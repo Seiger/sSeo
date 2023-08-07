@@ -20,7 +20,7 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
         "",
         "main",
         0,
-        6,
+        7,
     ];
 
     return serialize(array_merge($params['menu'], $menu));

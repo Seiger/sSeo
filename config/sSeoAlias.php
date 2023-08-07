@@ -1,1 +1,1 @@
-<?php return Seiger\sSettings\Facades\sSeo::class;
+<?php return Seiger\sSeo\Facades\sSeo::class;
