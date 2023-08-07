@@ -37,7 +37,7 @@ class sSeo
     public function route(string $name): string
     {
         $route = rtrim(route($name), '/');
-        if (\Seiger\sSeo\evo()->getConfig('friendly_url_suffix', '') != '/') {
+        if (evo()->getConfig('friendly_url_suffix', '') != '/') {
             $route = str_ireplace(evo()->getConfig('friendly_url_suffix', ''), '', route($name));
         }
         return $route;

@@ -1,4 +1,5 @@
-<?php
+<?php namespace Seiger\sSeo;
+
 use EvolutionCMS\ServiceProvider;
 
 class sSeoServiceProvider extends ServiceProvider
@@ -23,9 +24,9 @@ class sSeoServiceProvider extends ServiceProvider
 
             // For use config
             $this->publishes([
-                dirname(__DIR__) . '/config/sSeoAlias.php' => \Seiger\sSeo\config_path('app/aliases/sSeo.php', true),
-                dirname(__DIR__) . '/config/sSeoSettings.php' => \Seiger\sSeo\config_path('seiger/settings/sSeo.php', true),
-                dirname(__DIR__) . '/images/seigerit-yellow.svg' => \Seiger\sSeo\public_path('assets/site/seigerit-yellow.svg'),
+                dirname(__DIR__) . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
+                dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
+                dirname(__DIR__) . '/images/seigerit-yellow.svg' => public_path('assets/site/seigerit-yellow.svg'),
             ]);
         }
 
