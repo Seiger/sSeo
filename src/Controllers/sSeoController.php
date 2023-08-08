@@ -1,5 +1,11 @@
 <?php namespace Seiger\sSeo\Controllers;
 
+use EvolutionCMS\Models\SystemSetting;
+use Illuminate\Support\Str;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use View;
+
 class sSeoController
 {
     //public $url;
@@ -9,7 +15,6 @@ class sSeoController
      */
     public function __construct()
     {
-        //$this->url = $this->moduleUrl();
         //Paginator::defaultView('pagination');
     }
 
@@ -18,9 +23,35 @@ class sSeoController
      *
      * @return View
      */
-    public function index(): View
+    public function index()
     {
         return $this->view('index');
+    }
+
+
+    /**
+     * Update settings configuration
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function updateConfigure()
+    {
+        $string = '<?php return [' . "\n";
+
+        $manage_www = request()->get('manage_www', 0);
+        $string .= "\t" . '"manage_www" => ' . (int)$manage_www . ',' . "\n";
+
+        $string .= '];';
+
+        // Save config
+        $handle = fopen(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php', "w");
+        fwrite($handle, $string);
+        fclose($handle);
+
+        evo()->clearCache('full');
+        return redirect()->back();
     }
 
     /**
@@ -28,10 +59,10 @@ class sSeoController
      *
      * @param string $tpl
      * @param array $data
-     * @return bool
+     * @return View
      */
-    public function view(string $tpl, array $data = []): View
+    public function view(string $tpl, array $data = [])
     {
-        return \View::make('sSeo::'.$tpl, $data);
+        return View::make('sSeo::'.$tpl, $data);
     }
 }
