@@ -11,7 +11,9 @@
                     </a>
                 </h2>
                 <script>tpResources.addTabPage(document.getElementById('configureTab'));</script>
-                @include('sSeo::configureTab')
+                <div class="container container-body">
+                    @include('sSeo::configureTab')
+                </div>
             </div>
         </div>
     </div>
@@ -19,7 +21,6 @@
 @push('scripts.bot')
     <script>function saveForm(selector){$(selector).submit()}</script>
     <style>
-        .form-row .row-col {display:flex; flex-wrap:wrap; flex-direction:row; align-content:start; padding-right:0.75rem;}
         #copyright{position:fixed;bottom:0;right:0;background-color:#0057b8;padding:3px 7px;border-radius:5px;}
         #copyright img{width:9em;}
     </style>

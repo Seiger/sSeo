@@ -16,9 +16,6 @@ class sSeoServiceProvider extends ServiceProvider
             // Add custom routes for package
             include(__DIR__.'/Http/routes.php');
 
-            // Views
-            $this->loadViewsFrom(dirname(__DIR__) . '/views', 'sSeo');
-
             // MultiLang
             $this->loadTranslationsFrom(dirname(__DIR__) . '/lang', 'sSeo');
 
@@ -29,6 +26,9 @@ class sSeoServiceProvider extends ServiceProvider
                 dirname(__DIR__) . '/images/seigerit-yellow.svg' => public_path('assets/site/seigerit-yellow.svg'),
             ]);
         }
+
+        // Views
+        $this->loadViewsFrom(dirname(__DIR__) . '/views', 'sSeo');
 
         $this->app->singleton(\Seiger\sSeo\sSeo::class);
         $this->app->alias(\Seiger\sSeo\sSeo::class, 'sSeo');

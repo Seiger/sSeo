@@ -43,6 +43,13 @@ class sSeoController
         $manage_www = request()->get('manage_www', 0);
         $string .= "\t" . '"manage_www" => ' . (int)$manage_www . ',' . "\n";
 
+        $noindex_get = explode(',', request()->get('noindex_get', ''));
+        $string .= "\t" . '"noindex_get" => [' . "\n";
+        foreach ($noindex_get as $item) {
+            $string .= "\t\t" . '"' . trim($item) . '",' . "\n";
+        }
+        $string .= "\t" . '],' . "\n";
+
         $string .= '];';
 
         // Save config

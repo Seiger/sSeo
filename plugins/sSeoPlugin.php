@@ -55,6 +55,13 @@ Event::listen('evolution.OnLoadSettings', function($params) {
     }
 });
 
+Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
+    // SEO robots
+    $robots = sSeo::checkRobots();
+
+    return view('sSeo::partials.headWebDocument', compact('robots'))->render();
+});
+
 /**
  * Add Menu item
  */

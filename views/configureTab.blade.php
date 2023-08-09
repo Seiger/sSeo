@@ -1,31 +1,45 @@
 <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.update-configure')}}" onsubmit="documentDirty=false;">
-    <div class="row form-row">
-        <div class="row-col col-12">
-            <div class="row form-row">
-                <div class="col-auto">
-                    <label for="parent" class="warning">@lang('global.server_protocol_title')</label>
-                    <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.protocol_help')"></i>
-                </div>
-                <div class="col">
-                    {{evo()->getConfig('server_protocol', 'http')}}
-                </div>
-            </div>
+    <div class="row form-row form-element-input">
+        <label class="control-label col-5 col-md-3 col-lg-2">
+            <span>@lang('global.server_protocol_title')</span>
+            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.protocol_help')"></i>
+        </label>
+        <div class="col-7 col-md-9 col-lg-10">
+            @if(evo()->getConfig('server_protocol', 'http') == 'https')
+                <h4><span class="badge badge-success">{{evo()->getConfig('server_protocol', 'http')}}</span></h4>
+            @else
+                <h4><span class="badge badge-secondary">{{evo()->getConfig('server_protocol', 'http')}}</span></h4>
+            @endif
         </div>
     </div>
-    <div class="row form-row">
-        <div class="row-col col-12">
-            <div class="row form-row">
-                <div class="col-auto">
-                    <label for="rating_on" class="warning">@lang('sSeo::global.manage_www')</label>
-                </div>
-                <div class="col">
-                    <select name="manage_www" id="manage_www" onchange="documentDirty=true;">
-                        <option value="0" @if(config('seiger.settings.sSeo.manage_www', 0) == 0) selected @endif>Не враховувати</option>
-                        <option value="1" @if(config('seiger.settings.sSeo.manage_www', 0) == 1) selected @endif>Без WWW</option>
-                        <option value="2" @if(config('seiger.settings.sSeo.manage_www', 0) == 2) selected @endif>З WWW</option>
-                    </select>
-                </div>
-            </div>
+    <div class="row form-row form-element-input">
+        <label class="control-label col-5 col-md-3 col-lg-2">
+            <span>@lang('sSeo::global.manage_www')</span>
+        </label>
+        <div class="col-7 col-md-9 col-lg-10">
+            <select name="manage_www" id="manage_www" class="form-control" onchange="documentDirty=true;">
+                <option value="0" @if(config('seiger.settings.sSeo.manage_www', 0) == 0) selected @endif>Не враховувати</option>
+                <option value="1" @if(config('seiger.settings.sSeo.manage_www', 0) == 1) selected @endif>Без WWW</option>
+                <option value="2" @if(config('seiger.settings.sSeo.manage_www', 0) == 2) selected @endif>З WWW</option>
+            </select>
+        </div>
+    </div>
+    <div class="row form-row form-element-input">
+        <label class="control-label col-5 col-md-3 col-lg-2">
+            <span>@lang('sSeo::global.paginates_get')</span>
+            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.paginates_get_help')"></i>
+        </label>
+        <div class="col-7 col-md-9 col-lg-10">
+            <input id="paginates_get" name="paginates_get" value="{{config('seiger.settings.sSeo.paginates_get', 'page')}}" type="text" class="form-control" onchange="documentDirty=true;">
+        </div>
+    </div>
+    <div class="row form-row form-element-input">
+        <label class="control-label col-5 col-md-3 col-lg-2">
+            <span>@lang('sSeo::global.noindex_get')</span>
+            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.noindex_get_help')"></i>
+        </label>
+        <div class="col-7 col-md-9 col-lg-10">
+            <input id="noindex_get" name="noindex_get" value="{{implode(',', config('seiger.settings.sSeo.noindex_get', []))}}" type="text" class="form-control" onchange="documentDirty=true;">
         </div>
     </div>
     <div class="split my-3"></div>
