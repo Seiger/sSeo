@@ -49,7 +49,7 @@ class sSeo
         }
 
         // $_GET
-        $request_get = request()->except('q');
+        $request_get = array_keys(request()->except('q'));
         if (count($request_get)) {
             $noindex_get = config('seiger.settings.sSeo.noindex_get', []);
             foreach ($noindex_get as $item) {

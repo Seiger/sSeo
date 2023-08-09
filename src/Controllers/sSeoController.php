@@ -40,8 +40,9 @@ class sSeoController
     {
         $string = '<?php return [' . "\n";
 
-        $manage_www = request()->get('manage_www', 0);
-        $string .= "\t" . '"manage_www" => ' . (int)$manage_www . ',' . "\n";
+        $string .= "\t" . '"manage_www" => ' . (int)request()->get('manage_www', 0) . ',' . "\n";
+
+        $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
 
         $noindex_get = explode(',', request()->get('noindex_get', ''));
         $string .= "\t" . '"noindex_get" => [' . "\n";
