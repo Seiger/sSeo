@@ -38,8 +38,24 @@ Event::listen('evolution.OnLoadSettings', function($params) {
         // Check domen
         $url .= $domen;
 
-        // Check request
-        $url .= $_SERVER['REQUEST_URI'];
+        // Check request slashes count
+        $requestUri = $_SERVER['REQUEST_URI'];
+        if (preg_match("/(\/){2,}/", $requestUri)) {
+            $requestUriArr = explode('/', $requestUri);
+            $requestUriArr = array_diff($requestUriArr, ['']);
+            $requestUri = implode('/', $requestUriArr);
+        }
+
+        // Check request end
+        if (evo()->getConfig('friendly_urls', false) && trim(evo()->getConfig('friendly_url_suffix', ''))) {
+            $requestUriArr = explode('?', $requestUri);
+            if (!str_ends_with($requestUriArr[0], evo()->getConfig('friendly_url_suffix', ''))) {
+                $requestUriArr[0] = $requestUriArr[0] . evo()->getConfig('friendly_url_suffix', '');
+                $requestUri = implode('?', $requestUriArr);
+            }
+        }
+
+        $url .= $requestUri;
 
         // Remove index.php
         if (evo()->getConfig('friendly_urls', false) && Str::contains($url, 'index.php')) {
@@ -47,6 +63,7 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             $url = str_replace('index.php', '', $url);
         }
 
+        // Check redirect
         if ($redirect) {
             header("HTTP/1.1 301 Moved Permanently");
             header("Location: " . $url);

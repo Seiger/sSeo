@@ -49,11 +49,11 @@ class sSeo
         }
 
         // $_GET
-        $request_get = array_keys(request()->except('q'));
+        $request_get = request()->except('q');
         if (count($request_get)) {
             $noindex_get = config('seiger.settings.sSeo.noindex_get', []);
-            foreach ($noindex_get as $item) {
-                if (in_array($item, $request_get)) {
+            foreach ($request_get as $key => $item) {
+                if (in_array($key, $noindex_get) || strpos($item, ',') !== false) {
                     $robots = ['show' => true, 'value' => 'noindex,nofollow'];
                 }
             }
