@@ -79,6 +79,10 @@ Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     return view('sSeo::partials.headWebDocument', compact('robots'))->render();
 });
 
+Event::listen('evolution.OnDocFormSave', function($params) {
+    sSeo::generateSitemap();
+});
+
 /**
  * Add Menu item
  */

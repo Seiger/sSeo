@@ -29,6 +29,7 @@ class sSeoServiceProvider extends ServiceProvider
 
         // Views
         $this->loadViewsFrom(dirname(__DIR__) . '/views', 'sSeo');
+        $this->loadViewsFrom(evo()->resourcePath('plugins/sseo'), 'sSeoAssets');
 
         $this->app->singleton(\Seiger\sSeo\sSeo::class);
         $this->app->alias(\Seiger\sSeo\sSeo::class, 'sSeo');

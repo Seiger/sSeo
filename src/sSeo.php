@@ -5,6 +5,7 @@
 
 use Illuminate\Support\Str;
 use ReflectionClass;
+use View;
 
 class sSeo
 {
@@ -60,6 +61,12 @@ class sSeo
         }
 
         return $robots;
+    }
+
+    public function generateSitemap()
+    {
+        $sitemap = View::make('sSeoAssets::sitemapTemplate')->render();
+        file_put_contents(MODX_BASE_PATH . "/sitemap.xml", $sitemap);
     }
 
     /**
