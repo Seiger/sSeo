@@ -8,16 +8,6 @@ use View;
 
 class sSeoController
 {
-    //public $url;
-
-    /**
-     * Construct
-     */
-    public function __construct()
-    {
-        //Paginator::defaultView('pagination');
-    }
-
     /**
      * Show tabs with custom system settings
      *
@@ -27,7 +17,6 @@ class sSeoController
     {
         return $this->view('index');
     }
-
 
     /**
      * Update settings configuration
