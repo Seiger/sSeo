@@ -3,7 +3,7 @@
 var headers = ["h1", "h2", "h3", "h4"]
 
 // Lighter to darker as links get smaller (harder to see)
-var colors = ["#cdb8ef", "#bb98f5", "#935feb", "#7c3aed"]
+var colors = ["#bae6fd", "#38bdf8", "#0284c7", "#075985"]
 
 $.each(headers, function(i, header){
     var color = colors[i];
@@ -11,7 +11,7 @@ $.each(headers, function(i, header){
         text = $(this).text();
         if (text != "") {
           var href=$(this).attr("id");
-          $(this).append('<a class="headerlink" style="color:' + color + '" href="#' + href + '" title="Permanent link"> ¶</a>')
+          $(this).prepend('<a class="headerlink" style="color:' + color + '" href="#' + href + '" title="Permanent link"># </a>')
         }
     });
 })
