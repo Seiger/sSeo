@@ -1,7 +1,1083 @@
 <!doctype html>
 <html lang=en-US class=h-full>
 {% include head.html %}
-<body class="docs relative w-full h-full antialiased text-gray-600">
+<body class="w-full h-full font-sans antialiased text-gray-900 language-php docs relative">
+<!-- -->
+<div class="relative overflow-auto dark:bg-dark-700" id="docsScreen">
+    <div class="relative lg:flex lg:items-start">
+        <aside class="hidden fixed top-0 bottom-0 left-0 z-20 h-full w-16 bg-gradient-to-b from-gray-100 to-white transition-all duration-300 overflow-hidden lg:sticky lg:w-80 lg:shrink-0 lg:flex lg:flex-col lg:justify-end lg:items-end 2xl:max-w-lg 2xl:w-full dark:from-dark-800 dark:to-dark-700">
+            <div class="relative min-h-0 flex-1 flex flex-col xl:w-80">
+                <a href="/" class="flex items-center py-8 px-4 lg:px-8 xl:px-16">
+                    <img class="w-8 h-8 shrink-0 transition-all duration-300 lg:w-12 lg:h-12" src="/img/logomark.min.svg" alt="Laravel" width="50" height="52">
+                    <img src="/img/logotype.min.svg" alt="Laravel" class="hidden ml-4 lg:block" width="114" height="29">
+                </a>
+                <div class="overflow-y-auto overflow-x-hidden px-4 lg:overflow-hidden lg:px-8 xl:px-16">
+                    <nav id="indexed-nav" class="hidden lg:block lg:mt-4">
+                        <div class="docs_sidebar">
+                            <ul>
+                                <li>
+                                    <h2>Prologue</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/releases">Release Notes</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/upgrade">Upgrade Guide</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/contributions">Contribution Guide</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Getting Started</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/installation">Installation</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/configuration">Configuration</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/structure">Directory Structure</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/frontend">Frontend</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/starter-kits">Starter Kits</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/deployment">Deployment</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Architecture Concepts</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/lifecycle">Request Lifecycle</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/container">Service Container</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/providers">Service Providers</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/facades">Facades</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>The Basics</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/routing">Routing</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/middleware">Middleware</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/csrf">CSRF Protection</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/controllers">Controllers</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/requests">Requests</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/responses">Responses</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/views">Views</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/blade">Blade Templates</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/vite">Asset Bundling</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/urls">URL Generation</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/session">Session</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/validation">Validation</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/errors">Error Handling</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/logging">Logging</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Digging Deeper</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/artisan">Artisan Console</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/broadcasting">Broadcasting</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/cache">Cache</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/collections">Collections</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/contracts">Contracts</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/events">Events</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/filesystem">File Storage</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/helpers">Helpers</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/http-client">HTTP Client</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/localization">Localization</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/mail">Mail</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/notifications">Notifications</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/packages">Package Development</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/processes">Processes</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/queues">Queues</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/rate-limiting">Rate Limiting</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/strings">Strings</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/scheduling">Task Scheduling</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Security</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/authentication">Authentication</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/authorization">Authorization</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/verification">Email Verification</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/encryption">Encryption</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/hashing">Hashing</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/passwords">Password Reset</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Database</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/database">Getting Started</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/queries">Query Builder</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/pagination">Pagination</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/migrations">Migrations</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/seeding">Seeding</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/redis">Redis</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Eloquent ORM</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent">Getting Started</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-relationships">Relationships</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-collections">Collections</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-mutators">Mutators / Casts</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-resources">API Resources</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-serialization">Serialization</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/eloquent-factories">Factories</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Testing</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/testing">Getting Started</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/http-tests">HTTP Tests</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/console-tests">Console Tests</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/dusk">Browser Tests</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/database-testing">Database</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/mocking">Mocking</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="sub--on">
+                                    <h2>Packages</h2>
+                                    <ul>
+                                        <li>
+                                            <a href="/docs/10.x/starter-kits#laravel-breeze">Breeze</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/billing">Cashier (Stripe)</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/cashier-paddle">Cashier (Paddle)</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/dusk">Dusk</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/envoy">Envoy</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/fortify">Fortify</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/folio">Folio</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/homestead">Homestead</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/horizon">Horizon</a>
+                                        </li>
+                                        <li>
+                                            <a href="https://jetstream.laravel.com">Jetstream</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/mix">Mix</a>
+                                        </li>
+                                        <li class="active">
+                                            <a href="/docs/10.x/octane">Octane</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/passport">Passport</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/pennant">Pennant</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/pint">Pint</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/precognition">Precognition</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/prompts">Prompts</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/sail">Sail</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/sanctum">Sanctum</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/scout">Scout</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/socialite">Socialite</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/telescope">Telescope</a>
+                                        </li>
+                                        <li>
+                                            <a href="/docs/10.x/valet">Valet</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="/api/10.x">API Documentation</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </nav>
+
+
+                    <div class="mt-4 px-3 py-2 border-dashed border-gray-200 border rounded-lg text-xs leading-loose text-gray-700 lg:block dark:border-gray-400 dark:text-gray-200">
+                        <span class="font-medium">Laravel Forge:</span> create and manage PHP 8 servers. Deploy your Laravel applications in seconds. <a class="underline text-red-600" href="https://forge.laravel.com">Sign up now!</a>.
+                    </div>
+
+
+                </div>
+            </div>
+        </aside>
+
+        <header class="lg:hidden" @keydown.window.escape="navIsOpen = false" @click.away="navIsOpen = false">
+            <div class="relative mx-auto w-full py-10 bg-white transition duration-200 dark:bg-dark-700">
+                <div class="mx-auto px-8 sm:px-16 flex items-center justify-between">
+                    <a href="/" class="flex items-center">
+                        <img class="" src="/img/logomark.min.svg" alt="Laravel">
+                        <img class="hidden ml-5 sm:block" src="/img/logotype.min.svg" alt="Laravel">
+                    </a>
+                    <div class="flex-1 flex items-center justify-end">
+                        <button id="header__sun" onclick="toSystemMode()" title="Switch to system theme" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+                            </svg>
+                        </button>
+                        <button id="header__moon" onclick="toLightMode()" title="Switch to light mode" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z"></path>
+                            </svg>
+                        </button>
+                        <button id="header__indeterminate" onclick="toDarkMode()" title="Switch to dark mode" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12A10 10 0 0 0 12 22A10 10 0 0 0 22 12A10 10 0 0 0 12 2M12 4A8 8 0 0 1 20 12A8 8 0 0 1 12 20V4Z"></path>
+                            </svg>
+                        </button>
+                        <button class="ml-2 relative w-10 h-10 p-2 text-red-600 lg:hidden focus:outline-none focus:shadow-outline" aria-label="Menu" @click.prevent="navIsOpen = !navIsOpen">
+                            <svg x-show="! navIsOpen" x-transition.opacity="" class="absolute inset-0 mt-2 ml-2 w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                            <svg x-show="navIsOpen" x-transition.opacity="" class="absolute inset-0 mt-2 ml-2 w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+                <span :class="{ 'shadow-sm': navIsOpen }" class="absolute inset-0 z-20 pointer-events-none"></span>
+            </div>
+            <div x-show="navIsOpen" x-transition:enter="duration-150" x-transition:leave="duration-100 ease-in" style="display: none;">
+                <nav x-show="navIsOpen" class="absolute w-full transform origin-top shadow-sm z-10" x-transition:enter="duration-150 ease-out" x-transition:enter-start="opacity-0 -translate-y-8 scale-75" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="duration-100 ease-in" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 -translate-y-8 scale-75" style="display: none;">
+                    <div class="relative p-8 bg-white docs_sidebar dark:bg-dark-600">
+                        <ul>
+                            <li>
+                                <h2>Prologue</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/releases">Release Notes</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/upgrade">Upgrade Guide</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/contributions">Contribution Guide</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Getting Started</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/installation">Installation</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/configuration">Configuration</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/structure">Directory Structure</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/frontend">Frontend</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/starter-kits">Starter Kits</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/deployment">Deployment</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Architecture Concepts</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/lifecycle">Request Lifecycle</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/container">Service Container</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/providers">Service Providers</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/facades">Facades</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>The Basics</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/routing">Routing</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/middleware">Middleware</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/csrf">CSRF Protection</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/controllers">Controllers</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/requests">Requests</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/responses">Responses</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/views">Views</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/blade">Blade Templates</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/vite">Asset Bundling</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/urls">URL Generation</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/session">Session</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/validation">Validation</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/errors">Error Handling</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/logging">Logging</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Digging Deeper</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/artisan">Artisan Console</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/broadcasting">Broadcasting</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/cache">Cache</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/collections">Collections</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/contracts">Contracts</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/events">Events</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/filesystem">File Storage</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/helpers">Helpers</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/http-client">HTTP Client</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/localization">Localization</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/mail">Mail</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/notifications">Notifications</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/packages">Package Development</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/processes">Processes</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/queues">Queues</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/rate-limiting">Rate Limiting</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/strings">Strings</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/scheduling">Task Scheduling</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Security</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/authentication">Authentication</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/authorization">Authorization</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/verification">Email Verification</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/encryption">Encryption</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/hashing">Hashing</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/passwords">Password Reset</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Database</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/database">Getting Started</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/queries">Query Builder</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/pagination">Pagination</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/migrations">Migrations</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/seeding">Seeding</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/redis">Redis</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Eloquent ORM</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent">Getting Started</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-relationships">Relationships</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-collections">Collections</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-mutators">Mutators / Casts</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-resources">API Resources</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-serialization">Serialization</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/eloquent-factories">Factories</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h2>Testing</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/testing">Getting Started</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/http-tests">HTTP Tests</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/console-tests">Console Tests</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/dusk">Browser Tests</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/database-testing">Database</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/mocking">Mocking</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sub--on">
+                                <h2>Packages</h2>
+                                <ul>
+                                    <li>
+                                        <a href="/docs/10.x/starter-kits#laravel-breeze">Breeze</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/billing">Cashier (Stripe)</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/cashier-paddle">Cashier (Paddle)</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/dusk">Dusk</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/envoy">Envoy</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/fortify">Fortify</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/folio">Folio</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/homestead">Homestead</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/horizon">Horizon</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://jetstream.laravel.com">Jetstream</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/mix">Mix</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="/docs/10.x/octane">Octane</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/passport">Passport</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/pennant">Pennant</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/pint">Pint</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/precognition">Precognition</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/prompts">Prompts</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/sail">Sail</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/sanctum">Sanctum</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/scout">Scout</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/socialite">Socialite</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/telescope">Telescope</a>
+                                    </li>
+                                    <li>
+                                        <a href="/docs/10.x/valet">Valet</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="/api/10.x">API Documentation</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <section class="flex-1 dark:bg-dark-700">
+            <div class="max-w-screen-lg px-8 sm:px-16 lg:px-24">
+                <div class="flex flex-col items-end border-b border-gray-200 py-1 transition-colors dark:border-gray-700 lg:mt-8 lg:flex-row-reverse">
+                    <div class="hidden lg:flex items-center justify-center ml-8">
+                        <button id="header__sun" onclick="toSystemMode()" title="Switch to system theme" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-sun" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+                            </svg>
+                        </button>
+                        <button id="header__moon" onclick="toLightMode()" title="Switch to light mode" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z"></path>
+                            </svg>
+                        </button>
+                        <button id="header__indeterminate" onclick="toDarkMode()" title="Switch to dark mode" class="relative w-10 h-10 focus:outline-none focus:shadow-outline text-gray-500">
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12A10 10 0 0 0 12 22A10 10 0 0 0 22 12A10 10 0 0 0 12 2M12 4A8 8 0 0 1 20 12A8 8 0 0 1 12 20V4Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="w-full lg:w-40 lg:pl-12">
+                        <div>
+                            <label class="text-gray-600 text-xs tracking-widest uppercase dark:text-gray-500" for="version-switcher">Version</label>
+                            <div x-data="" class="relative w-full bg-white transition-all duration-500 focus-within:border-gray-600 dark:bg-gray-800">
+                                <select id="version-switcher" aria-label="Laravel version" class="appearance-none flex-1 w-full px-0 py-1 placeholder-gray-900 tracking-wide bg-white focus:outline-none dark:bg-dark-700 dark:text-gray-400 dark:placeholder-gray-500" @change="window.location = $event.target.value">
+                                    <option value="https://laravel.com/docs/master/octane">Master</option>
+                                    <option selected="" value="https://laravel.com/docs/10.x/octane">10.x</option>
+                                    <option value="https://laravel.com/docs/9.x/octane">9.x</option>
+                                    <option value="https://laravel.com/docs/8.x/octane">8.x</option>
+                                    <option value="https://laravel.com/docs/7.x/octane">7.x</option>
+                                    <option value="https://laravel.com/docs/6.x/octane">6.x</option>
+                                    <option value="https://laravel.com/docs/5.8/octane">5.8</option>
+                                    <option value="https://laravel.com/docs/5.7/octane">5.7</option>
+                                    <option value="https://laravel.com/docs/5.6/octane">5.6</option>
+                                    <option value="https://laravel.com/docs/5.5/octane">5.5</option>
+                                    <option value="https://laravel.com/docs/5.4/octane">5.4</option>
+                                    <option value="https://laravel.com/docs/5.3/octane">5.3</option>
+                                    <option value="https://laravel.com/docs/5.2/octane">5.2</option>
+                                    <option value="https://laravel.com/docs/5.1/octane">5.1</option>
+                                    <option value="https://laravel.com/docs/5.0/octane">5.0</option>
+                                    <option value="https://laravel.com/docs/4.2/octane">4.2</option>
+                                </select>
+                                <img class="absolute inset-y-0 right-0 mt-2.5 w-2.5 h-2.5 text-gray-900 pointer-events-none dark:hidden" src="/img/icons/drop_arrow.min.svg" alt="">
+                                <img class="absolute inset-y-0 right-0 mt-2.5 w-2.5 h-2.5 text-gray-900 pointer-events-none hidden dark:block" src="/img/icons/drop_arrow.dark.min.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative mt-8 flex items-center justify-end w-full h-10 lg:mt-0">
+                        <div class="flex-1 flex items-center">
+                            <button id="docsearch" class="text-gray-800 transition-colors dark:text-gray-400 w-full"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 20 20"><path d="M14.386 14.386l4.0877 4.0877-4.0877-4.0877c-2.9418 2.9419-7.7115 2.9419-10.6533 0-2.9419-2.9418-2.9419-7.7115 0-10.6533 2.9418-2.9419 7.7115-2.9419 10.6533 0 2.9419 2.9418 2.9419 7.7115 0 10.6533z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"><svg width="15" height="15" class="DocSearch-Control-Key-Icon"><path d="M4.505 4.496h2M5.505 5.496v5M8.216 4.496l.055 5.993M10 7.5c.333.333.5.667.5 1v2M12.326 4.5v5.996M8.384 4.496c1.674 0 2.116 0 2.116 1.5s-.442 1.5-2.116 1.5M3.205 9.303c-.09.448-.277 1.21-1.241 1.203C1 10.5.5 9.513.5 8V7c0-1.57.5-2.5 1.464-2.494.964.006 1.134.598 1.24 1.342M12.553 10.5h1.953" stroke-width="1.2" stroke="currentColor" fill="none" stroke-linecap="square"></path></svg></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></button>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="mt-8 md:mt-16">
+                    <section class="docs_main max-w-prose">
+
+
+                        <div id="main-content">
+                            <h1>Laravel Octane</h1>
+                            <ul>
+                                <li>
+                                    <a href="#introduction">Introduction</a>
+                                </li>
+                                <li>
+                                    <a href="#installation">Installation</a>
+                                </li>
+                                <li>
+                                    <a href="#server-prerequisites">Server Prerequisites</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#roadrunner">RoadRunner</a>
+                                        </li>
+                                        <li>
+                                            <a href="#swoole">Swoole</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#serving-your-application">Serving Your Application</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#serving-your-application-via-https">Serving Your Application Via HTTPS</a>
+                                        </li>
+                                        <li>
+                                            <a href="#serving-your-application-via-nginx">Serving Your Application Via Nginx</a>
+                                        </li>
+                                        <li>
+                                            <a href="#watching-for-file-changes">Watching For File Changes</a>
+                                        </li>
+                                        <li>
+                                            <a href="#specifying-the-worker-count">Specifying The Worker Count</a>
+                                        </li>
+                                        <li>
+                                            <a href="#specifying-the-max-request-count">Specifying The Max Request Count</a>
+                                        </li>
+                                        <li>
+                                            <a href="#reloading-the-workers">Reloading The Workers</a>
+                                        </li>
+                                        <li>
+                                            <a href="#stopping-the-server">Stopping The Server</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#dependency-injection-and-octane">Dependency Injection &amp; Octane</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#container-injection">Container Injection</a>
+                                        </li>
+                                        <li>
+                                            <a href="#request-injection">Request Injection</a>
+                                        </li>
+                                        <li>
+                                            <a href="#configuration-repository-injection">Configuration Repository Injection</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#managing-memory-leaks">Managing Memory Leaks</a>
+                                </li>
+                                <li>
+                                    <a href="#concurrent-tasks">Concurrent Tasks</a>
+                                </li>
+                                <li>
+                                    <a href="#ticks-and-intervals">Ticks &amp; Intervals</a>
+                                </li>
+                                <li>
+                                    <a href="#the-octane-cache">The Octane Cache</a>
+                                </li>
+                                <li>
+                                    <a href="#tables">Tables</a>
+                                </li>
+                            </ul>
+                            <p></p>
+                            <h2 id="introduction"><a href="#introduction">Introduction</a></h2>
+                            <p><a href="https://github.com/laravel/octane">Laravel Octane</a> supercharges your application's performance by serving your application using high-powered application servers, including <a href="https://openswoole.com/">Open Swoole</a>, <a href="https://github.com/swoole/swoole-src">Swoole</a>, and <a href="https://roadrunner.dev">RoadRunner</a>. Octane boots your application once, keeps it in memory, and then feeds it requests at supersonic speeds.</p>
+                            <p></p>
+                            <h2 id="installation"><a href="#installation">Installation</a></h2>
+                            <p>Octane may be installed via the Composer package manager:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-0"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">composer </span><span style="color: #BFC7D5;">require</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">laravel/octane</span></div></code></pre><button id="clipButton-0" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-0"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>After installing Octane, you may execute the <code>octane:install</code> Artisan command, which will install Octane's configuration file into your application:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-1"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:install</span></div></code></pre><button id="clipButton-1" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-1"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h2 id="server-prerequisites"><a href="#server-prerequisites">Server Prerequisites</a></h2>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    Laravel Octane requires <a href="https://php.net/releases/">PHP 8.1+</a>.</p></div>
+                            </blockquote>
+                            <p></p>
+                            <h3 id="roadrunner"><a href="#roadrunner">RoadRunner</a></h3>
+                            <p><a href="https://roadrunner.dev">RoadRunner</a> is powered by the RoadRunner binary, which is built using Go. The first time you start a RoadRunner based Octane server, Octane will offer to download and install the RoadRunner binary for you.</p>
+                            <p></p>
+                            <h4 id="roadrunner-via-laravel-sail"><a href="#roadrunner-via-laravel-sail">RoadRunner Via Laravel Sail</a></h4>
+                            <p>If you plan to develop your application using <a href="/docs/10.x/sail">Laravel Sail</a>, you should run the following commands to install Octane and RoadRunner:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-2"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">up</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">composer</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">require</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">laravel/octane</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">spiral/roadrunner-cli</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">spiral/roadrunner-http</span></div></code></pre><button id="clipButton-2" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-2"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Next, you should start a Sail shell and use the <code>rr</code> executable to retrieve the latest Linux based build of the RoadRunner binary:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-3"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">shell</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">#</span><span style="color: #697098;"> Within the Sail shell...</span></div><div class="line"><span style="color: #BFC7D5;">./vendor/bin/rr </span><span style="color: #BFC7D5;">get-binary</span></div></code></pre><button id="clipButton-3" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-3"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>After installing the RoadRunner binary, you may exit your Sail shell session. You will now need to adjust the <code>supervisor.conf</code> file used by Sail to keep your application running. To get started, execute the <code>sail:publish</code> Artisan command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-4"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">sail:publish</span></div></code></pre><button id="clipButton-4" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-4"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Next, update the <code>command</code> directive of your application's <code>docker/supervisord.conf</code> file so that Sail serves your application using Octane instead of the PHP development server:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="ini" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-5"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">command</span><span style="color: #BFC7D5;">=/usr/bin/php -d </span><span style="color: #C792EA;">variables_order</span><span style="color: #BFC7D5;">=EGPCS /var/www/html/artisan octane:start --</span><span style="color: #C792EA;">server</span><span style="color: #BFC7D5;">=roadrunner --</span><span style="color: #C792EA;">host</span><span style="color: #BFC7D5;">=0.0.0.0 --</span><span style="color: #C792EA;">rpc-port</span><span style="color: #BFC7D5;">=6001 --</span><span style="color: #C792EA;">port</span><span style="color: #BFC7D5;">=80</span></div></code></pre><button id="clipButton-5" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-5"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Finally, ensure the <code>rr</code> binary is executable and build your Sail images:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-6"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">chmod </span><span style="color: #BFC7D5;">+x</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">./rr</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">build</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--no-cache</span></div></code></pre><button id="clipButton-6" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-6"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="swoole"><a href="#swoole">Swoole</a></h3>
+                            <p>If you plan to use the Swoole application server to serve your Laravel Octane application, you must install the Swoole PHP extension. Typically, this can be done via PECL:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-7"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">pecl </span><span style="color: #BFC7D5;">install</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">swoole</span></div></code></pre><button id="clipButton-7" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-7"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h4 id="openswoole"><a href="#openswoole">Open Swoole</a></h4>
+                            <p>If you want to use the Open Swoole application server to serve your Laravel Octane application, you must install the Open Swoole PHP extension. Typically, this can be done via PECL:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-8"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">pecl </span><span style="color: #BFC7D5;">install</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">openswoole</span></div></code></pre><button id="clipButton-8" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-8"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Using Laravel Octane with Open Swoole grants the same functionality provided by Swoole, such as concurrent tasks, ticks, and intervals.</p>
+                            <p></p>
+                            <h4 id="swoole-via-laravel-sail"><a href="#swoole-via-laravel-sail">Swoole Via Laravel Sail</a></h4>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    Before serving an Octane application via Sail, ensure you have the latest version of Laravel Sail and execute <code>./vendor/bin/sail build --no-cache</code> within your application's root directory.</p></div>
+                            </blockquote>
+                            <p>Alternatively, you may develop your Swoole based Octane application using <a href="/docs/10.x/sail">Laravel Sail</a>, the official Docker based development environment for Laravel. Laravel Sail includes the Swoole extension by default. However, you will still need to adjust the <code>supervisor.conf</code> file used by Sail to keep your application running. To get started, execute the <code>sail:publish</code> Artisan command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-9"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">sail:publish</span></div></code></pre><button id="clipButton-9" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-9"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Next, update the <code>command</code> directive of your application's <code>docker/supervisord.conf</code> file so that Sail serves your application using Octane instead of the PHP development server:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="ini" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-10"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">command</span><span style="color: #BFC7D5;">=/usr/bin/php -d </span><span style="color: #C792EA;">variables_order</span><span style="color: #BFC7D5;">=EGPCS /var/www/html/artisan octane:start --</span><span style="color: #C792EA;">server</span><span style="color: #BFC7D5;">=swoole --</span><span style="color: #C792EA;">host</span><span style="color: #BFC7D5;">=0.0.0.0 --</span><span style="color: #C792EA;">port</span><span style="color: #BFC7D5;">=80</span></div></code></pre><button id="clipButton-10" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-10"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Finally, build your Sail images:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-11"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">./vendor/bin/sail </span><span style="color: #BFC7D5;">build</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--no-cache</span></div></code></pre><button id="clipButton-11" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-11"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h4 id="swoole-configuration"><a href="#swoole-configuration">Swoole Configuration</a></h4>
+                            <p>Swoole supports a few additional configuration options that you may add to your <code>octane</code> configuration file if necessary. Because they rarely need to be modified, these options are not included in the default configuration file:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-12"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">swoole</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> [</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">options</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> [</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">log_file</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">storage_path</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">logs/swoole_http.log</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">),</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">package_max_length</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #F78C6C;">10</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">*</span><span style="color: #BFC7D5;"> </span><span style="color: #F78C6C;">1024</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">*</span><span style="color: #BFC7D5;"> </span><span style="color: #F78C6C;">1024</span><span style="color: #BFC7D5;">,</span></div><div class="line"><span style="color: #BFC7D5;">    ],</span></div><div class="line"><span style="color: #BFC7D5;">],</span></div></code></pre><button id="clipButton-12" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-12"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h2 id="serving-your-application"><a href="#serving-your-application">Serving Your Application</a></h2>
+                            <p>The Octane server can be started via the <code>octane:start</code> Artisan command. By default, this command will utilize the server specified by the <code>server</code> configuration option of your application's <code>octane</code> configuration file:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-13"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span></div></code></pre><button id="clipButton-13" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-13"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>By default, Octane will start the server on port 8000, so you may access your application in a web browser via <code>http://localhost:8000</code>.</p>
+                            <p></p>
+                            <h3 id="serving-your-application-via-https"><a href="#serving-your-application-via-https">Serving Your Application Via HTTPS</a></h3>
+                            <p>By default, applications running via Octane generate links prefixed with <code>http://</code>. The <code>OCTANE_HTTPS</code> environment variable, used within your application's <code>config/octane.php</code> configuration file, can be set to <code>true</code> when serving your application via HTTPS. When this configuration value is set to <code>true</code>, Octane will instruct Laravel to prefix all generated links with <code>https://</code>:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-14"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">https</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">env</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">OCTANE_HTTPS</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">,</span><span style="color: #82AAFF;"> false</span><span style="color: #BFC7D5;">),</span></div></code></pre><button id="clipButton-14" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-14"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="serving-your-application-via-nginx"><a href="#serving-your-application-via-nginx">Serving Your Application Via Nginx</a></h3>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-purple-600 lg:mb-0"><img src="/img/callouts/lightbulb.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    If you aren't quite ready to manage your own server configuration or aren't comfortable configuring all of the various services needed to run a robust Laravel Octane application, check out <a href="https://forge.laravel.com">Laravel Forge</a>.</p></div>
+                            </blockquote>
+                            <p>In production environments, you should serve your Octane application behind a traditional web server such as Nginx or Apache. Doing so will allow the web server to serve your static assets such as images and stylesheets, as well as manage your SSL certificate termination.</p>
+                            <p>In the Nginx configuration example below, Nginx will serve the site's static assets and proxy requests to the Octane server that is running on port 8000:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="nginx" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-15"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">map</span><span style="color: #BFC7D5;"> $</span><span style="color: #7986E7;">http_upgrade</span><span style="color: #BFC7D5;"> $</span><span style="color: #FFCB6B;">connection_upgrade</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #82AAFF;"> default</span><span style="color: #BFC7D5;"> upgrade;</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C3E88D;">''</span><span style="color: #BFC7D5;">      close;</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #C792EA;">server</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> listen </span><span style="color: #BFC7D5;">80;</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> listen </span><span style="color: #BFC7D5;">[::]:80;</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> server_name </span><span style="color: #BFC7D5;">domain.com;</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> server_tokens </span><span style="color: #BFC7D5;">off;</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> root </span><span style="color: #BFC7D5;">/home/forge/domain.com/public;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> index </span><span style="color: #BFC7D5;">index.php;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> charset </span><span style="color: #BFC7D5;">utf-8;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">location</span><span style="color: #BFC7D5;"> /index.php {</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> try_files </span><span style="color: #BFC7D5;">/not_exists @octane;</span></div><div class="line"><span style="color: #BFC7D5;">    }</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">location</span><span style="color: #BFC7D5;"> / {</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> try_files </span><span style="color: #BFC7D5;">$</span><span style="color: #FFCB6B;">uri</span><span style="color: #BFC7D5;"> $</span><span style="color: #FFCB6B;">uri</span><span style="color: #BFC7D5;">/ @octane;</span></div><div class="line"><span style="color: #BFC7D5;">    }</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">location</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=</span><span style="color: #BFC7D5;"> </span><span style="color: #80CBC4;">/favicon.ico </span><span style="color: #BFC7D5;">{</span><span style="color: #C792EA;"> access_log </span><span style="color: #BFC7D5;">off;</span><span style="color: #C792EA;"> log_not_found </span><span style="color: #BFC7D5;">off; }</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">location</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=</span><span style="color: #BFC7D5;"> </span><span style="color: #80CBC4;">/robots.txt  </span><span style="color: #BFC7D5;">{</span><span style="color: #C792EA;"> access_log </span><span style="color: #BFC7D5;">off;</span><span style="color: #C792EA;"> log_not_found </span><span style="color: #BFC7D5;">off; }</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> access_log </span><span style="color: #BFC7D5;">off;</span></div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> error_log </span><span style="color: #BFC7D5;"> /var/log/nginx/domain.com-error.log</span><span style="color: #82AAFF;"> error</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">   </span><span style="color: #C792EA;"> error_page </span><span style="color: #BFC7D5;">404 /index.php;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">location</span><span style="color: #BFC7D5;"> @octane {</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> set </span><span style="color: #BFC7D5;">$</span><span style="color: #FFCB6B;">suffix</span><span style="color: #BFC7D5;"> </span><span style="color: #C3E88D;">""</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #C792EA;">if</span><span style="color: #BFC7D5;"> ($</span><span style="color: #FFCB6B;">uri</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">= </span><span style="color: #BFC7D5;">/index.php) {</span></div><div class="line"><span style="color: #BFC7D5;">           </span><span style="color: #C792EA;"> set </span><span style="color: #BFC7D5;">$</span><span style="color: #FFCB6B;">suffix</span><span style="color: #BFC7D5;"> ?$</span><span style="color: #FFCB6B;">query_string</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">        }</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_http_version </span><span style="color: #BFC7D5;">1.1;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">Host $</span><span style="color: #FFCB6B;">http_host</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">Scheme $</span><span style="color: #FFCB6B;">scheme</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">SERVER_PORT $</span><span style="color: #FFCB6B;">server_port</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">REMOTE_ADDR $</span><span style="color: #FFCB6B;">remote_addr</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">X-Forwarded-For $</span><span style="color: #FFCB6B;">proxy_add_x_forwarded_for</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">Upgrade $</span><span style="color: #FFCB6B;">http_upgrade</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_set_header </span><span style="color: #BFC7D5;">Connection $</span><span style="color: #FFCB6B;">connection_upgrade</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">       </span><span style="color: #C792EA;"> proxy_pass </span><span style="color: #BFC7D5;">http://127.0.0.1:8000$</span><span style="color: #FFCB6B;">suffix</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #BFC7D5;">    }</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div></code></pre><button id="clipButton-15" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-15"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="watching-for-file-changes"><a href="#watching-for-file-changes">Watching For File Changes</a></h3>
+                            <p>Since your application is loaded in memory once when the Octane server starts, any changes to your application's files will not be reflected when you refresh your browser. For example, route definitions added to your <code>routes/web.php</code> file will not be reflected until the server is restarted. For convenience, you may use the <code>--watch</code> flag to instruct Octane to automatically restart the server on any file changes within your application:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-16"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--watch</span></div></code></pre><button id="clipButton-16" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-16"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Before using this feature, you should ensure that <a href="https://nodejs.org">Node</a> is installed within your local development environment. In addition, you should install the <a href="https://github.com/paulmillr/chokidar">Chokidar</a> file-watching library within your project:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-17"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">npm </span><span style="color: #BFC7D5;">install</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--save-dev</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">chokidar</span></div></code></pre><button id="clipButton-17" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-17"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>You may configure the directories and files that should be watched using the <code>watch</code> configuration option within your application's <code>config/octane.php</code> configuration file.</p>
+                            <p></p>
+                            <h3 id="specifying-the-worker-count"><a href="#specifying-the-worker-count">Specifying The Worker Count</a></h3>
+                            <p>By default, Octane will start an application request worker for each CPU core provided by your machine. These workers will then be used to serve incoming HTTP requests as they enter your application. You may manually specify how many workers you would like to start using the <code>--workers</code> option when invoking the <code>octane:start</code> command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-18"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--workers=4</span></div></code></pre><button id="clipButton-18" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-18"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>If you are using the Swoole application server, you may also specify how many <a href="#concurrent-tasks">"task workers"</a> you wish to start:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-19"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--workers=4</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--task-workers=6</span></div></code></pre><button id="clipButton-19" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-19"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="specifying-the-max-request-count"><a href="#specifying-the-max-request-count">Specifying The Max Request Count</a></h3>
+                            <p>To help prevent stray memory leaks, Octane gracefully restarts any worker once it has handled 500 requests. To adjust this number, you may use the <code>--max-requests</code> option:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-20"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--max-requests=250</span></div></code></pre><button id="clipButton-20" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-20"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="reloading-the-workers"><a href="#reloading-the-workers">Reloading The Workers</a></h3>
+                            <p>You may gracefully restart the Octane server's application workers using the <code>octane:reload</code> command. Typically, this should be done after deployment so that your newly deployed code is loaded into memory and is used to serve to subsequent requests:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-21"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:reload</span></div></code></pre><button id="clipButton-21" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-21"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h3 id="stopping-the-server"><a href="#stopping-the-server">Stopping The Server</a></h3>
+                            <p>You may stop the Octane server using the <code>octane:stop</code> Artisan command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-22"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:stop</span></div></code></pre><button id="clipButton-22" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-22"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h4 id="checking-the-server-status"><a href="#checking-the-server-status">Checking The Server Status</a></h4>
+                            <p>You may check the current status of the Octane server using the <code>octane:status</code> Artisan command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-23"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:status</span></div></code></pre><button id="clipButton-23" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-23"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h2 id="dependency-injection-and-octane"><a href="#dependency-injection-and-octane">Dependency Injection &amp; Octane</a></h2>
+                            <p>Since Octane boots your application once and keeps it in memory while serving requests, there are a few caveats you should consider while building your application. For example, the <code>register</code> and <code>boot</code> methods of your application's service providers will only be executed once when the request worker initially boots. On subsequent requests, the same application instance will be reused.</p>
+                            <p>In light of this, you should take special care when injecting the application service container or request into any object's constructor. By doing so, that object may have a  stale version of the container or request on subsequent requests.</p>
+                            <p>Octane will automatically handle resetting any first-party framework state between requests. However, Octane does not always know how to reset the global state created by your application. Therefore, you should be aware of how to build your application in a way that is Octane friendly. Below, we will discuss the most common situations that may cause problems while using Octane.</p>
+                            <p></p>
+                            <h3 id="container-injection"><a href="#container-injection">Container Injection</a></h3>
+                            <p>In general, you should avoid injecting the application service container or HTTP request instance into the constructors of other objects. For example, the following binding injects the entire application service container into an object that is bound as a singleton:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-24"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">/**</span></div><div class="line"><span style="color: #697098;"> * Register any application services.</span></div><div class="line"><span style="color: #697098;"> </span><span style="color: #697098;">*/</span></div><div class="line"><span style="color: #C792EA;">public</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">register</span><span style="color: #D9F5DD;">()</span><span style="color: #89DDFF;">:</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">void</span></div><div class="line"><span style="color: #BFC7D5;">{</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #BFC7D5;">);</span></div><div class="line"><span style="color: #BFC7D5;">    });</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div></code></pre><button id="clipButton-24" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-24"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>In this example, if the <code>Service</code> instance is resolved during the application boot process, the container will be injected into the service and that same container will be held by the <code>Service</code> instance on subsequent requests. This <strong>may</strong> not be a problem for your particular application; however, it can lead to the container unexpectedly missing bindings that were added later in the boot cycle or by a subsequent request.</p>
+                            <p>As a work-around, you could either stop registering the binding as a singleton, or you could inject a container resolver closure into the service that always resolves the current container instance:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-25"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Container\</span><span style="color: #FFCB8B;">Container</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">bind</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #BFC7D5;">);</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #FFCB8B;">Container</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">getInstance</span><span style="color: #BFC7D5;">());</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div></code></pre><button id="clipButton-25" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-25"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>The global <code>app</code> helper and the <code>Container::getInstance()</code> method will always return the latest version of the application container.</p>
+                            <p></p>
+                            <h3 id="request-injection"><a href="#request-injection">Request Injection</a></h3>
+                            <p>In general, you should avoid injecting the application service container or HTTP request instance into the constructors of other objects. For example, the following binding injects the entire request instance into an object that is bound as a singleton:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-26"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">/**</span></div><div class="line"><span style="color: #697098;"> * Register any application services.</span></div><div class="line"><span style="color: #697098;"> </span><span style="color: #697098;">*/</span></div><div class="line"><span style="color: #C792EA;">public</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">register</span><span style="color: #D9F5DD;">()</span><span style="color: #89DDFF;">:</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">void</span></div><div class="line"><span style="color: #BFC7D5;">{</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #BFC7D5;">[</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">request</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">]);</span></div><div class="line"><span style="color: #BFC7D5;">    });</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div></code></pre><button id="clipButton-26" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-26"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>In this example, if the <code>Service</code> instance is resolved during the application boot process, the HTTP request will be injected into the service and that same request will be held by the <code>Service</code> instance on subsequent requests. Therefore, all headers, input, and query string data will be incorrect, as well as all other request data.</p>
+                            <p>As a work-around, you could either stop registering the binding as a singleton, or you could inject a request resolver closure into the service that always resolves the current request instance. Or, the most recommended approach is simply to pass the specific request information your object needs to one of the object's methods at runtime:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-27"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">bind</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #BFC7D5;">[</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">request</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">]);</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #BEC5D4;">$app</span><span style="color: #BFC7D5;">[</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">request</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">]);</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">//</span><span style="color: #697098;"> Or...</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BEC5D4;">$service</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">method</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$request</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">input</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">name</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">));</span></div></code></pre><button id="clipButton-27" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-27"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>The global <code>request</code> helper will always return the request the application is currently handling and is therefore safe to use within your application.</p>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    It is acceptable to type-hint the <code>Illuminate\Http\Request</code> instance on your controller methods and route closures.</p></div>
+                            </blockquote>
+                            <p></p>
+                            <h3 id="configuration-repository-injection"><a href="#configuration-repository-injection">Configuration Repository Injection</a></h3>
+                            <p>In general, you should avoid injecting the configuration repository instance into the constructors of other objects. For example, the following binding injects the configuration repository into an object that is bound as a singleton:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-28"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">/**</span></div><div class="line"><span style="color: #697098;"> * Register any application services.</span></div><div class="line"><span style="color: #697098;"> </span><span style="color: #697098;">*/</span></div><div class="line"><span style="color: #C792EA;">public</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">register</span><span style="color: #D9F5DD;">()</span><span style="color: #89DDFF;">:</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">void</span></div><div class="line"><span style="color: #BFC7D5;">{</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">make</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">config</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">));</span></div><div class="line"><span style="color: #BFC7D5;">    });</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div></code></pre><button id="clipButton-28" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-28"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>In this example, if the configuration values change between requests, that service will not have access to the new values because it's depending on the original repository instance.</p>
+                            <p>As a work-around, you could either stop registering the binding as a singleton, or you could inject a configuration repository resolver closure to the class:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-29"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Container\</span><span style="color: #FFCB8B;">Container</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Contracts\Foundation\</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">bind</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Application</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$app</span><span style="color: #D9F5DD;">)</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #BEC5D4;">$app</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">make</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">config</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">));</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FF5572;">$this</span><span style="color: #89DDFF;">-&gt;app-&gt;</span><span style="color: #82AAFF;">singleton</span><span style="color: #BFC7D5;">(</span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #C792EA;">class</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">new</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">(</span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #FFCB8B;">Container</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">getInstance</span><span style="color: #BFC7D5;">()</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">make</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">config</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">));</span></div><div class="line"><span style="color: #BFC7D5;">});</span></div></code></pre><button id="clipButton-29" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-29"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>The global <code>config</code> will always return the latest version of the configuration repository and is therefore safe to use within your application.</p>
+                            <p></p>
+                            <h3 id="managing-memory-leaks"><a href="#managing-memory-leaks">Managing Memory Leaks</a></h3>
+                            <p>Remember, Octane keeps your application in memory between requests; therefore, adding data to a statically maintained array will result in a memory leak. For example, the following controller has a memory leak since each request to the application will continue to add data to the static <code>$data</code> array:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-30"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\</span><span style="color: #FFCB8B;">Service</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Http\</span><span style="color: #FFCB8B;">Request</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Support\</span><span style="color: #FFCB8B;">Str</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #697098;">/**</span></div><div class="line"><span style="color: #697098;"> * Handle an incoming request.</span></div><div class="line"><span style="color: #697098;"> </span><span style="color: #697098;">*/</span></div><div class="line"><span style="color: #C792EA;">public</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">index</span><span style="color: #D9F5DD;">(</span><span style="color: #FFCB8B;">Request</span><span style="color: #BFC7D5;"> </span><span style="color: #BEC5D4;">$request</span><span style="color: #D9F5DD;">)</span><span style="color: #89DDFF;">:</span><span style="color: #BFC7D5;"> </span><span style="color: #C792EA;">array</span></div><div class="line"><span style="color: #BFC7D5;">{</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #FFCB8B;">Service</span><span style="color: #89DDFF;">::</span><span style="color: #FFCB6B;">$data</span><span style="color: #BFC7D5;">[] </span><span style="color: #C792EA;">=</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Str</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">random</span><span style="color: #BFC7D5;">(</span><span style="color: #F78C6C;">10</span><span style="color: #BFC7D5;">);</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> [</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #697098;">//</span><span style="color: #697098;"> ...</span></div><div class="line"><span style="color: #BFC7D5;">    ];</span></div><div class="line"><span style="color: #BFC7D5;">}</span></div></code></pre><button id="clipButton-30" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-30"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>While building your application, you should take special care to avoid creating these types of memory leaks. It is recommended that you monitor your application's memory usage during local development to ensure you are not introducing new memory leaks into your application.</p>
+                            <p></p>
+                            <h2 id="concurrent-tasks"><a href="#concurrent-tasks">Concurrent Tasks</a></h2>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    This feature requires <a href="#swoole">Swoole</a>.</p></div>
+                            </blockquote>
+                            <p>When using Swoole, you may execute operations concurrently via light-weight background tasks. You may accomplish this using Octane's <code>concurrently</code> method. You may combine this method with PHP array destructuring to retrieve the results of each operation:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-31"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\Models\</span><span style="color: #FFCB8B;">User</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> App\Models\</span><span style="color: #FFCB8B;">Server</span><span style="color: #BFC7D5;">;</span></div><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Laravel\Octane\Facades\</span><span style="color: #FFCB8B;">Octane</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #BFC7D5;">[</span><span style="color: #BEC5D4;">$users</span><span style="color: #BFC7D5;">, </span><span style="color: #BEC5D4;">$servers</span><span style="color: #BFC7D5;">] </span><span style="color: #C792EA;">=</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Octane</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">concurrently</span><span style="color: #BFC7D5;">([</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #FFCB8B;">User</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">all</span><span style="color: #BFC7D5;">(),</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #FFCB8B;">Server</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">all</span><span style="color: #BFC7D5;">(),</span></div><div class="line"><span style="color: #BFC7D5;">]);</span></div></code></pre><button id="clipButton-31" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-31"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Concurrent tasks processed by Octane utilize Swoole's "task workers", and execute within an entirely different process than the incoming request. The amount of workers available to process concurrent tasks is determined by the <code>--task-workers</code> directive on the <code>octane:start</code> command:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="shell" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-32"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #BFC7D5;">php </span><span style="color: #BFC7D5;">artisan</span><span style="color: #BFC7D5;"> </span><span style="color: #BFC7D5;">octane:start</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--workers=4</span><span style="color: #BFC7D5;"> </span><span style="color: #82AAFF;">--task-workers=6</span></div></code></pre><button id="clipButton-32" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-32"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>When invoking the <code>concurrently</code> method, you should not provide more than 1024 tasks due to limitations imposed by Swoole's task system.</p>
+                            <p></p>
+                            <h2 id="ticks-and-intervals"><a href="#ticks-and-intervals">Ticks &amp; Intervals</a></h2>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    This feature requires <a href="#swoole">Swoole</a>.</p></div>
+                            </blockquote>
+                            <p>When using Swoole, you may register "tick" operations that will be executed every specified number of seconds. You may register "tick" callbacks via the <code>tick</code> method. The first argument provided to the <code>tick</code> method should be a string that represents the name of the ticker. The second argument should be a callable that will be invoked at the specified interval.</p>
+                            <p>In this example, we will register a closure to be invoked every 10 seconds. Typically, the <code>tick</code> method should be called within the <code>boot</code> method of one of your application's service providers:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-33"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #FFCB8B;">Octane</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">tick</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">simple-ticker</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #82AAFF;">ray</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">Ticking...</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">))</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">seconds</span><span style="color: #BFC7D5;">(</span><span style="color: #F78C6C;">10</span><span style="color: #BFC7D5;">);</span></div></code></pre><button id="clipButton-33" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-33"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>Using the <code>immediate</code> method, you may instruct Octane to immediately invoke the tick callback when the Octane server initially boots, and every N seconds thereafter:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-34"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #FFCB8B;">Octane</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">tick</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">simple-ticker</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">fn</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> =&gt; </span><span style="color: #82AAFF;">ray</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">Ticking...</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">))</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">seconds</span><span style="color: #BFC7D5;">(</span><span style="color: #F78C6C;">10</span><span style="color: #BFC7D5;">)</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">immediate</span><span style="color: #BFC7D5;">();</span></div></code></pre><button id="clipButton-34" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-34"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h2 id="the-octane-cache"><a href="#the-octane-cache">The Octane Cache</a></h2>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    This feature requires <a href="#swoole">Swoole</a>.</p></div>
+                            </blockquote>
+                            <p>When using Swoole, you may leverage the Octane cache driver, which provides read and write speeds of up to 2 million operations per second. Therefore, this cache driver is an excellent choice for applications that need extreme read / write speeds from their caching layer.</p>
+                            <p>This cache driver is powered by <a href="https://www.swoole.co.uk/docs/modules/swoole-table">Swoole tables</a>. All data stored in the cache is available to all workers on the server. However, the cached data will be flushed when the server is restarted:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-35"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #FFCB8B;">Cache</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">store</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">octane</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">)</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">put</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">framework</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">Laravel</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, </span><span style="color: #F78C6C;">30</span><span style="color: #BFC7D5;">);</span></div></code></pre><button id="clipButton-35" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-35"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-purple-600 lg:mb-0"><img src="/img/callouts/lightbulb.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    The maximum number of entries allowed in the Octane cache may be defined in your application's <code>octane</code> configuration file.</p></div>
+                            </blockquote>
+                            <p></p>
+                            <h3 id="cache-intervals"><a href="#cache-intervals">Cache Intervals</a></h3>
+                            <p>In addition to the typical methods provided by Laravel's cache system, the Octane cache driver features interval based caches. These caches are automatically refreshed at the specified interval and should be registered within the <code>boot</code> method of one of your application's service providers. For example, the following cache will be refreshed every five seconds:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-36"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Illuminate\Support\</span><span style="color: #FFCB8B;">Str</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FFCB8B;">Cache</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">store</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">octane</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">)</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">interval</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">random</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, </span><span style="color: #C792EA;">function</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">()</span><span style="color: #BFC7D5;"> {</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Str</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">random</span><span style="color: #BFC7D5;">(</span><span style="color: #F78C6C;">10</span><span style="color: #BFC7D5;">);</span></div><div class="line"><span style="color: #BFC7D5;">}, seconds: </span><span style="color: #F78C6C;">5</span><span style="color: #BFC7D5;">);</span></div></code></pre><button id="clipButton-36" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-36"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p></p>
+                            <h2 id="tables"><a href="#tables">Tables</a></h2>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    This feature requires <a href="#swoole">Swoole</a>.</p></div>
+                            </blockquote>
+                            <p>When using Swoole, you may define and interact with your own arbitrary <a href="https://www.swoole.co.uk/docs/modules/swoole-table">Swoole tables</a>. Swoole tables provide extreme performance throughput and the data in these tables can be accessed by all workers on the server. However, the data within them will be lost when the server is restarted.</p>
+                            <p>Tables should be defined within the <code>tables</code> configuration array of your application's <code>octane</code> configuration file. An example table that allows a maximum of 1000 rows is already configured for you. The maximum size of string columns may be configured by specifying the column size after the column type as seen below:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-37"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">tables</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> [</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">example:1000</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> [</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">name</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">string:1000</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">,</span></div><div class="line"><span style="color: #BFC7D5;">        </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">votes</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">int</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">,</span></div><div class="line"><span style="color: #BFC7D5;">    ],</span></div><div class="line"><span style="color: #BFC7D5;">],</span></div></code></pre><button id="clipButton-37" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-37"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <p>To access a table, you may use the <code>Octane::table</code> method:</p>
+                            <div class="relative code-block-wrapper"><pre><code data-theme="olaolu-palenight" data-lang="php" class="torchlight" style="background-color: #292D3E; --theme-selection-background: #7580B850;" id="clipText-38"><!-- Syntax highlighted by torchlight.dev --><div class="line"><span style="color: #C792EA;">use</span><span style="color: #BFC7D5;"> Laravel\Octane\Facades\</span><span style="color: #FFCB8B;">Octane</span><span style="color: #BFC7D5;">;</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #FFCB8B;">Octane</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">table</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">example</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">)</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">set</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">uuid</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">, [</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">name</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">Nuno Maduro</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">,</span></div><div class="line"><span style="color: #BFC7D5;">    </span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">votes</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;"> </span><span style="color: #89DDFF;">=&gt;</span><span style="color: #BFC7D5;"> </span><span style="color: #F78C6C;">1000</span><span style="color: #BFC7D5;">,</span></div><div class="line"><span style="color: #BFC7D5;">]);</span></div><div class="line">&nbsp;</div><div class="line"><span style="color: #C792EA;">return</span><span style="color: #BFC7D5;"> </span><span style="color: #FFCB8B;">Octane</span><span style="color: #89DDFF;">::</span><span style="color: #82AAFF;">table</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">example</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">)</span><span style="color: #89DDFF;">-&gt;</span><span style="color: #82AAFF;">get</span><span style="color: #BFC7D5;">(</span><span style="color: #D9F5DD;">'</span><span style="color: #C3E88D;">uuid</span><span style="color: #D9F5DD;">'</span><span style="color: #BFC7D5;">);</span></div></code></pre><button id="clipButton-38" class="md:block hidden copyBtn" aria-label="Copy to Clipboard" title="Copy to Clipboard" data-clipboard-target="#clipText-38"><svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"></path><path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z"></path></svg></button></div>
+                            <blockquote>
+                                <div class="mb-10 max-w-2xl mx-auto px-4 py-8 shadow-lg lg:flex lg:items-center callout"><div class="w-20 h-20 mb-6 flex items-center justify-center shrink-0 bg-red-600 lg:mb-0"><img src="/img/callouts/exclamation.min.svg" class="opacity-75"></div><p class="mb-0 lg:ml-6">
+                                    The column types supported by Swoole tables are: <code>string</code>, <code>int</code>, and <code>float</code>.</p></div>
+                            </blockquote>
+
+                            <style>footer{background-color:var(--docsearch-hit-background);z-index:101}</style><script async="" type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CKYILK3E&amp;placement=laravelcom" id="_carbonads_js"></script><div id="carbonads"><span><span class="carbon-wrap"><a href="https://forge.laravel.com" class="carbon-img" target="_blank" rel="noopener sponsored"><img src="https://cdn4.buysellads.net/uu/1/102396/1635866001-laravel-forge.png" alt="ads via Carbon" border="0" height="100" width="130" style="max-width: 130px;"></a><a href="https://forge.laravel.com" class="carbon-text" target="_blank" rel="noopener sponsored">Deploy Laravel and PHP applications on DigitalOcean, Linode, &amp; AWS.</a></span></span></div>
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- -->
 <header class="fixed left-0 top-0 w-full h-20 bg-white border-b border-black border-opacity-10 bg-clip-padding z-50"
         role=banner>
     <div class="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 h-full grid grid-cols-auto-span-auto items-center justify-between text-navy">
