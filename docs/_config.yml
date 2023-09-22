@@ -48,7 +48,7 @@ logo: assets/img/tw-jekyll.png
 github_branch: main
 
 # If not set, badge color (background) defaults to violet
-# badge_color: "#2bcf98"
+badge_color: "#0284c7"
 badge_rounded: true
 
 # Build settings
