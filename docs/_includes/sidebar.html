@@ -11,7 +11,7 @@
         <dt {% if forloop.first %}class="flex sm:justify-center" {% endif %}>
             <a
                 href="{% if section.url %}{{ site.baseurl }}/{{ section.url }}{% else %}{{ section.external_url }}{% endif %}"
-                class="flex items-center text-sm font-semibold hover:text-violet-600 transition-colors pb-1 -ml-0.5 mb-1 active">
+                class="flex items-center text-sm font-semibold hover:text-blue-600 transition-colors pb-1 -ml-0.5 mb-1 active">
                 {{ section.title }}
             </a>
         </dt>
@@ -19,7 +19,7 @@
         {% if section.links %}
         <dd {% if forloop.last %}class="border-l" {% else %}class="mb-8 border-l" {% endif %} id="{{ section.title | slugify }}">{% for entry in section.links %}
             <a href="{% if entry.url %}{{ site.baseurl }}/{{ entry.url }}{% else %}{{ entry.external_url }}{% endif %}"
-               class="flex hover:text-violet-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">{{
+               class="flex hover:text-blue-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">{{
                 entry.title }}</a>{% endfor %}
         </dd>
         {% endif %}{% endfor %}

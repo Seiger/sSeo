@@ -35,7 +35,7 @@ function slugify(string) {
 
         // This is the part id
         var parent = $("#" + div_id)
-        var content = '<li id="link_' + div_id + '"><a href="#' + div_id + '" title="' + div_text.split('¶')[0] +'" class="relative flex hover:text-violet-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">' + div_text.split('¶')[0] +'</a></li>';
+        var content = '<li id="link_' + div_id + '"><a href="#' + div_id + '" title="' + div_text.split('¶')[0] +'" class="relative flex hover:text-blue-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">' + div_text.split('¶')[0] +'</a></li>';
         $(toc).append(content);
 
         // Add section code to subnavigation
@@ -51,7 +51,7 @@ function slugify(string) {
                     $(contender).attr("id", contender_id)
                 }
 
-               var content = '<li><a href="#' + contender_id + '" title="' + contender_text.split('¶')[0] +'" class="relative flex hover:text-violet-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">' + contender_text.split('¶')[0] +'</a></li>';
+               var content = '<li><a href="#' + contender_id + '" title="' + contender_text.split('¶')[0] +'" class="relative flex hover:text-blue-600 transition-colors py-1 border-l-[3px] pl-4 -ml-0.5 border-transparent hover:border-violet-500">' + contender_text.split('¶')[0] +'</a></li>';
                children.append(content);
             }
          })
