@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: sSeo documentation
+title: sSeo
 email: info@seigerit.com
 author: Serhii Korneliuk
 description: sSeo collection of SEO Tools for Evolution CMS.
