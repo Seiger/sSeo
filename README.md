@@ -28,4 +28,4 @@ php artisan package:installrequire seiger/sseo "*"
 php artisan vendor:publish --provider="Seiger\sSeo\sSeoServiceProvider"
 ```
 
-[See full documentation here](https://seiger.github.io/sseo/)
+[See full documentation here](https://seiger.github.io/sSeo/)
