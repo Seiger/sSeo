@@ -5,15 +5,15 @@ permalink: /
 ---
 
 ![sSeo](https://repository-images.githubusercontent.com/627975404/56ba0688-1b24-4ea5-a58a-359fa4ef1be4)
-[![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo)
-[![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution)
-![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo)
-[![License](https://img.shields.io/packagist/l/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
-[![Issues](https://img.shields.io/github/issues/Seiger/sseo)](https://github.com/Seiger/sseo/issues)
-[![Stars](https://img.shields.io/packagist/stars/Seiger/sseo)](https://packagist.org/packages/seiger/sseo)
-[![Total Downloads](https://img.shields.io/packagist/dt/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
+[![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo){: .badge}
+[![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution){: .badge}
+![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo){: .badge}
+[![License](https://img.shields.io/packagist/l/seiger/sseo)](https://packagist.org/packages/seiger/sseo){: .badge}
+[![Issues](https://img.shields.io/github/issues/Seiger/sseo)](https://github.com/Seiger/sseo/issues){: .badge}
+[![Stars](https://img.shields.io/packagist/stars/Seiger/sseo)](https://packagist.org/packages/seiger/sseo){: .badge}
+[![Total Downloads](https://img.shields.io/packagist/dt/seiger/sseo)](https://packagist.org/packages/seiger/sseo){: .badge}
 
-# Welcome to sSeo!
+## Welcome to sSeo!
 
 **sSeo** - SEO Tools for Evolution CMS. 
 The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS 
