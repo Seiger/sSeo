@@ -108,7 +108,6 @@ article ul.task-list {
 }
 
 article ul li.task-list-item{
-  position: inherit;
   margin-left: 2em;
 }
 

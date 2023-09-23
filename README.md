@@ -29,7 +29,7 @@ and Blade templater.
 - [ ] Open Graph Protocol.
 - [ ] 301 Redirects to solve 404 errors in webmaster tools.
 
-### Install by artisan package installer
+## Install by artisan package installer
 
 Go to You /core/ folder:
 
