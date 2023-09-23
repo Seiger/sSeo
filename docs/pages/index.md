@@ -19,6 +19,8 @@ permalink: /
 The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS 
 and Blade templater.
 
+[Getting Started](/getting-started/){: .btn .btn-sky}
+
 ## Features
 
 - [x] Generates META tags automatically.
@@ -36,6 +38,4 @@ and Blade templater.
 
 ## Support
 
-If you need help, please don't hesitate to [open an issue](https://www.github.com/{{ site.github_user }}/{{ site.github_repo }}).
-
-[Getting Started](/getting-started/){: .self-auto .btn .btn-sky}
+If you need help, please don't hesitate to [open an issue]({{ site.support }}).

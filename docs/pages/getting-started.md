@@ -1,5 +1,8 @@
 ---
-description: Getting started with Tw-Jekyll
+layout: page
+title: sSeo for Evolution CMS 3
+description: Getting started with sSeo
+permalink: /getting-started/
 ---
 
 ## Test Features
