@@ -34,5 +34,8 @@ and Blade templater.
 - [ ] Open Graph Protocol.
 - [ ] 301 Redirects to solve 404 errors in webmaster tools.
 
+## Support
 
-[Getting Started](/getting-started/){: .self-auto}
+If you need help, please don't hesitate to [open an issue](https://www.github.com/{{ site.github_user }}/{{ site.github_repo }}).
+
+[Getting Started](/getting-started/){: .self-auto .btn .btn-sky}

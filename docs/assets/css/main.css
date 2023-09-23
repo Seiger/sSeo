@@ -112,7 +112,7 @@ blockquote span{
   margin-right: 0.5em;
 }
 
-a.badge img, img.badge{
+.docs article a.badge img, .docs article img.badge{
   margin: initial;
   display: inline;
 }

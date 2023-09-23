@@ -2,7 +2,7 @@
 description: Getting started with Tw-Jekyll
 ---
 
-## Features
+## Test Features
 
 ### User Interaction
 

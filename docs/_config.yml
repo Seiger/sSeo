@@ -42,7 +42,7 @@ github_repo: sSeo
 # discord: https://community.discord.com
 
 # If you have a logo, put here to include in meta tags
-logo: assets/img/tw-jekyll.png
+logo: assets/img/sit-logo-blue.png
 
 # branch to edit on GitHub
 github_branch: main
@@ -74,11 +74,11 @@ collections:
 
 # Defaults
 defaults:
-  - scope:
-      path: "_docs"
-      type: "docs"
-    values:
-      layout: page
+  #- scope:
+  #    path: "_docs"
+  #    type: "docs"
+  #  values:
+  #    layout: page
   - scope:
       path: ""
       type: "pages"
