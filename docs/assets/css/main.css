@@ -103,7 +103,11 @@ blockquote span{
   margin-top:1em;
 }
 
-.task-list-item{
+article ul.task-list {
+  margin-top: 0.5em;
+}
+
+article ul li.task-list-item{
   position: inherit;
   margin-left: 2em;
 }
@@ -112,7 +116,7 @@ blockquote span{
   margin-right: 0.5em;
 }
 
-.docs article a.badge img, .docs article img.badge{
+a.badge img, article img.badge{
   margin: initial;
   display: inline;
 }
