@@ -11,6 +11,10 @@
   background-color: #405cf5;
 }
 
+.btn-sky {
+  background-color: #0284c7;
+}
+
 .btn-red {
   background-color: #e31616;
 }
@@ -97,4 +101,18 @@ blockquote span{
   font-style: normal;
   font-weight: bold;
   margin-top:1em;
+}
+
+.task-list-item{
+  position: inherit;
+  margin-left: 2em;
+}
+
+.task-list-item [type=checkbox]{
+  margin-right: 0.5em;
+}
+
+a.badge img, img.badge{
+  margin: initial;
+  display: inline;
 }
