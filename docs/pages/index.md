@@ -1,25 +1,53 @@
 ---
 layout: page
-title: Tw-Jekyll Theme
+title: sSeo for Evolution CMS 3
 permalink: /
 ---
 
-# Welcome to Tailwind Jekyll!
+![sSeo](https://repository-images.githubusercontent.com/627975404/56ba0688-1b24-4ea5-a58a-359fa4ef1be4)
+[![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo)
+[![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution)
+![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo)
+[![License](https://img.shields.io/packagist/l/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
+[![Issues](https://img.shields.io/github/issues/Seiger/sseo)](https://github.com/Seiger/sseo/issues)
+[![Stars](https://img.shields.io/packagist/stars/Seiger/sseo)](https://packagist.org/packages/seiger/sseo)
+[![Total Downloads](https://img.shields.io/packagist/dt/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
 
-This is a [starter template](https://vsoch.github.com/tw-jekyll/) for a Tailwind jekyll theme, based
-on [these docs](https://github.com/superfly/docs) that are based on [Tailwind css](https://tailwindcss.com/docs/installation),
-however everything has been modified to work on GitHub pages (using Jekyll). If you don't need
-native deployment on GitHub pages, then please consider checking out Tailwind. 
-The original [Apache License](https://github.com/vsoch/tw-jekyll/tree/main/LICENSE) is included.
+# Welcome to sSeo!
 
-## Purpose
+**sSeo** - SEO Tools for Evolution CMS. 
+The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS 
+and Blade templater.
 
-GitHub pages uses Jekyll natively, so when I make documentation, I typically
-look for Jekyll templates. Why? Using Jekyll means that I can use markdown,
-and allow for users to easily contribute, and build automatically just by
-way of pushing to a main branch (or general GitHub pages).
+## Features
 
-{% include callout.html text="I fell in love with this template as soon as I saw it, and knew that I wanted others to be empowered to use it." %}
+- [x] Generates META tags automatically.
+- [x] Install XML Sistemap.
+- [x] Include or exclude documents from xml sitemap (via Searchable).
+- [x] On page Robots index/follow settings.
+- [x] Custom Seo Title.
+- [x] Custom Seo Description.
+- [x] Canonical Url to avoid duplicated contents.
+- [x] Noindex pagination page.
+- [x] Noindex custom $_GET parameters.
+- [x] http(s) and WWW redirects.
+- [ ] Open Graph Protocol.
+- [ ] 301 Redirects to solve 404 errors in webmaster tools.
 
-For getting started with development, see the {% include doc.html name="Getting Started" path="getting-started" %} page. Would you like to request a feature or contribute? [Open an issue]({{ site.repo }}/issues)
+## Install by artisan package installer
 
+Go to You /core/ folder:
+
+```console
+cd core
+```
+
+Run php artisan command
+
+```console
+php artisan package:installrequire seiger/sseo "*"
+```
+
+```console
+php artisan vendor:publish --provider="Seiger\sSeo\sSeoServiceProvider"
+```

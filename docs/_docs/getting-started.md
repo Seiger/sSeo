@@ -1,11 +1,5 @@
 ---
-tags: 
- - jekyll
- - github
 description: Getting started with Tw-Jekyll
-author:
-  name: Vanessa Sochat
-  github: vsoch
 ---
 
 ## Features

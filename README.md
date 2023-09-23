@@ -8,9 +8,28 @@
 [![Stars](https://img.shields.io/packagist/stars/Seiger/sseo)](https://packagist.org/packages/seiger/sseo)
 [![Total Downloads](https://img.shields.io/packagist/dt/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
 
-**sSeo** Collection of SEO Tools for Evolution CMS.
+# Welcome to sSeo!
 
-## Install by artisan package installer
+**sSeo** - SEO Tools for Evolution CMS.
+The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS
+and Blade templater.
+
+## Features
+
+- [x] Generates META tags automatically.
+- [x] Install XML Sistemap.
+- [x] Include or exclude documents from xml sitemap (via Searchable).
+- [x] On page Robots index/follow settings.
+- [x] Custom Seo Title.
+- [x] Custom Seo Description.
+- [x] Canonical Url to avoid duplicated contents.
+- [x] Noindex pagination page.
+- [x] Noindex custom $_GET parameters.
+- [x] http(s) and WWW redirects.
+- [ ] Open Graph Protocol.
+- [ ] 301 Redirects to solve 404 errors in webmaster tools.
+
+### Install by artisan package installer
 
 Go to You /core/ folder:
 
