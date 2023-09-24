@@ -5,7 +5,7 @@ description: Getting started with sSeo
 permalink: /getting-started/
 ---
 
-## Install by artisan package installer
+## Install by artisan package
 
 Go to You /core/ folder
 
