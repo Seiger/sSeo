@@ -29,9 +29,9 @@ Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>
 
 ```html
 <!DOCTYPE html>
-<html lang="{{evo()->getConfig('lang', 'uk')}}" class="page">
+<html lang="{% raw %}{{evo()->getConfig('lang', 'en')}}{% endraw %}">
 <head>
-    <base href="{{evo()->getConfig('site_url', '/')}}"/>
+    <base href="{% raw %}{{evo()->getConfig('site_url', '/')}}{% endraw %}"/>
     @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender')))
         {!!implode('', $evtHead)!!}
     @endif
