@@ -25,8 +25,16 @@ php artisan vendor:publish --provider="Seiger\sSeo\sSeoServiceProvider"
 
 ## Configure layout via Blade
 
-Put in Your `<head></head>` section this code
+Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>` section of your Blade layout.
 
-```php
-@if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender'))){!!implode('', $evtHead)!!}@endif
+```blade
+<!DOCTYPE html>
+<html lang="{{evo()->getConfig('lang', 'uk')}}" class="page">
+<head>
+    <base href="{{evo()->getConfig('site_url', '/')}}"/>
+    @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender')))
+        {!!implode('', $evtHead)!!}
+    @endif
+    ...
+</head>
 ```
