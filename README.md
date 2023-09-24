@@ -1,5 +1,5 @@
 # sSeo for Evolution CMS 3
-![sSeo](https://repository-images.githubusercontent.com/627975404/56ba0688-1b24-4ea5-a58a-359fa4ef1be4)
+![sSeo](https://repository-images.githubusercontent.com/675386929/349d7568-33f6-487d-8b87-367c13b35c4d)
 [![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo)
 [![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution)
 ![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo)

@@ -18,9 +18,9 @@
         </label>
         <div class="col-7 col-md-9 col-lg-10">
             <select name="manage_www" id="manage_www" class="form-control" onchange="documentDirty=true;">
-                <option value="0" @if(config('seiger.settings.sSeo.manage_www', 0) == 0) selected @endif>Не враховувати</option>
-                <option value="1" @if(config('seiger.settings.sSeo.manage_www', 0) == 1) selected @endif>Без WWW</option>
-                <option value="2" @if(config('seiger.settings.sSeo.manage_www', 0) == 2) selected @endif>З WWW</option>
+                <option value="0" @if(config('seiger.settings.sSeo.manage_www', 0) == 0) selected @endif>@lang('sSeo::global.ignore')</option>
+                <option value="1" @if(config('seiger.settings.sSeo.manage_www', 0) == 1) selected @endif>@lang('sSeo::global.without_www')</option>
+                <option value="2" @if(config('seiger.settings.sSeo.manage_www', 0) == 2) selected @endif>@lang('sSeo::global.using_www')</option>
             </select>
         </div>
     </div>

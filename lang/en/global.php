@@ -1,4 +1,17 @@
 <?php return [
+    'configure' => 'Configuration',
+    'configure_help' => 'Adjusting the SEO behavior of the site.',
+    'configure_icon' => 'fa fa-sliders',
+    'description' => 'A tool for adjusting the SEO behavior of a site.',
     'icon' => 'fa fas fa-chart-line',
+    'ignore' => 'Ignore',
+    'manage_www' => 'Management of the WWW',
+    'noindex_get' => 'Do not index $_GET',
+    'noindex_get_help' => 'Specify the list of $_GET parameters separated by commas. Pages with these options will be banned from indexing.',
+    'paginates_get' => 'Pagination pages',
+    'paginates_get_help' => 'A parameter indicating that this page is a pagination page. Default page.',
+    'protocol_help' => 'The site protocol is configured in <b>System Configuration -> Site</b>',
     'title' => 'SEO',
+    'using_www' => 'Using WWW',
+    'without_www' => 'Without WWW',
 ];
