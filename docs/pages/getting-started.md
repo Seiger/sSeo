@@ -27,7 +27,7 @@ php artisan vendor:publish --provider="Seiger\sSeo\sSeoServiceProvider"
 
 Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>` section of your Blade layout.
 
-```blade
+```html
 <!DOCTYPE html>
 <html lang="{{evo()->getConfig('lang', 'uk')}}" class="page">
 <head>
