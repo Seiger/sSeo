@@ -72,7 +72,7 @@
 }
  
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic);
-blockquote{
+blockquote {
   font-family:Open Sans;
   font-style:italic;
   color: #555555;
@@ -91,11 +91,11 @@ blockquote::before{
   top:-10px;
 }
 
-blockquote::after{
+blockquote::after {
   content: '';
 }
 
-blockquote span{
+blockquote span {
   display:block;
   color:#333333;
   font-style: normal;
@@ -107,15 +107,19 @@ article ul.task-list {
   margin-top: 0.5em;
 }
 
-article ul li.task-list-item{
+article ul li.task-list-item {
   margin-left: 2em;
 }
 
-.task-list-item [type=checkbox]{
+article ul li.task-list-item:before {
+  display: none;
+}
+
+.task-list-item [type=checkbox] {
   margin-right: 0.5em;
 }
 
-a.badge img, article img.badge{
+a.badge img, article img.badge {
   margin: initial;
   display: inline;
 }
