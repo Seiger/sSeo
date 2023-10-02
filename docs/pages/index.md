@@ -19,7 +19,7 @@ permalink: /
 The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS 
 and Blade templater.
 
-[Getting Started](/getting-started/){: .btn .btn-sky}
+[Getting Started]({{ site.baseurl }}/getting-started/){: .btn .btn-sky}
 
 ## Features
 
