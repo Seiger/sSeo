@@ -27,10 +27,12 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             if (str_starts_with($domen, 'www.')) {
                 if (config('seiger.settings.sSeo.manage_www', 0) == 1) {
                     $domen = ltrim($domen, 'www.');
+                    $redirect = true;
                 }
             } else {
                 if (config('seiger.settings.sSeo.manage_www', 0) == 2) {
                     $domen = 'www.' . $domen;
+                    $redirect = true;
                 }
             }
         }
@@ -44,6 +46,16 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             $requestUriArr = explode('/', $requestUri);
             $requestUriArr = array_diff($requestUriArr, ['']);
             $requestUri = implode('/', $requestUriArr);
+            if (strpos($requestUri,"/")) {
+                $requestUri = '/'.$requestUri;
+            }
+            $redirect = true;
+        }
+
+        // Check request uppercase latters
+        if (preg_match_all("/[A-Z]/", $requestUri)) {
+            $requestUri = Str::lower($requestUri);
+            $redirect = true;
         }
 
         // Check request end
@@ -52,6 +64,7 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             if (!str_ends_with($requestUriArr[0], evo()->getConfig('friendly_url_suffix', ''))) {
                 $requestUriArr[0] = $requestUriArr[0] . evo()->getConfig('friendly_url_suffix', '');
                 $requestUri = implode('?', $requestUriArr);
+                $redirect = true;
             }
         }
 

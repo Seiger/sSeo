@@ -38,3 +38,7 @@ Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>
     ...
 </head>
 ```
+
+## Configure sitemap template
+
+Configure the output template for `sitemap.xml` by path `assets/plugins/sseo/sitemapTemplate.blade.php`
