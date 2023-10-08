@@ -1,7 +1,4 @@
 <nav aria-label="Main menu" data-menu class="z-40 bg-white text-base hidden md:block fixed top-0 pt-36 pb-16 pl-0.5 w-[calc(100%-1rem)] md:w-60 h-full max-h-screen md:text-[13px] text-navy docs-left-sidebar overflow-y-auto leading-5">
-    <a class="navbar-brand" href="{{ site.baseurl }}/">
-        <span class="navbar-logo"></span>{% include logo.svg %}<span class="text-uppercase font-weight-bold">{{ site.title }}</span>
-    </a>
     <dl class=leading-5>
         {% for section in site.data.toc %}
             {% capture sectionUrl %}
