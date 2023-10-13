@@ -6,13 +6,13 @@
 @foreach(sLang::langFront() as $lang)
     @if ($lang != sLang::langDefault())@php(evo()->setConfig('virtual_dir', $lang.'/'))@endif
     @foreach($pages as $page)
-        <url><loc>{{url($page->id, '', '', 'full')}}</loc><lastmod>{{Carbon\Carbon::parse($page->editedon)->toDateTimeString()}}</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
+        <url><loc>{{url($page->id, '', '', 'full')}}</loc><lastmod>{{Carbon\Carbon::parse($page->editedon)->toIso8601String()}}</lastmod><changefreq>always</changefreq><priority>0.7</priority></url>
     @endforeach
     @foreach($articles as $article)
-        <url><loc>{{$article->link}}</loc><lastmod>{{Carbon\Carbon::parse($article->updated_at)->toDateTimeString()}}</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
+        <url><loc>{{$article->link}}</loc><lastmod>{{Carbon\Carbon::parse($article->updated_at)->toIso8601String()}}</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
     @endforeach
     @foreach($books as $book)
-        <url><loc>{{$book->link}}</loc><lastmod>{{Carbon\Carbon::parse($book->updated_at)->toDateTimeString()}}</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
+        <url><loc>{{$book->link}}</loc><lastmod>{{Carbon\Carbon::parse($book->updated_at)->toIso8601String()}}</lastmod><changefreq>weekly</changefreq><priority>1</priority></url>
     @endforeach
 @endforeach
 </urlset>
