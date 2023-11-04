@@ -53,8 +53,10 @@ Event::listen('evolution.OnLoadSettings', function($params) {
         }
 
         // Check request uppercase latters
-        if (preg_match_all("/[A-Z]/", $requestUri)) {
-            $requestUri = Str::lower($requestUri);
+        if (preg_match_all("/[A-Z].*\?/", $requestUri)) {
+            $requestArr = explode('?', $requestUri);
+            $requestArr[0] = Str::lower($requestArr[0]);
+            $requestUri = implode('?', $requestArr);
             $redirect = true;
         }
 
