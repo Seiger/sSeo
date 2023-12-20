@@ -12,7 +12,7 @@
 
 **sSeo** - SEO Tools for Evolution CMS.
 The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS
-and Blade templater.
+and Blade templates.
 
 ## Features
 
