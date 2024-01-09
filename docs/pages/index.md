@@ -1,6 +1,6 @@
 ---
 layout: page
-title: sSeo for Evolution CMS 3
+title: sSeo for Evolution CMS
 permalink: /
 ---
 
@@ -15,26 +15,34 @@ permalink: /
 
 ## Welcome to sSeo!
 
-**sSeo** - SEO Tools for Evolution CMS. 
-The sSeo package contains the best snippets and plugins for SEO optimization on websites built by Evolution CMS 
-and Blade templater.
+Elevate your website's visibility and performance on search engines with **sSeo**,
+a robust SEO tools package meticulously crafted for Evolution CMS and Blade templates.
+Designed to empower website administrators and developers, this feature-rich plugin is
+your go-to solution for comprehensive SEO optimization.
+
+Unleash the full potential of your website's SEO strategy with **sSeo**.
+Whether you are fine-tuning existing content or embarking on new web projects,
+this plugin provides the tools you need for a competitive edge in the digital landscape.
 
 [Getting Started]({{ site.baseurl }}/getting-started/){: .btn .btn-sky}
 
 ## Features
 
-- [x] Generates META tags automatically.
-- [x] Install XML Sistemap.
+- [x] Automatic META Tags Generation.
+- [x] XML Sitemap Generation.
 - [x] Include or exclude documents from xml sitemap (via Searchable).
 - [x] On page Robots index/follow settings.
-- [x] Custom Seo Title.
-- [x] Custom Seo Description.
-- [x] Canonical Url to avoid duplicated contents.
-- [x] Noindex pagination page.
-- [x] Noindex custom $_GET parameters.
-- [x] http(s) and WWW redirects.
-- [ ] Open Graph Protocol.
-- [ ] 301 Redirects to solve 404 errors in webmaster tools.
+- [x] Custom SEO Title and Description.
+- [x] Canonical URL Implementation.
+- [x] Noindex for Pagination and Custom $_GET Parameters.
+- [x] HTTP(S) and WWW Redirects.
+- [ ] Open Graph Protocol Integration.
+- [ ] 301 Redirects for Resolving 404 Errors.
+- [ ] SEO Dashboard and Reporting.
+- [ ] Social Media Integration Metrics.
+- [ ] AI-Powered SEO Recommendations.
+- [ ] Featured Snippets Optimization.
+- [ ] Local Business Schema Markup.
 
 ## Support
 

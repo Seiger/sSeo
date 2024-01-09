@@ -1,14 +1,22 @@
 <?php namespace Seiger\sSeo;
-/**
- * Class sSeo - Seiger oollection of SEO Tools for Evolution CMS.
- */
 
 use Illuminate\Support\Str;
 use ReflectionClass;
 use View;
 
+/**
+ * Class sSeo - Seiger collection of SEO Tools for Evolution CMS.
+ *
+ * This class provides methods for handling SEO-related tasks such as checking robots meta tag,
+ * generating sitemap, and getting route URLs.
+ */
 class sSeo
 {
+    /**
+     * Check robots settings and return the value to be used
+     *
+     * @return array Returns an array with keys "show" (boolean) and "value" (string)
+     */
     public function checkRobots(): array
     {
         $robots = ['show' => false, 'value' => 'index,follow'];
@@ -63,6 +71,14 @@ class sSeo
         return $robots;
     }
 
+    /**
+     * Generate sitemap file
+     *
+     * This method generates a sitemap file by rendering the "sitemapTemplate" view and
+     * saving the contents to the "sitemap.xml" file in the MODX base path.
+     *
+     * @return void
+     */
     public function generateSitemap()
     {
         $sitemap = View::make('sSeoAssets::sitemapTemplate')->render();
@@ -70,10 +86,11 @@ class sSeo
     }
 
     /**
-     * Get url from route name
+     * Resolves and returns the route URL for the given route name.
      *
-     * @param string $name Route name
-     * @return string
+     * @param string $name The name of the route to resolve.
+     *
+     * @return string The resolved route URL without the trailing slash.
      */
     public function route(string $name): string
     {

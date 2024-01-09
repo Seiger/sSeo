@@ -6,12 +6,17 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use View;
 
+/**
+ * Show tabs with custom system settings
+ *
+ * @return \Illuminate\View\View
+ */
 class sSeoController
 {
     /**
-     * Show tabs with custom system settings
+     * Returns the view for the index page.
      *
-     * @return View
+     * @return mixed The view for the index page.
      */
     public function index()
     {
@@ -19,11 +24,9 @@ class sSeoController
     }
 
     /**
-     * Update settings configuration
+     * Updates the configure file with the new values.
      *
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @return \Illuminate\Http\RedirectResponse The redirect response to the previous page.
      */
     public function updateConfigure()
     {
@@ -52,11 +55,11 @@ class sSeoController
     }
 
     /**
-     * Display render
+     * Returns the view for the specified template.
      *
-     * @param string $tpl
-     * @param array $data
-     * @return View
+     * @param string $tpl The template name.
+     * @param array $data Optional data to be passed to the view.
+     * @return mixed The view for the specified template.
      */
     public function view(string $tpl, array $data = [])
     {
