@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Facade;
  *
  * This class is a facade for the sSeo component, which allows easy access to its functionality.
  *
- * @see Facade
+ * @package Seiger\sSeo
+ * @mixin \Seiger\sSeo\sSeo
  */
 class sSeo extends Facade
 {
