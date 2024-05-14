@@ -1,3 +1,4 @@
+@if(!is_writable(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php'))<div class="alert alert-danger" role="alert">@lang('sSeo::global.not_writable')</div>@endif
 <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.update-configure')}}" onsubmit="documentDirty=false;">
     <div class="row form-row form-element-input">
         <label class="control-label col-5 col-md-3 col-lg-2">

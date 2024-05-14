@@ -86,11 +86,10 @@ class sSeo
     }
 
     /**
-     * Resolves and returns the route URL for the given route name.
+     * Get url from route name with action id
      *
-     * @param string $name The name of the route to resolve.
-     *
-     * @return string The resolved route URL without the trailing slash.
+     * @param string $name Route name
+     * @return string
      */
     public function route(string $name): string
     {
@@ -98,6 +97,15 @@ class sSeo
         if (evo()->getConfig('friendly_url_suffix', '') != '/') {
             $route = str_ireplace(evo()->getConfig('friendly_url_suffix', ''), '', route($name));
         }
+
+        $a = 0;
+        $arr = str_split($name, 1);
+        foreach ($arr as $n) {
+            $a += ord($n);
+        }
+        $a = $a < 999 ? $a + 999 : $a;
+
+        return $route.'?a='.$a;
         return $route;
     }
 }

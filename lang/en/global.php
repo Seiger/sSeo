@@ -14,4 +14,5 @@
     'title' => 'SEO',
     'using_www' => 'Using WWW',
     'without_www' => 'Without WWW',
+    'not_writable' => 'The file ../core/custom/config/seiger/settings/sSeo.php is not writable.',
 ];

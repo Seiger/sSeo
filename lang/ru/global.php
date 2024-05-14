@@ -14,4 +14,5 @@
     'title' => 'SEO',
     'using_www' => 'З WWW',
     'without_www' => 'Без WWW',
+    'not_writable' => 'Файл ../core/custom/config/seiger/settings/sSeo.php не доступен для записи.',
 ];
