@@ -52,12 +52,14 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             $redirect = true;
         }
 
-        // Check request uppercase latters
-        if (preg_match_all("/[A-Z].*\?/", $requestUri)) {
-            $requestArr = explode('?', $requestUri);
-            $requestArr[0] = Str::lower($requestArr[0]);
-            $requestUri = implode('?', $requestArr);
-            $redirect = true;
+        // Check request path uppercase letters
+        if (preg_match_all("/[A-Z]/", $requestUri)) {
+            $requestUriArr = explode('?', $requestUri);
+            if (preg_match_all("/[A-Z]/", $requestUriArr[0])) {
+                $requestUriArr[0] = Str::lower($requestUriArr[0]);
+                $requestUri = implode('?', $requestUriArr);
+                $redirect = true;
+            }
         }
 
         // Check request end
