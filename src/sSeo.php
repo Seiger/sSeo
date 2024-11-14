@@ -93,19 +93,13 @@ class sSeo
      */
     public function route(string $name): string
     {
-        $route = rtrim(route($name), '/');
-        if (evo()->getConfig('friendly_url_suffix', '') != '/') {
-            $route = str_ireplace(evo()->getConfig('friendly_url_suffix', ''), '', route($name));
-        }
+        // Generate the base route URL and remove trailing slashes
+        $route = route($name);
 
-        $a = 0;
-        $arr = str_split($name, 1);
-        foreach ($arr as $n) {
-            $a += ord($n);
-        }
+        // Generate a unique action ID based on the route name
+        $a = array_sum(array_map('ord', str_split($name))) + 999;
         $a = $a < 999 ? $a + 999 : $a;
 
-        return $route.'?a='.$a;
-        return $route;
+        return str_replace(MODX_MANAGER_URL, '/', $route) . '?a=' . $a;
     }
 }

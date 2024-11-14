@@ -20,6 +20,7 @@ class sSeoController
      */
     public function index()
     {
+        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
         return $this->view('index');
     }
 

@@ -11,22 +11,20 @@ class sSeoServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Only Manager
-        if (IN_MANAGER_MODE) {
-            // Add custom routes for package
-            include(__DIR__.'/Http/routes.php');
+        // Add custom routes for package
+        $this->app->router->middlewareGroup('mgr', config('app.middleware.mgr', []));
+        include(__DIR__.'/Http/routes.php');
 
-            // MultiLang
-            $this->loadTranslationsFrom(dirname(__DIR__) . '/lang', 'sSeo');
+        // MultiLang
+        $this->loadTranslationsFrom(dirname(__DIR__) . '/lang', 'sSeo');
 
-            // For use config
-            $this->publishes([
-                dirname(__DIR__) . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
-                dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
-                dirname(__DIR__) . '/images/seigerit-yellow.svg' => public_path('assets/site/seigerit-yellow.svg'),
-                dirname(__DIR__) . '/config/sSeoSitemapTemplate.blade.php' => public_path('assets/plugins/sseo/sitemapTemplate.blade.php'),
-            ]);
-        }
+        // For use config
+        $this->publishes([
+            dirname(__DIR__) . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
+            dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
+            dirname(__DIR__) . '/images/seigerit-yellow.svg' => public_path('assets/site/seigerit-yellow.svg'),
+            dirname(__DIR__) . '/config/sSeoSitemapTemplate.blade.php' => public_path('assets/plugins/sseo/sitemapTemplate.blade.php'),
+        ]);
 
         // Views
         $this->loadViewsFrom(dirname(__DIR__) . '/views', 'sSeo');
