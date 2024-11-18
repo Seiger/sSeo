@@ -6,6 +6,7 @@
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Seiger\sSeo\Facades\sSeo;
+use Seiger\sSeo\Models\sSeoModel;
 
 /**
  * Correct url formatting
@@ -90,10 +91,16 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 });
 
 Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
+    // Meta Title
+    $title = sSeo::checkMetaTitle();
+
+    // Meta Description
+    $description = sSeo::checkMetaDescription();
+
     // SEO robots
     $robots = sSeo::checkRobots();
 
-    return view('sSeo::partials.headWebDocument', compact('robots'))->render();
+    return view('sSeo::partials.headWebDocument', compact('robots', 'title', 'description'))->render();
 });
 
 Event::listen('evolution.OnDocFormSave', function($params) {
@@ -118,4 +125,40 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
     ];
 
     return serialize(array_merge($params['menu'], $menu));
+});
+
+/**
+ * Add SEO Tab or Block
+ */
+Event::listen('evolution.OnDocFormRender', function($params) {
+    if (isset($params['id']) && !empty($params['id'])) {
+        $fields = sSeoModel::where('resource_id', $params['id'])
+            ->where('resource_type', 'document')
+            ->first()?->toArray();
+        return view('sSeo::resourceTab', $fields ?? [])->render();
+    }
+});
+Event::listen('evolution.sCommerceFormFieldRender', function($params) {
+    if (isset($params['field']) && !empty($params['field']) && $params['field'] == 'seo' && $params['dataInput']['product'] && $params['dataInput']['product']->id) {
+        $fields = sSeoModel::where('resource_id', $params['dataInput']['product']->id)
+            ->where('resource_type', 'product')
+            ->first()?->toArray();
+        return view('sSeo::productSection', $fields ?? [])->render();
+    }
+});
+
+/**
+ * Save SEO fields
+ */
+Event::listen('evolution.OnDocFormSave', function($params) {
+    if (isset($params['id']) && !empty($params['id'])) {
+        $data = array_merge(['resource_id' => $params['id'], 'resource_type' => 'document'], request()->input('sseo', []));
+        sSeo::updateSeoFields($data);
+    }
+});
+Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
+    if (isset($params['product']) && $params['product']->id) {
+        $data = array_merge(['resource_id' => $params['product']->id, 'resource_type' => 'product'], request()->input('sseo', []));
+        sSeo::updateSeoFields($data);
+    }
 });

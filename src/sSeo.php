@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use ReflectionClass;
+use Seiger\sSeo\Models\sSeoModel;
 use View;
 
 /**
@@ -12,6 +13,42 @@ use View;
  */
 class sSeo
 {
+    private $document;
+
+    /**
+     * Set Meta Title value
+     *
+     * @return string Returns a title value
+     */
+    public function checkMetaTitle(): string
+    {
+        $document = $this->getDocument();
+
+        if (isset($document['meta_title']) && !empty($document['meta_title'])) {
+            $title = $document['meta_title'];
+        } else {
+            $title = ($document['pagetitle'] ?? '') . ' - ' . evo()->getConfig('site_name', '');
+        }
+        return $title;
+    }
+
+    /**
+     * Set Meta Description value
+     *
+     * @return string Returns a title value
+     */
+    public function checkMetaDescription(): string
+    {
+        $document = $this->getDocument();
+
+        if (isset($document['meta_description']) && !empty($document['meta_description'])) {
+            $description = $document['meta_description'];
+        } else {
+            $description = '';
+        }
+        return $description;
+    }
+
     /**
      * Check robots settings and return the value to be used
      *
@@ -72,6 +109,27 @@ class sSeo
     }
 
     /**
+     * Set or Update SEO fields
+     *
+     * @param $data
+     * @return void
+     */
+    public function updateSeoFields($data)
+    {
+        if (is_array($data) && isset($data['resource_id']) && (int)$data['resource_id']) {
+            $fields = sSeoModel::where('resource_id', $data['resource_id'])
+                ->where('resource_type', $data['resource_type'])
+                ->firstOrNew();
+
+            foreach ($data as $key => $value) {
+                $fields->{$key} = $value;
+            }
+
+            $fields->save();
+        }
+    }
+
+    /**
      * Generate sitemap file
      *
      * This method generates a sitemap file by rendering the "sitemapTemplate" view and
@@ -101,5 +159,21 @@ class sSeo
         $a = $a < 999 ? $a + 999 : $a;
 
         return str_replace(MODX_MANAGER_URL, '/', $route) . '?a=' . $a;
+    }
+
+    private function getDocument()
+    {
+        if ($this->document === null) {
+            $document = sSeoModel::where('resource_id', evo()->documentObject['id'])
+                ->where('resource_type', evo()->documentObject['type'])
+                ->first()?->toArray();
+
+            if (is_array($document) && count($document)) {
+                $this->document = array_merge($document, evo()->documentObject);
+            } else {
+                $this->document = evo()->documentObject;
+            }
+        }
+        return $this->document;
     }
 }
