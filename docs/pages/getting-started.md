@@ -23,6 +23,10 @@ php artisan package:installrequire seiger/sseo "*"
 php artisan vendor:publish --provider="Seiger\sSeo\sSeoServiceProvider"
 ```
 
+```console
+php artisan migrate
+```
+
 ## Configure layout via Blade
 
 Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>` section of your Blade layout.
