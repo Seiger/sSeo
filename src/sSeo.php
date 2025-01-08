@@ -16,7 +16,47 @@ class sSeo
     private $document;
 
     /**
-     * Set Meta Title value
+     * Check and generate the canonical URL for the current page.
+     *
+     * @return array Returns an array with keys "show" (boolean) and "value" (string)
+     */
+    public function checkCanonical(): array
+    {
+        $document = $this->getDocument();
+        $canonical = ['show' => false, 'value' => ''];
+
+        // canonical
+        if (isset(evo()->documentObject['canonical'])) {
+            if (is_scalar(evo()->documentObject['canonical']) && evo()->documentObject['canonical'] != 'default') {
+                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['canonical'])];
+            } elseif (is_array(evo()->documentObject['canonical']) && isset(evo()->documentObject['canonical'][1]) && evo()->documentObject['canonical'][1] != 'default') {
+                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['canonical'][1])];
+            }
+        }
+
+        // tv_canonical
+        if (isset(evo()->documentObject['tv_canonical'])) {
+            if (is_scalar(evo()->documentObject['tv_canonical']) && evo()->documentObject['tv_canonical'] != 'default') {
+                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_canonical'])];
+            } elseif (is_array(evo()->documentObject['tv_canonical']) && isset(evo()->documentObject['tv_canonical'][1]) && evo()->documentObject['tv_canonical'][1] != 'default') {
+                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_canonical'][1])];
+            }
+        }
+
+        // Paginate
+        $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
+        if (
+            in_array($paginates_get, request()->segments()) ||
+            in_array($paginates_get, array_keys(request()->except('q')))
+        ) {
+            $canonical = ['show' => true, 'value' => url($document['id'], '', '', 'full')];
+        }
+
+        return $canonical;
+    }
+
+    /**
+     * Check and generate the Meta Title value
      *
      * @return string Returns a title value
      */
@@ -33,7 +73,7 @@ class sSeo
     }
 
     /**
-     * Set Meta Description value
+     * Check and generate the Meta Description value
      *
      * @return string Returns a title value
      */
@@ -50,7 +90,7 @@ class sSeo
     }
 
     /**
-     * Check robots settings and return the value to be used
+     * Check and generate the Robots settings and return the value to be used
      *
      * @return array Returns an array with keys "show" (boolean) and "value" (string)
      */
@@ -139,8 +179,10 @@ class sSeo
      */
     public function generateSitemap()
     {
-        $sitemap = View::make('sSeoAssets::sitemapTemplate')->render();
-        file_put_contents(MODX_BASE_PATH . "/sitemap.xml", $sitemap);
+        if (!evo()->getConfig('check_sMultisite', true)) {
+            $sitemap = View::make('sSeoAssets::sitemapTemplate')->render();
+            file_put_contents(MODX_BASE_PATH . "/sitemap.xml", $sitemap);
+        }
     }
 
     /**

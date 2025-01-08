@@ -91,6 +91,9 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 });
 
 Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
+    // Meta Canonical
+    $canonical = sSeo::checkCanonical();
+
     // Meta Title
     $title = sSeo::checkMetaTitle();
 
@@ -100,7 +103,7 @@ Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     // SEO robots
     $robots = sSeo::checkRobots();
 
-    return view('sSeo::partials.headWebDocument', compact('robots', 'title', 'description'))->render();
+    return view('sSeo::partials.headWebDocument', compact('canonical', 'robots', 'title', 'description'))->render();
 });
 
 Event::listen('evolution.OnDocFormSave', function($params) {
