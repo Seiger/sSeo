@@ -69,7 +69,7 @@ class sSeo
         } else {
             $title = ($document['pagetitle'] ?? '') . ' - ' . evo()->getConfig('site_name', '');
         }
-        return $title;
+        return trim($title);
     }
 
     /**
@@ -86,7 +86,7 @@ class sSeo
         } else {
             $description = '';
         }
-        return $description;
+        return trim($description);
     }
 
     /**
