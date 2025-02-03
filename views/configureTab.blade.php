@@ -43,6 +43,15 @@
             <input id="noindex_get" name="noindex_get" value="{{implode(',', config('seiger.settings.sSeo.noindex_get', []))}}" type="text" class="form-control" onchange="documentDirty=true;">
         </div>
     </div>
+    <div class="row form-row form-element-input">
+        <label class="control-label col-5 col-md-3 col-lg-2">
+            <span>@lang('sSeo::global.redirects_enabled')</span>
+            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.redirects_enabled_help')"></i>
+        </label>
+        <div class="col-7 col-md-9 col-lg-10">
+            <input type="checkbox" name="redirects_enabled" id="redirects_enabled" value="1" @if(config('seiger.settings.sSeo.redirects_enabled', 1) == 1) checked @endif onchange="documentDirty=true;">
+        </div>
+    </div>
     <div class="split my-3"></div>
 </form>
 

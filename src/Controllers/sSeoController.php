@@ -4,6 +4,8 @@ use EvolutionCMS\Models\SystemSetting;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Seiger\sMultisite\Models\sMultisite;
+use Seiger\sSeo\Models\sRedirect;
 use View;
 
 /**
@@ -25,6 +27,24 @@ class sSeoController
     }
 
     /**
+     * Returns the view for the redirects page.
+     *
+     * @return mixed The view for the redirects page.
+     */
+    public function redirects()
+    {
+        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
+        $redirects = sRedirect::getAllRedirects('old_url', 'asc');
+
+        $availableSites = collect([]);
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $availableSites = sMultisite::all();
+        }
+
+        return $this->view('index', ['redirects' => $redirects, 'availableSites' => $availableSites]);
+    }
+
+    /**
      * Updates the configure file with the new values.
      *
      * @return \Illuminate\Http\RedirectResponse The redirect response to the previous page.
@@ -34,7 +54,6 @@ class sSeoController
         $string = '<?php return [' . "\n";
 
         $string .= "\t" . '"manage_www" => ' . (int)request()->get('manage_www', 0) . ',' . "\n";
-
         $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
 
         $noindex_get = explode(',', request()->get('noindex_get', ''));
@@ -43,6 +62,8 @@ class sSeoController
             $string .= "\t\t" . '"' . trim($item) . '",' . "\n";
         }
         $string .= "\t" . '],' . "\n";
+
+        $string .= "\t" . '"redirects_enabled" => ' . (int)request()->get('redirects_enabled', 0) . ',' . "\n";
 
         $string .= '];';
 
@@ -53,6 +74,101 @@ class sSeoController
 
         evo()->clearCache('full');
         return redirect()->back();
+    }
+
+    /**
+     * Update the redirects list with new data and create backups of old redirects.
+     *
+     * This method:
+     * - Retrieves the submitted redirects from the request.
+     * - Validates the input and returns an error message if no redirects are provided.
+     * - Creates a backup of existing redirects if not already backed up for the current day.
+     * - Maintains a maximum of 5 recent backup files and removes backups older than 7 days.
+     * - Truncates the `sRedirect` table before inserting new redirects.
+     * - Prevents duplicate redirects by checking for existing `old_url` entries.
+     * - Inserts the validated redirects into the database.
+     * - Clears the site cache after updating redirects.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects back with a success or error message.
+     */
+    public function updateRedirects()
+    {
+        $redirects = request()->input('redirects', []);
+
+        if (empty($redirects)) {
+            return redirect()->back()->with('error', trans('sSeo::global.no_redirects_provided'));
+        }
+
+        // Create backup directory if it doesn't exist
+        $backupDir = storage_path('backups/');
+        if (!file_exists($backupDir)) {
+            mkdir($backupDir, 0755, true);
+        }
+
+        // Backup file for today
+        $backupFile = $backupDir . 'redirects_backup_' . now()->format('Y-m-d') . '.json';
+
+        if (!file_exists($backupFile)) {
+            $backupRedirects = sRedirect::all()->toArray();
+            file_put_contents($backupFile, json_encode($backupRedirects, JSON_PRETTY_PRINT));
+        }
+
+        // Cleanup old backups: keep the 5 most recent and remove backups older than 7 days
+        $backupFiles = glob($backupDir . 'redirects_backup_*.json');
+        if (count($backupFiles) > 5) {
+            usort($backupFiles, function ($a, $b) {
+                return filemtime($a) - filemtime($b);
+            });
+
+            foreach (array_slice($backupFiles, 0, count($backupFiles) - 5) as $oldBackup) {
+                unlink($oldBackup);
+            }
+        }
+
+        foreach ($backupFiles as $file) {
+            if (filemtime($file) < strtotime('-7 days')) {
+                unlink($file);
+            }
+        }
+
+        // Truncate the redirects table
+        sRedirect::truncate();
+
+        $insertData = [];
+        foreach ($redirects as $redirect) {
+            if (!isset($redirect['old'], $redirect['new'], $redirect['type'])) {
+                continue;
+            }
+
+            $siteKey = trim($redirect['site_key']);
+            $oldUrl = trim($redirect['old']);
+            $newUrl = trim($redirect['new']);
+            $type = intval($redirect['type']);
+
+            if (empty($oldUrl) || empty($newUrl) || !in_array($type, [301, 302, 307])) {
+                continue;
+            }
+
+            // Prevent duplicate redirects
+            if (!sRedirect::where('old_url', $oldUrl)->exists()) {
+                $insertData[] = [
+                    'site_key' => $siteKey,
+                    'old_url' => $oldUrl,
+                    'new_url' => $newUrl,
+                    'type' => $type,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        if (!empty($insertData)) {
+            sRedirect::insert($insertData);
+        }
+
+        // Clear full cache after updating redirects
+        evo()->clearCache('full');
+        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
     }
 
     /**

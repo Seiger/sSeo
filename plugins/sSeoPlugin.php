@@ -6,6 +6,7 @@
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Seiger\sSeo\Facades\sSeo;
+use Seiger\sSeo\Models\sRedirect;
 use Seiger\sSeo\Models\sSeoModel;
 
 /**
@@ -90,6 +91,20 @@ Event::listen('evolution.OnLoadSettings', function($params) {
     }
 });
 
+/**
+ * Redirects
+ */
+Event::listen('evolution.OnPageNotFound', function ($params) {
+    $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+    $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'default';
+    $redirect = sRedirect::where('site_key', $siteKey)->where('old_url', $requestUri)->first();
+
+    if ($redirect) {
+        evo()->sendRedirect($redirect->new_url, 0, '', $redirect->type);
+        exit;
+    }
+});
+
 Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     // Meta Canonical
     $canonical = sSeo::checkCanonical();
@@ -118,7 +133,7 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
         'sseo',
         'tools',
         '<i class="'.__('sSeo::global.icon').'"></i><span class="menu-item-text">'.__('sSeo::global.title').'</span>',
-        sSeo::route('sSeo.index'),
+        sSeo::route('sSeo.redirects'),
         __('sSeo::global.title'),
         "",
         "",

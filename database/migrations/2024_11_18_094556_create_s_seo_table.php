@@ -33,6 +33,15 @@ return new class extends Migration
             $table->timestamp('last_modified')->nullable()->comment('Sitemap change frequency');
             $table->timestamps();
         });
+
+        Schema::create('s_redirects', function (Blueprint $table) {
+            $table->id();
+            $table->string('site_key')->default('default');
+            $table->string('old_url');
+            $table->string('new_url');
+            $table->unsignedMediumInteger('type')->default(301);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -40,6 +49,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('s_redirects');
         Schema::dropIfExists('s_seo');
     }
 };

@@ -30,7 +30,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [x] Noindex for Pagination and Custom $_GET Parameters.
 - [x] HTTP(S) and WWW Redirects.
 - [ ] Open Graph Protocol Integration.
-- [ ] 301 Redirects for Resolving 404 Errors.
+- [x] 30x Redirects for Resolving 404 Errors.
 - [ ] SEO Dashboard and Reporting.
 - [ ] Social Media Integration Metrics.
 - [ ] AI-Powered SEO Recommendations.

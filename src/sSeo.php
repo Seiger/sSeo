@@ -197,7 +197,7 @@ class sSeo
         $route = route($name);
 
         // Generate a unique action ID based on the route name
-        $a = array_sum(array_map('ord', str_split($name))) + 999;
+        $a = array_sum(array_map('ord', str_split(__('sSeo::global.title')))) + 999;
         $a = $a < 999 ? $a + 999 : $a;
 
         return str_replace(MODX_MANAGER_URL, '/', $route) . '?a=' . $a;

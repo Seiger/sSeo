@@ -1,16 +1,35 @@
 <?php namespace Seiger\sSeo;
 
 use EvolutionCMS\ServiceProvider;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
+/**
+ * Class sSeoServiceProvider
+ *
+ * Service provider for sSeo package. Handles registration,
+ * publishing resources, and managing subscriptions for PRO features.
+ */
 class sSeoServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      *
+     * Loads migrations, translations, views, and custom routes.
+     * Optionally checks for PRO subscription to enable additional features.
+     *
      * @return void
      */
     public function boot()
     {
+        // Check subscription status when loading the module
+        // $subscription = $this->checkSubscription();
+
+        // If the subscription is PRO - load additional functionality
+        /* if ($subscription['plan'] === 'pro' || $subscription['plan'] === 'enterprise') {
+            $this->loadProFeatures();
+        } */
+
         // Add custom routes for package
         $this->app->router->middlewareGroup('mgr', config('app.middleware.mgr', []));
         include(__DIR__.'/Http/routes.php');
@@ -30,6 +49,8 @@ class sSeoServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
+     * Registers necessary components and plugins for Evolution CMS.
+     *
      * @return void
      */
     public function register()
@@ -41,6 +62,8 @@ class sSeoServiceProvider extends ServiceProvider
     /**
      * Publish the necessary resources for the package.
      *
+     * This includes configuration files, images, and view templates.
+     *
      * @return void
      */
     protected function publishResources()
@@ -51,5 +74,37 @@ class sSeoServiceProvider extends ServiceProvider
             dirname(__DIR__) . '/images/seigerit-blue.svg' => public_path('assets/site/seigerit-blue.svg'),
             dirname(__DIR__) . '/config/sSeoSitemapTemplate.blade.php' => public_path('assets/plugins/sseo/sitemapTemplate.blade.php'),
         ]);
+    }
+
+    /**
+     * Subscription verification via API.
+     *
+     * Checks if the user has an active PRO subscription and caches the result.
+     *
+     * @return array Subscription details including plan and status.
+     */
+    private function checkSubscription(): array
+    {
+        return Cache::remember('sseo_subscription', 3600, function () {
+            return Http::get('https://api.seigerit.com/verify', [
+                'domain' => evo()->getConfig('site_url')
+            ])->json();
+        });
+    }
+
+    /**
+     * Load PRO features for users with an active subscription.
+     *
+     * Includes additional routes, Blade templates, and plugins.
+     *
+     * @return void
+     */
+    private function loadProFeatures(): void
+    {
+        // Additional routes or PRO functionality
+        include(__DIR__ . '/Http/pro_routes.php');
+
+        // Load additional Blade templates or plugins
+        $this->loadViewsFrom(dirname(__DIR__) . '/views/pro', 'sSeoPro');
     }
 }
