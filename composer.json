@@ -3,7 +3,7 @@
     "license": "GPL-3.0",
     "type": "EvolutionCMS-Plugin",
     "description": "Evocms package for collection of SEO Tools for Evolution CMS.",
-    "keywords": ["evocms", "evolution-cms", "seo"],
+    "keywords": ["evocms", "evolution-cms", "seo", "evolution-cms-seo", "seo-tools", "cms-seo", "evolution-cms-plugin"],
     "authors": [
         {
             "name": "Serhii Korneliuk",
@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.1"
+        "php": ">=8.2"
     },
     "autoload": {
         "psr-4": {
@@ -27,6 +27,11 @@
                 "sSeo": "Seiger\\sSeo\\Facades\\sSeo"
             }
         }
+    },
+    "config": {
+        "exclude-files": [
+            "docs/*"
+        ]
     },
     "scripts": {
         "post-autoload-dump": []

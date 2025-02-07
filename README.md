@@ -21,21 +21,26 @@ this plugin provides the tools you need for a competitive edge in the digital la
 
 ## Features
 
+- [x] Custom SEO Title and Description.
+- [x] Canonical URL Implementation.
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.
 - [x] Include or exclude documents from xml sitemap (via Searchable).
-- [x] On page Robots index/follow settings.
-- [x] Custom SEO Title and Description.
-- [x] Canonical URL Implementation.
+- [ ] On page Robots index/follow settings.
 - [x] Noindex for Pagination and Custom $_GET Parameters.
-- [x] HTTP(S) and WWW Redirects.
-- [ ] Open Graph Protocol Integration.
 - [x] 30x Redirects for Resolving 404 Errors.
+- [x] HTTP(S) and WWW Redirects.
+- [x] Manage robots.txt file via Admin Panel.
+- [ ] Open Graph Protocol Integration.
 - [ ] SEO Dashboard and Reporting.
 - [ ] Social Media Integration Metrics.
 - [ ] AI-Powered SEO Recommendations.
 - [ ] Featured Snippets Optimization.
 - [ ] Local Business Schema Markup.
+- [ ] SEO Health Check
+- [ ] Rich Snippets (Schema Markup) Support
+- [ ] Performance Optimization Recommendations
+- [ ] Real-time SEO Analytics
 
 ## Install by artisan package installer
 

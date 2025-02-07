@@ -94,16 +94,18 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 /**
  * Redirects
  */
-Event::listen('evolution.OnPageNotFound', function ($params) {
-    $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-    $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'default';
-    $redirect = sRedirect::where('site_key', $siteKey)->where('old_url', $requestUri)->first();
+if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
+    Event::listen('evolution.OnPageNotFound', function ($params) {
+        $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'default';
+        $redirect = sRedirect::where('site_key', $siteKey)->where('old_url', $requestUri)->first();
 
-    if ($redirect) {
-        evo()->sendRedirect($redirect->new_url, 0, '', $redirect->type);
-        exit;
-    }
-});
+        if ($redirect) {
+            evo()->sendRedirect($redirect->new_url, 0, '', $redirect->type);
+            exit;
+        }
+    });
+}
 
 Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     // Meta Canonical
@@ -121,10 +123,6 @@ Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     return view('sSeo::partials.headWebDocument', compact('canonical', 'robots', 'title', 'description'))->render();
 });
 
-Event::listen('evolution.OnDocFormSave', function($params) {
-    sSeo::generateSitemap();
-});
-
 /**
  * Add Menu item
  */
@@ -133,7 +131,7 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
         'sseo',
         'tools',
         '<i class="'.__('sSeo::global.icon').'"></i><span class="menu-item-text">'.__('sSeo::global.title').'</span>',
-        sSeo::route('sSeo.redirects'),
+        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.configure'),
         __('sSeo::global.title'),
         "",
         "",
@@ -173,6 +171,7 @@ Event::listen('evolution.OnDocFormSave', function($params) {
         $data = array_merge(['resource_id' => $params['id'], 'resource_type' => 'document'], request()->input('sseo', []));
         sSeo::updateSeoFields($data);
     }
+    sSeo::generateSitemap();
 });
 Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
     if (isset($params['product']) && $params['product']->id) {

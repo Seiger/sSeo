@@ -16,17 +16,6 @@ use View;
 class sSeoController
 {
     /**
-     * Returns the view for the index page.
-     *
-     * @return mixed The view for the index page.
-     */
-    public function index()
-    {
-        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
-        return $this->view('index');
-    }
-
-    /**
      * Returns the view for the redirects page.
      *
      * @return mixed The view for the redirects page.
@@ -45,35 +34,26 @@ class sSeoController
     }
 
     /**
-     * Updates the configure file with the new values.
+     * Returns the view for the index page.
      *
-     * @return \Illuminate\Http\RedirectResponse The redirect response to the previous page.
+     * @return mixed The view for the index page.
      */
-    public function updateConfigure()
+    public function robots()
     {
-        $string = '<?php return [' . "\n";
+        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
+        $robots = file_get_contents(MODX_BASE_PATH . 'robots.txt') ?: '';
+        return $this->view('index', compact('robots'));
+    }
 
-        $string .= "\t" . '"manage_www" => ' . (int)request()->get('manage_www', 0) . ',' . "\n";
-        $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
-
-        $noindex_get = explode(',', request()->get('noindex_get', ''));
-        $string .= "\t" . '"noindex_get" => [' . "\n";
-        foreach ($noindex_get as $item) {
-            $string .= "\t\t" . '"' . trim($item) . '",' . "\n";
-        }
-        $string .= "\t" . '],' . "\n";
-
-        $string .= "\t" . '"redirects_enabled" => ' . (int)request()->get('redirects_enabled', 0) . ',' . "\n";
-
-        $string .= '];';
-
-        // Save config
-        $handle = fopen(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php', "w");
-        fwrite($handle, $string);
-        fclose($handle);
-
-        evo()->clearCache('full');
-        return redirect()->back();
+    /**
+     * Returns the view for the index page.
+     *
+     * @return mixed The view for the index page.
+     */
+    public function configure()
+    {
+        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
+        return $this->view('index');
     }
 
     /**
@@ -169,6 +149,63 @@ class sSeoController
         // Clear full cache after updating redirects
         evo()->clearCache('full');
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+    }
+
+
+    /**
+     * Update the content of the robots.txt file.
+     *
+     * This method handles the update of the robots.txt file by taking the
+     * content passed from the request, validating that it is not empty,
+     * and then writing it to the `robots.txt` file. If the input is empty,
+     * it redirects the user back with an error message. Otherwise, it writes
+     * the content to the file and returns a success message.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateRobots()
+    {
+        $robots = request()->input('robots', []);
+
+        if (empty($robots)) {
+            return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
+        }
+
+        file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
+
+        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+    }
+
+    /**
+     * Updates the configure file with the new values.
+     *
+     * @return \Illuminate\Http\RedirectResponse The redirect response to the previous page.
+     */
+    public function updateConfigure()
+    {
+        $string = '<?php return [' . "\n";
+
+        $string .= "\t" . '"manage_www" => ' . (int)request()->get('manage_www', 0) . ',' . "\n";
+        $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
+
+        $noindex_get = explode(',', request()->get('noindex_get', ''));
+        $string .= "\t" . '"noindex_get" => [' . "\n";
+        foreach ($noindex_get as $item) {
+            $string .= "\t\t" . '"' . trim($item) . '",' . "\n";
+        }
+        $string .= "\t" . '],' . "\n";
+
+        $string .= "\t" . '"redirects_enabled" => ' . (int)request()->get('redirects_enabled', 0) . ',' . "\n";
+
+        $string .= '];';
+
+        // Save config
+        $handle = fopen(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php', "w");
+        fwrite($handle, $string);
+        fclose($handle);
+
+        evo()->clearCache('full');
+        return redirect()->back();
     }
 
     /**

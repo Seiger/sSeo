@@ -1,4 +1,4 @@
-@php($name = explode('.', Route::currentRouteName())[1] ?? 'index')
+@php($name = explode('.', Route::currentRouteName())[1] ?? 'configure')
 @extends('manager::template.page')
 @section('content')
     <h1><i class="@lang('sSeo::global.icon')" data-tooltip="@lang('sSeo::global.description')"></i>@lang('sSeo::global.title')</h1>
@@ -21,15 +21,29 @@
                     </div>
                 </div>
             @endif
+            <div class="tab-page robotsTab" id="robotsTab">
+                <h2 class="tab">
+                    <a href="{{sSeo::route('sSeo.robots')}}">
+                        <span><i class="@lang('sSeo::global.robots_icon')" data-tooltip="@lang('sSeo::global.robots_help')"></i> @lang('sSeo::global.robots')</span>
+                    </a>
+                </h2>
+                <script>tpResources.addTabPage(document.getElementById('robotsTab'));</script>
+                <div class="container container-body">
+                    @if($name == 'robots')
+                        @include('sSeo::robotsTab')
+                        <script>tpResources.setSelectedTab('robotsTab');</script>
+                    @endif
+                </div>
+            </div>
             <div class="tab-page configureTab" id="configureTab">
                 <h2 class="tab">
-                    <a href="{{sSeo::route('sSeo.index')}}">
+                    <a href="{{sSeo::route('sSeo.configure')}}">
                         <span><i class="@lang('sSeo::global.configure_icon')" data-tooltip="@lang('sSeo::global.configure_help')"></i> @lang('sSeo::global.configure')</span>
                     </a>
                 </h2>
                 <script>tpResources.addTabPage(document.getElementById('configureTab'));</script>
                 <div class="container container-body">
-                    @if($name == 'index')
+                    @if($name == 'configure')
                         @include('sSeo::configureTab')
                         <script>tpResources.setSelectedTab('configureTab');</script>
                     @endif
