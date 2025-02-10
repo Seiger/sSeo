@@ -30,7 +30,12 @@
     },
     "config": {
         "exclude-files": [
-            "docs/*"
+            "docs/*",
+            ".git/*",
+            ".github/*",
+            ".idea/*",
+            "README.md",
+            "LICENSE"
         ]
     },
     "scripts": {

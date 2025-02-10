@@ -49,7 +49,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.redirects_enabled_help')"></i>
         </label>
         <div class="col-7 col-md-9 col-lg-10">
-            <input type="checkbox" name="redirects_enabled" id="redirects_enabled" value="1" @if(config('seiger.settings.sSeo.redirects_enabled', 1) == 1) checked @endif onchange="documentDirty=true;">
+            <input type="checkbox" name="redirects_enabled" id="redirects_enabled" value="1" @if(config('seiger.settings.sSeo.redirects_enabled', 0) == 1) checked @endif onchange="documentDirty=true;">
         </div>
     </div>
     <div class="split my-3"></div>
