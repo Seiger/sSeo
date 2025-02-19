@@ -28,6 +28,10 @@ this plugin provides the tools you need for a competitive edge in the digital la
 
 ## Features
 
+- [x] Integration with:
+    - [x] Evolution CMS Resources.
+    - [x] **[sCommerce](https://github.com/Seiger/sCommerce)** Products.
+    - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
 - [x] Custom SEO Title and Description.
 - [x] Canonical URL Implementation.
 - [x] Automatic META Tags Generation.

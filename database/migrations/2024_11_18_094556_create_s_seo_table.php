@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -14,8 +15,9 @@ return new class extends Migration
         Schema::create('s_seo', function (Blueprint $table) {
             $table->id();
             $table->integer('resource_id')->index()->comment('Resource ID (page, product, etc.)');
-            $table->string('resource_type', 64)->default('document')->comment('Resource Type (document, product, etc.)');
-            $table->string('lang', 4)->default('base')->comment('Localization (for multilingual sites)');
+            $table->string('resource_type')->default('document')->comment('Resource Type (document, product, etc.)');
+            $table->string('domain_key')->index()->default('default')->comment('Domain key (for using a multisite system)');
+            $table->string('lang', 4)->index()->default('base')->comment('Localization (for multilingual sites)');
             $table->string('meta_title', 255)->default('')->comment('Page Meta title');
             $table->mediumText('meta_description')->default('')->comment('Page Meta description');
             $table->mediumText('meta_keywords')->default('')->comment('Page Meta keywords');
@@ -27,7 +29,8 @@ return new class extends Migration
             $table->string('twitter_card', 50)->default('summary')->comment('Type Twitter Card');
             $table->enum('robots', ['', 'index,follow', 'index,nofollow', 'noindex,nofollow'])->default('');
             $table->longText('structured_data')->default('')->comment('JSON-LD for structured data');
-            $table->jsonb('extra_meta')->comment('Additional meta tags (key=value format)');
+            $table->jsonb('extra_meta')->default(new Expression('(JSON_ARRAY())'))->comment('Additional meta tags (key=value format)');
+            $table->boolean('exclude_from_sitemap')->default(false)->comment('Indicates whether the resource should be excluded from the sitemap');
             $table->unsignedDecimal('priority', 2, 1)->default(0.5)->comment('Page priority for XML Sitemap');
             $table->enum('changefreq', ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->default('weekly')->comment('Sitemap change frequency');
             $table->timestamp('last_modified')->nullable()->comment('Sitemap change frequency');

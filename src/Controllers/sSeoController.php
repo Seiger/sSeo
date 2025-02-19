@@ -185,7 +185,7 @@ class sSeoController
     {
         $string = '<?php return [' . "\n";
 
-        $string .= "\t" . '"manage_www" => ' . (int)request()->get('manage_www', 0) . ',' . "\n";
+        $string .= "\t" . '"manage_www" => ' . request()->integer('manage_www') . ',' . "\n";
         $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
 
         $noindex_get = explode(',', request()->get('noindex_get', ''));
@@ -195,7 +195,8 @@ class sSeoController
         }
         $string .= "\t" . '],' . "\n";
 
-        $string .= "\t" . '"redirects_enabled" => ' . (int)request()->get('redirects_enabled', 0) . ',' . "\n";
+        $string .= "\t" . '"redirects_enabled" => ' . request()->integer('redirects_enabled') . ',' . "\n";
+        $string .= "\t" . '"generate_sitemap" => ' . request()->integer('generate_sitemap') . ',' . "\n";
 
         $string .= '];';
 
