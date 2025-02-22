@@ -55,4 +55,4 @@ this plugin provides the tools you need for a competitive edge in the digital la
 
 ## Support
 
-If you need help, please don't hesitate to [open an issue]({{ site.support }}).
+If you need help, please don't hesitate to [open an issue]({{site.support}}).

@@ -92,10 +92,10 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 });
 
 /**
- * Redirects
+ * Page Not Found logics
  */
-if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
-    Event::listen('evolution.OnPageNotFound', function ($params) {
+Event::listen('evolution.OnPageNotFound', function () {
+    if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
         $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'default';
         $redirect = sRedirect::where('site_key', $siteKey)->where('old_url', $requestUri)->first();
@@ -104,8 +104,25 @@ if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
             evo()->sendRedirect($redirect->new_url, 0, '', $redirect->type);
             exit;
         }
-    });
-}
+    }
+
+    if (evo()->getConfig('check_sMultisite', false)) {
+        if (request()->is('robots.txt')) {
+            $file = null;
+            if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'robots.txt')) {
+                $file = EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'robots.txt';
+            } elseif (file_exists(MODX_BASE_PATH . 'robots.txt')) {
+                $file = MODX_BASE_PATH . 'robots.txt';
+            }
+
+            if ($file) {
+                header('Content-Type: text/plain');
+                echo file_get_contents($file);
+                exit;
+            }
+        }
+    }
+});
 
 Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     // Meta Canonical

@@ -34,15 +34,57 @@ class sSeoController
     }
 
     /**
-     * Returns the view for the index page.
+     * Retrieves the robots.txt file for the current site or multisite setup.
      *
-     * @return mixed The view for the index page.
+     * This method checks if the `sMultisite` configuration is enabled and retrieves the `robots.txt`
+     * file for each site in the multisite setup. If the multisite is not enabled, it checks for the
+     * existence of a single `robots.txt` file for the current site. The method also prepares the necessary
+     * data for rendering a code editor, specifically `Codemirror`, for editing the robots.txt file(s).
+     *
+     * - If multisite is enabled, it fetches the corresponding `robots.txt` files for each site.
+     * - If multisite is disabled, it retrieves the `robots.txt` file for the current site.
+     * - In both cases, the file's path is checked, and if the file exists, it's assigned to the `$robots` variable.
+     * - A `Codemirror` editor instance is prepared for editing the robots.txt files.
+     *
+     * @return \Illuminate\View\View The view with the robots.txt file(s), site data, and code editor instance.
      */
     public function robots()
     {
         $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
-        $robots = file_get_contents(MODX_BASE_PATH . 'robots.txt') ?: '';
-        return $this->view('index', compact('robots'));
+        $sites = new \stdClass();
+        $editor = [];
+
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sites = sMultisite::all();
+            if ($sites->isEmpty()) {
+                $robots = '';
+                if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
+                    $robots = MODX_BASE_PATH . 'robots.txt';
+                }
+            } else {
+                $robots = [];
+                foreach ($sites as $site) {
+                    $editor[] = $site->key . '_robots';
+                    if (file_exists(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt')) {
+                        $file = EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt';
+                    } elseif (file_exists(MODX_BASE_PATH . 'robots.txt')) {
+                        $file = MODX_BASE_PATH . 'robots.txt';
+                    } else {
+                        $file = '';
+                    }
+                    $robots[$site->key . '_robots'] = $file;
+                }
+            }
+        } else {
+            $robots = '';
+            $editor[] = 'robots';
+            if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
+                $robots = MODX_BASE_PATH . 'robots.txt';
+            }
+        }
+
+        $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
+        return $this->view('index', compact('robots', 'sites', 'editor', 'codeEditor'));
     }
 
     /**
@@ -151,7 +193,6 @@ class sSeoController
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
     }
 
-
     /**
      * Update the content of the robots.txt file.
      *
@@ -165,13 +206,34 @@ class sSeoController
      */
     public function updateRobots()
     {
-        $robots = request()->input('robots', []);
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sites = sMultisite::all();
+            if ($sites->isEmpty()) {
+                if (empty($robots)) {
+                    return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
+                }
 
-        if (empty($robots)) {
-            return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
+                $robots = request()->input('robots', '');
+                file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
+            } else {
+                foreach ($sites as $site) {
+                    if (!is_dir(EVO_STORAGE_PATH . $site->key)) {
+                        mkdir(EVO_STORAGE_PATH . $site->key, octdec(evo()->getConfig('new_folder_permissions', '0777')), true);
+                        chmod(EVO_STORAGE_PATH . $site->key, octdec(evo()->getConfig('new_folder_permissions', '0777')));
+                    }
+
+                    $robots = request()->input($site->key . '_robots', '');
+                    file_put_contents(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt', $robots);
+                }
+            }
+        } else {
+            if (empty($robots)) {
+                return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
+            }
+
+            $robots = request()->input('robots', '');
+            file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
         }
-
-        file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
 
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
     }
@@ -207,6 +269,44 @@ class sSeoController
 
         evo()->clearCache('full');
         return redirect()->back();
+    }
+
+    /**
+     * Connecting the visual editor to the required fields
+     *
+     * @param string $ids List of id fields separated by commas
+     * @param string $height Window height
+     * @param string $editor Which editor to use TinyMCE5, Codemirror
+     * @return string
+     */
+    public function textEditor(string $ids, string $height = '500px', string $editor = ''): string
+    {
+        $theme = null;
+        $elements = [];
+        $options = [];
+        $ids = explode(",", $ids);
+
+        if (!trim($editor)) {
+            $editor = evo()->getConfig('which_editor', 'TinyMCE5');
+        }
+        if ($editor == 'TinyMCE5') {
+            $theme = evo()->getConfig('sart_tinymce5_theme', 'custom');
+        }
+
+        foreach ($ids as $id) {
+            $elements[] = trim($id);
+            if ($theme) {
+                $options[trim($id)]['theme'] = $theme;
+            }
+        }
+
+        return implode("", evo()->invokeEvent('OnRichTextEditorInit', [
+            'editor' => $editor,
+            'elements' => $elements,
+            'height' => $height,
+            'contentType' => 'htmlmixed',
+            'options' => $options
+        ]));
     }
 
     /**

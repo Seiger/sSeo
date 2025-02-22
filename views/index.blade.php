@@ -1,7 +1,7 @@
 @php($name = explode('.', Route::currentRouteName())[1] ?? 'configure')
 @extends('manager::template.page')
 @section('content')
-    <h1><i class="@lang('sSeo::global.icon')" data-tooltip="@lang('sSeo::global.description')"></i>@lang('sSeo::global.title')</h1>
+    <h1 style="font-size: 1.5em;"><i class="@lang('sSeo::global.icon')" data-tooltip="@lang('sSeo::global.description')"></i>@lang('sSeo::global.title')</h1>
     <div class="sectionBody">
         <div class="tab-pane" id="resourcesPane">
             <script>tpResources = new WebFXTabPane(document.getElementById('resourcesPane'), false);</script>
