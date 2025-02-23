@@ -121,6 +121,21 @@ Event::listen('evolution.OnPageNotFound', function () {
                 exit;
             }
         }
+
+        if (request()->is('sitemap.xml')) {
+            $file = null;
+            if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'sitemap.xml')) {
+                $file = EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'sitemap.xml';
+            } elseif (file_exists(MODX_BASE_PATH . 'sitemap.xml')) {
+                $file = MODX_BASE_PATH . 'sitemap.xml';
+            }
+
+            if ($file) {
+                header('Content-Type: text/xml');
+                echo file_get_contents($file);
+                exit;
+            }
+        }
     }
 });
 
@@ -188,7 +203,7 @@ Event::listen('evolution.OnDocFormSave', function($params) {
         $data = array_merge(['resource_id' => $params['id'], 'resource_type' => 'document'], request()->input('sseo', []));
         sSeo::updateSeoFields($data);
     }
-    sSeo::generateSitemap();
+    sSeo::generateSitemap(intval($params['id'] ?? 0));
 });
 Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
     if (isset($params['product']) && $params['product']->id) {

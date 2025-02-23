@@ -5,6 +5,8 @@ use EvolutionCMS\Models\SiteContent;
 use Illuminate\Support\Str;
 use Seiger\sArticles\Models\sArticle;
 use Seiger\sCommerce\Models\sProduct;
+use Seiger\sMultisite\Models\sMultisite;
+use Seiger\sSeo\Controllers\sSeoController;
 use Seiger\sSeo\Models\sSeoModel;
 use View;
 
@@ -187,96 +189,18 @@ class sSeo
      *
      * @return void
      */
-    public function generateSitemap()
+    public function generateSitemap(int $id = 0)
     {
         if (config('seiger.settings.sSeo.generate_sitemap', 0) == 1) {
-            $urls = [];
-            $siteUrl = trim(evo()->getConfig('site_url', '/'), '/');
-
-            // Evolution CMS Resources
-            $resources = SiteContent::select('*', 'site_content.id as resource')
-                ->leftJoin('s_seo', function($join) {
-                    $join->on('site_content.id', '=', 's_seo.resource_id');
-                    $join->where('s_seo.resource_type', '=', 'document');
-                })
-                ->whereNot('exclude_from_sitemap', true)
-                ->orWhereNull('exclude_from_sitemap')
-                ->wherePublished(1)
-                ->whereDeleted(0)
-                ->get();
-
-            if (!empty($resources)) {
-                foreach ($resources as $resource) {
-                    $loc = $siteUrl . url($resource->resource);
-                    $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
-                    $changefreq = $resource->changefreq ?? 'always';
-                    $priority = $resource->priority ?? '0.5';
-                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+            if (evo()->getConfig('check_sMultisite', false)) {
+                if ($id > 0) {
+                    $parents = evo()->getParentIds($id);
+                    $root = (int)array_shift($parents);
+                    (new sSeoController())->generateMultisiteSitemap($root);
                 }
+            } else {
+                (new sSeoController())->generateSitemap();
             }
-
-            // sCommerce Products
-            if (evo()->getConfig('check_sCommerce', false)) {
-                $products = sProduct::leftJoin('s_seo', function($join) {
-                    $join->on('s_products.id', '=', 's_seo.resource_id');
-                    $join->where('s_seo.resource_type', '=', 'product');
-                })
-                    ->whereNot('exclude_from_sitemap', true)
-                    ->orWhereNull('exclude_from_sitemap')
-                    ->wherePublished(1)
-                    ->get();
-
-                if (!empty($products)) {
-                    foreach ($products as $product) {
-                        $loc = $siteUrl . $product->link;
-                        $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
-                        $changefreq = $product->changefreq ?? 'always';
-                        $priority = $product->priority ?? '0.5';
-                        $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
-                    }
-                }
-            }
-
-            // sArticles Publications
-            if (evo()->getConfig('check_sArticles', false)) {
-                $publications = sArticle::leftJoin('s_seo', function($join) {
-                    $join->on('s_articles.id', '=', 's_seo.resource_id');
-                    $join->where('s_seo.resource_type', '=', 'publication');
-                })
-                    ->whereNot('exclude_from_sitemap', true)
-                    ->orWhereNull('exclude_from_sitemap')
-                    ->wherePublished(1)
-                    ->get();
-
-                if (!empty($publications)) {
-                    foreach ($publications as $publication) {
-                        $loc = $siteUrl . $publication->link;
-                        $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
-                        $changefreq = $publication->changefreq ?? 'always';
-                        $priority = $publication->priority ?? '0.5';
-                        $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
-                    }
-                }
-            }
-
-            // Start the XML structure
-            $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-            $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
-
-            // Loop through each URL and add it to the sitemap
-            foreach ($urls as $url) {
-                $sitemap .= '    <url>' . PHP_EOL;
-                $sitemap .= '        <loc>' . htmlspecialchars($url['loc']) . '</loc>' . PHP_EOL;
-                $sitemap .= '        <lastmod>' . $url['lastmod'] . '</lastmod>' . PHP_EOL;
-                $sitemap .= '        <changefreq>' . $url['changefreq'] . '</changefreq>' . PHP_EOL;
-                $sitemap .= '        <priority>' . $url['priority'] . '</priority>' . PHP_EOL;
-                $sitemap .= '    </url>' . PHP_EOL;
-            }
-
-            // Close the XML structure
-            $sitemap .= '</urlset>' . PHP_EOL;
-
-            file_put_contents(MODX_BASE_PATH . "/sitemap.xml", $sitemap);
         }
     }
 

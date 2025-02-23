@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('s_seo', function (Blueprint $table) {
-            $table->id();
+            $table->id('seoid');
             $table->integer('resource_id')->index()->comment('Resource ID (page, product, etc.)');
             $table->string('resource_type')->default('document')->comment('Resource Type (document, product, etc.)');
             $table->string('domain_key')->index()->default('default')->comment('Domain key (for using a multisite system)');

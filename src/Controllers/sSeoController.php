@@ -1,10 +1,15 @@
 <?php namespace Seiger\sSeo\Controllers;
 
+use Carbon\Carbon;
+use EvolutionCMS\Models\SiteContent;
 use EvolutionCMS\Models\SystemSetting;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Seiger\sArticles\Models\sArticle;
+use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
+use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use View;
 
@@ -269,6 +274,262 @@ class sSeoController
 
         evo()->clearCache('full');
         return redirect()->back();
+    }
+
+    /**
+     * Generate sitemap.xml file.
+     *
+     * This method generates a sitemap file by fetching resources from the Evolution CMS (including
+     * site content, sCommerce products, and sArticles publications). The method renders an XML structure
+     * and saves the contents to the "sitemap.xml" file in the MODX base path.
+     *
+     * - It considers settings from `seiger.settings.sSeo.generate_sitemap` to decide whether to generate
+     *   the sitemap.
+     * - It gathers the URLs from site content, sCommerce products, and sArticles publications, including
+     *   their metadata like `lastmod`, `changefreq`, and `priority`.
+     * - The sitemap file is saved as "sitemap.xml" in the base path of the MODX site.
+     *
+     * @return void
+     */
+    public function generateSitemap()
+    {
+        $urls = [];
+        $siteUrl = trim(evo()->getConfig('site_url', '/'), '/');
+
+        // Evolution CMS Resources
+        $resources = SiteContent::leftJoin('s_seo', function($join) {
+            $join->on('site_content.id', '=', 's_seo.resource_id');
+            $join->where('s_seo.resource_type', '=', 'document');
+        })->where(function($query) {
+            $query->whereNot('exclude_from_sitemap', true)
+                ->orWhereNull('exclude_from_sitemap');
+        })
+            ->wherePublished(1)
+            ->whereDeleted(0)
+            ->get();
+
+        if (!empty($resources)) {
+            foreach ($resources as $resource) {
+                $loc = $siteUrl . url($resource->id);
+                $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
+                $changefreq = $resource->changefreq ?? 'always';
+                $priority = $resource->priority ?? '0.5';
+                $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+            }
+        }
+
+        // sCommerce Products
+        if (evo()->getConfig('check_sCommerce', false)) {
+            $products = sProduct::leftJoin('s_seo', function($join) {
+                $join->on('s_products.id', '=', 's_seo.resource_id');
+                $join->where('s_seo.resource_type', '=', 'product');
+            })
+                ->where(function($query) {
+                    $query->whereNot('exclude_from_sitemap', true)
+                        ->orWhereNull('exclude_from_sitemap');
+                })
+                ->active()
+                ->get();
+
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    $loc = $siteUrl . $product->link;
+                    $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
+                    $changefreq = $product->changefreq ?? 'always';
+                    $priority = $product->priority ?? '0.5';
+                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                }
+            }
+        }
+
+        // sArticles Publications
+        if (evo()->getConfig('check_sArticles', false)) {
+            $publications = sArticle::leftJoin('s_seo', function($join) {
+                $join->on('s_articles.id', '=', 's_seo.resource_id');
+                $join->where('s_seo.resource_type', '=', 'publication');
+            })
+                ->where(function($q) {
+                    $q->whereNot('exclude_from_sitemap', true)
+                        ->orWhereNull('exclude_from_sitemap');
+                })
+                ->get();
+
+            if (!empty($publications)) {
+                foreach ($publications as $publication) {
+                    $loc = $siteUrl . $publication->link;
+                    $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
+                    $changefreq = $publication->changefreq ?? 'always';
+                    $priority = $publication->priority ?? '0.5';
+                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                }
+            }
+        }
+
+        $this->writeSitemap(MODX_BASE_PATH . 'sitemap.xml', $urls);
+    }
+
+    /**
+     * Generate Multisite sitemap.xml file.
+     *
+     * This method generates a sitemap file for a multisite setup by fetching resources from the Evolution CMS (including
+     * site content, sCommerce products, and sArticles publications). It renders an XML structure and saves the contents
+     * to the "sitemap.xml" file in the storage path of the specific site.
+     *
+     * - It considers settings from `seiger.settings.sSeo.generate_sitemap` to decide whether to generate
+     *   the sitemap.
+     * - It gathers the URLs from site content, sCommerce products, and sArticles publications, including
+     *   their metadata like `lastmod`, `changefreq`, and `priority`.
+     * - The sitemap file is saved as "sitemap.xml" in the storage path specific to the domain in a multisite setup.
+     *
+     * @param int $root The root ID for the specific multisite. If no multisite is found, it defaults to `0`.
+     * @return void
+     */
+    public function generateMultisiteSitemap(int $root = 0)
+    {
+        $urls = [];
+
+        $domain = sMultisite::whereResource($root)->whereActive(1)->first();
+        if (empty($domain)) {
+            $domain = sMultisite::whereResource(0)->whereActive(1)->first();
+        }
+
+        $siteUrl = trim(\Seiger\sMultisite\Facades\sMultisite::scheme(evo()->getConfig('server_protocol', 'https') . '://' . $domain->domain), '/');
+
+        if ($domain->resource == 0) {
+            $domainBaseIds = evo()->getChildIds(0, 1);
+            $domains = sMultisite::all();
+            $multisiteResources = $domains->pluck('resource')->toArray();
+            if (count($multisiteResources)) {
+                $domainBaseIds = array_diff($domainBaseIds, $multisiteResources);
+            }
+            $domainIds = $domainBaseIds ?? [];
+            foreach ($domainBaseIds as $domainBaseId) {
+                $domainIds = array_merge($domainIds, evo()->getChildIds($domainBaseId));
+            }
+        } else {
+            $domainIds = array_merge(evo()->getChildIds($domain->resource));
+        }
+        if (empty($domainIds)) {
+            $domainIds = [0];
+        }
+
+        // Evolution CMS Resources
+        $resources = SiteContent::leftJoin('s_seo', function($join) {
+            $join->on('site_content.id', '=', 's_seo.resource_id');
+            $join->where('s_seo.resource_type', '=', 'document');
+        })->where(function($query) {
+            $query->whereNot('exclude_from_sitemap', true)
+                ->orWhereNull('exclude_from_sitemap');
+        })
+            ->whereIn('id', $domainIds)
+            ->wherePublished(1)
+            ->whereDeleted(0)
+            ->get();
+
+        if (!empty($resources)) {
+            foreach ($resources as $resource) {
+                if ($resource->id == $domain->site_start) {
+                    $loc = $siteUrl;
+                } else {
+                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', url($resource->id));
+                }
+                $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
+                $changefreq = $resource->changefreq ?? 'always';
+                $priority = $resource->priority ?? '0.5';
+                $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+            }
+        }
+
+        // sCommerce Products
+        if (evo()->getConfig('check_sCommerce', false)) {
+            $products = sProduct::leftJoin('s_seo', function($join) {
+                $join->on('s_products.id', '=', 's_seo.resource_id');
+                $join->where('s_seo.resource_type', '=', 'product');
+            })
+                ->where(function($q) {
+                    $q->whereNot('exclude_from_sitemap', true)
+                        ->orWhereNull('exclude_from_sitemap');
+                })
+                ->whereHas('categories', function ($q) use ($domainIds) {
+                    $q->whereIn('category', $domainIds);
+                })
+                ->active()
+                ->get();
+
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $product->link);
+                    $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
+                    $changefreq = $product->changefreq ?? 'always';
+                    $priority = $product->priority ?? '0.5';
+                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                }
+            }
+        }
+
+        if (evo()->getConfig('check_sArticles', false)) {
+            $publications = sArticle::leftJoin('s_seo', function($join) {
+                $join->on('s_articles.id', '=', 's_seo.resource_id');
+                $join->where('s_seo.resource_type', '=', 'publication');
+            })
+                ->where(function($q) {
+                    $q->whereNot('exclude_from_sitemap', true)
+                        ->orWhereNull('exclude_from_sitemap');
+                })
+                ->whereIn('parent', $domainIds)
+                ->get();
+
+            if (!empty($publications)) {
+                foreach ($publications as $publication) {
+                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $publication->link);
+                    $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
+                    $changefreq = $publication->changefreq ?? 'always';
+                    $priority = $publication->priority ?? '0.5';
+                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                }
+            }
+        }
+
+        if (!is_dir(EVO_STORAGE_PATH . $domain->key)) {
+            mkdir(EVO_STORAGE_PATH . $domain->key, octdec(evo()->getConfig('new_folder_permissions', '0777')), true);
+            chmod(EVO_STORAGE_PATH . $domain->key, octdec(evo()->getConfig('new_folder_permissions', '0777')));
+        }
+
+        $this->writeSitemap(EVO_STORAGE_PATH . $domain->key . DIRECTORY_SEPARATOR . 'sitemap.xml', $urls);
+    }
+
+    /**
+     * Write the sitemap to a file.
+     *
+     * This method generates an XML structure for the sitemap and writes the content to a file.
+     * It loops through all provided URLs and includes their metadata such as `loc`, `lastmod`,
+     * `changefreq`, and `priority` in the XML file.
+     *
+     * @param string $file The path where the sitemap file will be saved.
+     * @param array $urls An array of URLs to be included in the sitemap, each containing `loc`, `lastmod`, `changefreq`, and `priority`.
+     * @return void
+     */
+    public function writeSitemap(string $file, array $urls): void
+    {
+        // Start the XML structure
+        $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
+
+        // Loop through each URL and add it to the sitemap
+        foreach ($urls as $url) {
+            $sitemap .= '    <url>' . PHP_EOL;
+            $sitemap .= '        <loc>' . htmlspecialchars($url['loc']) . '</loc>' . PHP_EOL;
+            $sitemap .= '        <lastmod>' . $url['lastmod'] . '</lastmod>' . PHP_EOL;
+            $sitemap .= '        <changefreq>' . $url['changefreq'] . '</changefreq>' . PHP_EOL;
+            $sitemap .= '        <priority>' . $url['priority'] . '</priority>' . PHP_EOL;
+            $sitemap .= '    </url>' . PHP_EOL;
+        }
+
+        // Close the XML structure
+        $sitemap .= '</urlset>' . PHP_EOL;
+
+        // Write the XML file
+        file_put_contents($file, $sitemap);
     }
 
     /**

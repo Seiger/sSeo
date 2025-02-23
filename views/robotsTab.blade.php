@@ -14,7 +14,7 @@
                     <div id="collapse{{$site->id}}" class="accordion-collapse hidden">
                         @if(!is_writable(trim($robots[$site->key . '_robots'] ?? '') ?: MODX_BASE_PATH))
                             <div class="alert alert-danger text-red-500 mt-0 mb-0 rounded-none">
-                                @lang('sSeo::global.not_writable', ['file' => trim($site->key . '_robots' ?? '') ?: MODX_BASE_PATH])
+                                @lang('sSeo::global.not_writable', ['file' => trim($robots[$site->key . '_robots'] ?? '') ?: MODX_BASE_PATH])
                             </div>
                         @endif
                         <textarea name="{{$site->key}}_robots" id="{{$site->key}}_robots" cols="30" rows="10" class="w-full m-0 p-0 border-t-0 rounded-t-none rounded-b-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-0 mb-0" onchange="documentDirty=true;">{!!trim($robots[$site->key . '_robots'] ?? '') ? file_get_contents($robots[$site->key . '_robots']) : ''!!}</textarea>

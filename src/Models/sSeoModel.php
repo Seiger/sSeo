@@ -10,6 +10,7 @@ class sSeoModel extends Model
      * @var string
      */
     protected $table = 's_seo';
+    protected $primaryKey = 'seoid';
 
     protected $fillable = [
         'resource_id', 'resource_type', 'lang',

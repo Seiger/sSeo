@@ -25,11 +25,12 @@ this plugin provides the tools you need for a competitive edge in the digital la
   - [x] Evolution CMS Resources.
   - [x] **[sCommerce](https://github.com/Seiger/sCommerce)** Products.
   - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
+  - [x] **[sMultisite](https://github.com/Seiger/sMultisite)** robots.txt and sitemap.xml.
 - [x] Custom SEO Title and Description.
 - [x] Canonical URL Implementation.
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.
-- [x] Include or exclude documents from xml sitemap (via Searchable).
+- [x] Include or exclude documents from xml sitemap.
 - [ ] On page Robots index/follow settings.
 - [x] Noindex for Pagination and Custom $_GET Parameters.
 - [x] 30x Redirects for Resolving 404 Errors.
