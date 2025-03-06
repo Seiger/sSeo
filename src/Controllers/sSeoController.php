@@ -39,6 +39,39 @@ class sSeoController
     }
 
     /**
+     * Prepare the templates for editing and return the view.
+     *
+     * This method initializes the templates for SEO fields, including the document's meta title, description,
+     * and keywords. If the `sCommerce` module is enabled, additional templates for product and category pages
+     * are added. The method then prepares a code editor for these templates using the `textEditor` method.
+     * Finally, it returns the view with the editor configurations and the templates to be edited.
+     *
+     * @return \Illuminate\View\View The view for editing SEO templates, including the code editor for the templates.
+     */
+    public function templates()
+    {
+        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
+
+        $editor = [];
+        $editor[] = 'sseo_meta_title_document_base';
+        $editor[] = 'sseo_meta_description_document_base';
+        $editor[] = 'sseo_meta_keywords_document_base';
+
+        if (evo()->getConfig('check_sCommerce', false)) {
+            $editor[] = 'sseo_meta_title_prodcat_base';
+            $editor[] = 'sseo_meta_title_product_base';
+            $editor[] = 'sseo_meta_description_prodcat_base';
+            $editor[] = 'sseo_meta_description_product_base';
+            $editor[] = 'sseo_meta_keywords_prodcat_base';
+            $editor[] = 'sseo_meta_keywords_product_base';
+        }
+
+        $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
+
+        return $this->view('index', compact('editor', 'codeEditor'));
+    }
+
+    /**
      * Retrieves the robots.txt file for the current site or multisite setup.
      *
      * This method checks if the `sMultisite` configuration is enabled and retrieves the `robots.txt`
@@ -194,6 +227,34 @@ class sSeoController
         }
 
         // Clear full cache after updating redirects
+        evo()->clearCache('full');
+        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+    }
+
+    /**
+     * Update SEO templates in the system settings.
+     *
+     * This method processes the POST request containing the template data. For each template,
+     * it checks if the key starts with 'sseo_' (indicating an SEO template setting). It then sanitizes
+     * the value, updates the corresponding setting in the database, and also updates the system configuration.
+     * After processing the templates, it clears the cache and redirects back with a success message.
+     *
+     * @return \Illuminate\Http\RedirectResponse The response after updating the templates,
+     *         including a redirect with a success message.
+     */
+    public function updateTemplates()
+    {
+        $templates = request()->post();
+        $tbl = evo()->getDatabase()->getFullTableName('system_settings');
+
+        foreach ($templates as $key => $value) {
+            if (str_starts_with($key, 'sseo_')) {
+                $value = removeSanitizeSeed($value);
+                evo()->getDatabase()->query("REPLACE INTO {$tbl} (`setting_name`, `setting_value`) VALUES ('{$key}', '{$value}')");
+                evo()->setConfig($key, $value);
+            }
+        }
+
         evo()->clearCache('full');
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
     }

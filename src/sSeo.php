@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use EvolutionCMS\Models\SiteContent;
 use Illuminate\Support\Str;
 use Seiger\sArticles\Models\sArticle;
+use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Controllers\sSeoController;
@@ -72,7 +73,7 @@ class sSeo
         if (isset($document['meta_title']) && !empty($document['meta_title'])) {
             $title = $document['meta_title'];
         } else {
-            $title = ($document['pagetitle'] ?? '') . ' - ' . evo()->getConfig('site_name', '');
+            $title = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_title_{$document['resource_type']}_base", '[*pagetitle*] - [(site_name)]'));
         }
         return trim($title);
     }
@@ -89,7 +90,29 @@ class sSeo
         if (isset($document['meta_description']) && !empty($document['meta_description'])) {
             $description = $document['meta_description'];
         } else {
-            $description = '';
+            $description = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_description_{$document['resource_type']}_base", '[*pagetitle*] - [(site_name)]'));
+        }
+        return trim($description);
+    }
+
+    /**
+     * Check and retrieve meta keywords for the current document.
+     *
+     * This method checks if the `meta_keywords` field is set and not empty for the current document.
+     * If available, it returns the value of `meta_keywords`. If the field is empty or not set,
+     * it retrieves the default meta keywords from the system configuration based on the document's type.
+     * The default value is parsed from a template using the `[pagetitle]` and `[longtitle]` placeholders.
+     *
+     * @return string The meta keywords for the document, either custom or default, trimmed of whitespace.
+     */
+    public function checkMetaKeywords(): string
+    {
+        $document = $this->getDocument();
+
+        if (isset($document['meta_keywords']) && !empty($document['meta_keywords'])) {
+            $description = $document['meta_keywords'];
+        } else {
+            $description = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_keywords_{$document['resource_type']}_base", '[*pagetitle*], [*longtitle*]'));;
         }
         return trim($description);
     }
@@ -245,7 +268,24 @@ class sSeo
             } else {
                 $this->document = evo()->documentObject;
             }
+
+            if (empty($this->document['resource_type'])) {
+                $this->document['resource_type'] = evo()->documentObject['type'];
+            }
+
+            if (evo()->getConfig('check_sCommerce', false)) {
+                if ($this->document['type'] == 'document') {
+                    $catalogRoot = (int)sCommerce::config('basic.catalog_root', 0);
+                    if ($catalogRoot > 0) {
+                        $catPages = array_merge([$catalogRoot], evo()->getChildIds($catalogRoot));
+                        if (in_array($this->document['id'], $catPages)) {
+                            $this->document['resource_type'] = 'prodcat';
+                        }
+                    }
+                }
+            }
         }
+
         return $this->document;
     }
 }

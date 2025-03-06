@@ -149,10 +149,13 @@ Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
     // Meta Description
     $description = sSeo::checkMetaDescription();
 
+    // Meta Keywords
+    $keywords = sSeo::checkMetaKeywords();
+
     // SEO robots
     $robots = sSeo::checkRobots();
 
-    return view('sSeo::partials.headWebDocument', compact('canonical', 'robots', 'title', 'description'))->render();
+    return view('sSeo::partials.headWebDocument', compact('canonical', 'robots', 'title', 'description', 'keywords'))->render();
 });
 
 /**
@@ -163,7 +166,7 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
         'sseo',
         'tools',
         '<i class="'.__('sSeo::global.icon').'"></i><span class="menu-item-text">'.__('sSeo::global.title').'</span>',
-        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.configure'),
+        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.templates'),
         __('sSeo::global.title'),
         "",
         "",
