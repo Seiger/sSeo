@@ -39,16 +39,16 @@
             </label>
             <div class="col-12 col-md-3 col-lg-2 col-xl-1">
                 <select name="sseo[priority]" id="priority" class="form-control" onchange="documentDirty=true;">
-                    <option value="0.1" @if(($priority ?? '') == 0.1) selected @endif>0.1</option>
-                    <option value="0.2" @if(($priority ?? '') == 0.2) selected @endif>0.2</option>
-                    <option value="0.3" @if(($priority ?? '') == 0.3) selected @endif>0.3</option>
-                    <option value="0.4" @if(($priority ?? '') == 0.4) selected @endif>0.4</option>
-                    <option value="0.5" @if(($priority ?? '') == 0.5) selected @endif>0.5</option>
-                    <option value="0.6" @if(($priority ?? '') == 0.6) selected @endif>0.6</option>
-                    <option value="0.7" @if(($priority ?? '') == 0.7) selected @endif>0.7</option>
-                    <option value="0.8" @if(($priority ?? '') == 0.8) selected @endif>0.8</option>
-                    <option value="0.9" @if(($priority ?? '') == 0.9) selected @endif>0.9</option>
                     <option value="1.0" @if(($priority ?? '') == 1.0) selected @endif>1.0</option>
+                    <option value="0.9" @if(($priority ?? '') == 0.9) selected @endif>0.9</option>
+                    <option value="0.8" @if(($priority ?? '') == 0.8) selected @endif>0.8</option>
+                    <option value="0.7" @if(($priority ?? '') == 0.7) selected @endif>0.7</option>
+                    <option value="0.6" @if(($priority ?? '') == 0.6) selected @endif>0.6</option>
+                    <option value="0.5" @if(($priority ?? '') == 0.5) selected @endif>0.5</option>
+                    <option value="0.4" @if(($priority ?? '') == 0.4) selected @endif>0.4</option>
+                    <option value="0.3" @if(($priority ?? '') == 0.3) selected @endif>0.3</option>
+                    <option value="0.2" @if(($priority ?? '') == 0.2) selected @endif>0.2</option>
+                    <option value="0.1" @if(($priority ?? '') == 0.1) selected @endif>0.1</option>
                 </select>
             </div>
             <label class="control-label col-12 col-md-3 col-lg-2">

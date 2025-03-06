@@ -232,11 +232,12 @@ class sSeoController
                 }
             }
         } else {
+            $robots = request()->input('robots', '');
+
             if (empty($robots)) {
                 return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
             }
 
-            $robots = request()->input('robots', '');
             file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
         }
 
@@ -310,7 +311,7 @@ class sSeoController
 
         if (!empty($resources)) {
             foreach ($resources as $resource) {
-                $loc = $siteUrl . url($resource->id);
+                $loc = $siteUrl . trim(url($resource->id), '.');
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
                 $changefreq = $resource->changefreq ?? 'always';
                 $priority = $resource->priority ?? '0.5';
@@ -333,7 +334,7 @@ class sSeoController
 
             if (!empty($products)) {
                 foreach ($products as $product) {
-                    $loc = $siteUrl . $product->link;
+                    $loc = $siteUrl . trim($product->link, '.');
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
@@ -356,7 +357,7 @@ class sSeoController
 
             if (!empty($publications)) {
                 foreach ($publications as $publication) {
-                    $loc = $siteUrl . $publication->link;
+                    $loc = $siteUrl . trim($publication->link, '.');
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';
