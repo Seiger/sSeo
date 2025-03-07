@@ -13,6 +13,10 @@ Go to You /core/ folder
 cd core
 ```
 
+```console
+composer update
+```
+
 Run php artisan commands
 
 ```console
