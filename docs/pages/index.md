@@ -4,7 +4,8 @@ title: sSeo for Evolution CMS
 permalink: /
 ---
 
-![sSeo](https://repository-images.githubusercontent.com/675386929/349d7568-33f6-487d-8b87-367c13b35c4d){: .badge}
+![sSeo Config](https://repository-images.githubusercontent.com/675386929/349d7568-33f6-487d-8b87-367c13b35c4d){: .badge}
+![sSeo Meta Templates](https://github.com/user-attachments/assets/691a53df-87b0-4ce5-a0a0-832abe662217){: .badge}
 [![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo){: .badge}
 [![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution){: .badge}
 ![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo){: .badge}
@@ -34,7 +35,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
     - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
     - [x] **[sMultisite](https://github.com/Seiger/sMultisite)** robots.txt and sitemap.xml.
 - [x] Custom SEO Title, Description and Keywords.
-- [x] SEO Meta Templates Title, Description and Keywords (pro).
+- [x] SEO Meta Templates Title, Description and Keywords **(pro)**.
 - [x] Canonical URL Implementation.
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.
