@@ -34,7 +34,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
     - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
     - [x] **[sMultisite](https://github.com/Seiger/sMultisite)** robots.txt and sitemap.xml.
 - [x] Custom SEO Title, Description and Keywords.
-- [x] SEO Meta Templates Title, Description and Keywords.
+- [x] SEO Meta Templates Title, Description and Keywords (pro).
 - [x] Canonical URL Implementation.
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.

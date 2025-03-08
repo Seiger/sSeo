@@ -21,20 +21,22 @@
                     </div>
                 </div>
             @endif
-            <div class="tab-page templatesTab" id="templatesTab">
-                <h2 class="tab">
-                    <a href="{{sSeo::route('sSeo.templates')}}">
-                        <span><i class="@lang('sSeo::global.templates_icon')" data-tooltip="@lang('sSeo::global.templates_help')"></i> @lang('sSeo::global.templates')</span>
-                    </a>
-                </h2>
-                <script>tpResources.addTabPage(document.getElementById('templatesTab'));</script>
-                <div class="container container-body">
-                    @if($name == 'templates')
-                        @include('sSeo::templatesTab')
-                        <script>tpResources.setSelectedTab('templatesTab');</script>
-                    @endif
+            @if(evo()->getConfig('sseo_pro', false))
+                <div class="tab-page templatesTab" id="templatesTab">
+                    <h2 class="tab">
+                        <a href="{{sSeo::route('sSeo.templates')}}">
+                            <span><i class="@lang('sSeo::global.templates_icon')" data-tooltip="@lang('sSeo::global.templates_help')"></i> @lang('sSeo::global.templates')</span>
+                        </a>
+                    </h2>
+                    <script>tpResources.addTabPage(document.getElementById('templatesTab'));</script>
+                    <div class="container container-body">
+                        @if($name == 'templates')
+                            @include('sSeo::templatesTab')
+                            <script>tpResources.setSelectedTab('templatesTab');</script>
+                        @endif
+                    </div>
                 </div>
-            </div>
+            @endif
             <div class="tab-page robotsTab" id="robotsTab">
                 <h2 class="tab">
                     <a href="{{sSeo::route('sSeo.robots')}}">

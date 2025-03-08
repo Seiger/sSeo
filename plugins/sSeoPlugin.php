@@ -166,7 +166,7 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
         'sseo',
         'tools',
         '<i class="'.__('sSeo::global.icon').'"></i><span class="menu-item-text">'.__('sSeo::global.title').'</span>',
-        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.templates'),
+        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.configure'),
         __('sSeo::global.title'),
         "",
         "",
