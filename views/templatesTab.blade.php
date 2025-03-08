@@ -16,13 +16,13 @@
                 <div class="relative mb-4">
                     <label for="sseo_meta_title_document_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_title_label', ['type_a' => __('sSeo::global.type_a_document'), 'lang' => ''])</label>
                     <textarea name="sseo_meta_title_document_base" id="sseo_meta_title_document_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_title_document_base', '[*pagetitle*] - [(site_name)]')!!}</textarea>
-                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                 </div>
                 @if (evo()->getConfig('check_sCommerce', false))
                     <div class="relative mb-4">
                         <label for="sseo_meta_title_prodcat_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_title_label', ['type_a' => __('sSeo::global.type_a_prodcat'), 'lang' => ''])</label>
                         <textarea name="sseo_meta_title_prodcat_base" id="sseo_meta_title_prodcat_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_title_prodcat_base', '[*pagetitle*] - [(site_name)]')!!}</textarea>
-                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                     </div>
                     <div class="relative mb-4">
                         <label for="sseo_meta_title_product_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_title_label', ['type_a' => __('sSeo::global.type_a_product'), 'lang' => ''])</label>
@@ -48,13 +48,13 @@
                 <div class="relative mb-4">
                     <label for="sseo_meta_description_document_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_description_label', ['type_a' => __('sSeo::global.type_a_document'), 'lang' => ''])</label>
                     <textarea name="sseo_meta_description_document_base" id="sseo_meta_description_document_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_description_document_base', '[*pagetitle*] - [(site_name)]')!!}</textarea>
-                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                 </div>
                 @if (evo()->getConfig('check_sCommerce', false))
                     <div class="relative mb-4">
                         <label for="sseo_meta_title_prodcat_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_description_label', ['type_a' => __('sSeo::global.type_a_prodcat'), 'lang' => ''])</label>
                         <textarea name="sseo_meta_description_prodcat_base" id="sseo_meta_description_prodcat_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_description_prodcat_base', '[*pagetitle*] - [(site_name)]')!!}</textarea>
-                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                     </div>
                     <div class="relative mb-4">
                         <label for="sseo_meta_description_product_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_description_label', ['type_a' => __('sSeo::global.type_a_product'), 'lang' => ''])</label>
@@ -80,13 +80,13 @@
                 <div class="relative mb-4">
                     <label for="sseo_meta_keywords_document_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_keywords_label', ['type_a' => __('sSeo::global.type_a_document'), 'lang' => ''])</label>
                     <textarea name="sseo_meta_keywords_document_base" id="sseo_meta_keywords_document_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_keywords_document_base', '[*pagetitle*], [*longtitle*]')!!}</textarea>
-                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                    <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                 </div>
                 @if (evo()->getConfig('check_sCommerce', false))
                     <div class="relative mb-4">
                         <label for="sseo_meta_title_prodcat_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_keywords_label', ['type_a' => __('sSeo::global.type_a_prodcat'), 'lang' => ''])</label>
                         <textarea name="sseo_meta_keywords_prodcat_base" id="sseo_meta_keywords_prodcat_base" cols="30" rows="10" class="w-full m-0 p-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 mt-2 mb-0">{!!evo()->getConfig('sseo_meta_keywords_prodcat_base', '[*pagetitle*], [*longtitle*]')!!}</textarea>
-                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => '']).</p>
+                        <p class="text-xs text-gray-500 mt-2">@lang('sSeo::global.meta_title_info', ['more' => ''])</p>
                     </div>
                     <div class="relative mb-4">
                         <label for="sseo_meta_description_product_base" class="block text-sm font-medium text-gray-700">@lang('sSeo::global.meta_keywords_label', ['type_a' => __('sSeo::global.type_a_product'), 'lang' => ''])</label>
