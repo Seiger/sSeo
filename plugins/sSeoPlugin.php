@@ -5,6 +5,7 @@
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
+use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use Seiger\sSeo\Models\sSeoModel;
@@ -189,13 +190,16 @@ Event::listen('evolution.OnDocFormRender', function($params) {
         return view('sSeo::resourceTab', $fields ?? [])->render();
     }
 });
-Event::listen('evolution.sCommerceFormFieldRender', function($params) {
-    if (isset($params['field']) && !empty($params['field']) && $params['field'] == 'seo' && $params['dataInput']['product'] && $params['dataInput']['product']->id) {
-        $fields = sSeoModel::where('resource_id', $params['dataInput']['product']->id)
-            ->where('resource_type', 'product')
-            ->first()?->toArray();
-        return view('sSeo::productSection', $fields ?? [])->render();
+Event::listen('evolution.sCommerceManagerAddTabEvent', function($params) {
+    $reflector = new \ReflectionClass('sSeo');
+    $result['handler'] = str_replace('Facades/sSeo.php', 'Controllers/modulesSeoTabHandler.php', $reflector->getFileName());
+    $result['view'] = '';
+
+    if (isset($params['currentTab']) && $params['currentTab'] == 'content') {
+        $result['view'] = sCommerce::tabRender('sseoproduct', 'sSeo::moduleTab', $params['dataInput'] ?? [], __('sSeo::global.title'), __('sSeo::global.icon'), ' ');
     }
+
+    return $result;
 });
 
 /**

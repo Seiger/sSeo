@@ -12,4 +12,5 @@ Route::middleware('mgr')->prefix('sseo')->name('sSeo.')->group(function () {
     Route::post('/templates', [sSeoController::class, 'updateTemplates'])->name('update-templates');
     Route::post('/robots', [sSeoController::class, 'updateRobots'])->name('update-robots');
     Route::post('/configure', [sSeoController::class, 'updateConfigure'])->name('update-configure');
+    Route::post('/modulesave', [sSeoController::class, 'updateModuleFields'])->name('modulesave');
 });

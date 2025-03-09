@@ -595,6 +595,21 @@ class sSeoController
     }
 
     /**
+     * Updates SEO module fields and redirects back to the previous page.
+     *
+     * This method retrieves SEO field data from the request input and updates
+     * the corresponding fields using `sSeo::updateSeoFields()`. After updating,
+     * it redirects the user back to the previous page.
+     *
+     * @return void
+     */
+    public function updateModuleFields()
+    {
+        sSeo::updateSeoFields(request()->input('sseo', []));
+        return header('Location: ' . htmlspecialchars_decode(back()->getTargetUrl()));
+    }
+
+    /**
      * Connecting the visual editor to the required fields
      *
      * @param string $ids List of id fields separated by commas
