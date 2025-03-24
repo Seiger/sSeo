@@ -606,7 +606,8 @@ class sSeoController
     public function updateModuleFields()
     {
         sSeo::updateSeoFields(request()->input('sseo', []));
-        return header('Location: ' . htmlspecialchars_decode(back()->getTargetUrl()));
+        header('Location: ' . htmlspecialchars_decode(back()->getTargetUrl()));
+        exit();
     }
 
     /**
