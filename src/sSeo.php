@@ -238,11 +238,16 @@ class sSeo
         // Generate the base route URL and remove trailing slashes
         $route = route($name);
 
+        // Trim friendly URL suffix
+        if (!empty(evo()->getConfig('friendly_url_suffix'))) {
+            $route = rtrim($route, evo()->getConfig('friendly_url_suffix'));
+        }
+
         // Generate a unique action ID based on the route name
         $a = array_sum(array_map('ord', str_split(__('sSeo::global.title')))) + 999;
         $a = $a < 999 ? $a + 999 : $a;
 
-        return str_replace(MODX_MANAGER_URL, '/', $route) . '?a=' . $a;
+        return $route . '?a=' . $a;
     }
 
     /**
