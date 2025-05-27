@@ -72,7 +72,6 @@ class sSeoServiceProvider extends ServiceProvider
             dirname(__DIR__) . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
             dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
             dirname(__DIR__) . '/images/seigerit-blue.svg' => public_path('assets/site/seigerit-blue.svg'),
-            dirname(__DIR__) . '/config/sSeoSitemapTemplate.blade.php' => public_path('assets/plugins/sseo/sitemapTemplate.blade.php'),
         ]);
     }
 
