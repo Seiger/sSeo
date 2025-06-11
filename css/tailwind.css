@@ -1,0 +1,9 @@
+@import "tailwindcss" prefix(tw);
+@config "./tailwind.config.js";
+
+@layer components {
+    .seo-badge {
+        @apply tw:inline-flex tw:items-center tw:gap-1
+        tw:rounded tw:text-xs tw:px-2 tw:py-0.5;
+    }
+}

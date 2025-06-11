@@ -16,7 +16,7 @@ class sSeoServiceProvider extends ServiceProvider
      * Bootstrap the application services.
      *
      * Loads migrations, translations, views, and custom routes.
-     * Optionally checks for PRO subscription to enable additional features.
+     * Optional checks for PRO subscription to enable additional features.
      *
      * @return void
      */
@@ -49,7 +49,7 @@ class sSeoServiceProvider extends ServiceProvider
     /**
      * Register the service provider.
      *
-     * Registers necessary components and plugins for Evolution CMS.
+     * Registers the necessary parts and plugins for Evolution CMS.
      *
      * @return void
      */
