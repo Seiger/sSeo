@@ -14,4 +14,5 @@ Route::middleware('mgr')->prefix('sseo')->name('sSeo.')->group(function () {
     Route::post('/robots', [sSeoController::class, 'updateRobots'])->name('urobots');
     Route::get('/configure', [sSeoController::class, 'configure'])->name('configure');
     Route::post('/configure', [sSeoController::class, 'updateConfigure'])->name('uconfigure');
+    Route::post('/modulesave', [sSeoController::class, 'updateModuleFields'])->name('modulesave');
 });
