@@ -35,6 +35,7 @@
     'meta_keywords' => 'SEO Keywords',
     'meta_keywords_help' => "Key phrases should be written with commas and a space. Do not use repeated words. Frequent repetition of the same phrases is perceived negatively by search engines. Enter unique queries. For each page, a set of 2-5 phrases that are not repeated for other pages.",
     'meta_keywords_label' => "SEO Keyword <b>:lang</b> filling template when the corresponding <b>:type_a</b> field is empty",
+    'meta_placeholders' => 'Available placeholders [(site_name)], [*pagetitle*], [*longtitle*] :more',
     'message_for_large_number_redirects' => 'An excessive number of redirects can negatively impact the site’s performance. <br>Note: The specified redirects apply only if the page is not found (404).',
     'new_url' => 'New URL',
     'new_url_help' => 'Specify the new URL to which the redirect should point. You can use either a relative or a full URL including the domain.',
