@@ -14,6 +14,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Seiger\sArticles\Models\sArticle;
 use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
+use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use View;
 
