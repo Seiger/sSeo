@@ -1,80 +1,81 @@
-@php($name = explode('.', Route::currentRouteName())[1] ?? 'configure')
-@extends('manager::template.page')
-@section('content')
-    <h1 style="font-size: 1.5em;"><i class="@lang('sSeo::global.icon')" data-tooltip="@lang('sSeo::global.description')"></i>@lang('sSeo::global.title')</h1>
-    <div class="sectionBody">
-        <div class="tab-pane" id="resourcesPane">
-            <script>tpResources = new WebFXTabPane(document.getElementById('resourcesPane'), false);</script>
-            @if(config('seiger.settings.sSeo.redirects_enabled', 0) == 1)
-                <div class="tab-page redirectsTab" id="redirectsTab">
-                    <h2 class="tab">
-                        <a href="{{sSeo::route('sSeo.redirects')}}">
-                            <span><i class="@lang('sSeo::global.redirects_icon')" data-tooltip="@lang('sSeo::global.redirects_help')"></i> @lang('sSeo::global.redirects')</span>
-                        </a>
-                    </h2>
-                    <script>tpResources.addTabPage(document.getElementById('redirectsTab'));</script>
-                    <div class="container container-body">
-                        @if($name == 'redirects')
-                            @include('sSeo::redirectsTab')
-                            <script>tpResources.setSelectedTab('redirectsTab');</script>
-                        @endif
-                    </div>
-                </div>
-            @endif
-            @if(evo()->getConfig('sseo_pro', false))
-                <div class="tab-page templatesTab" id="templatesTab">
-                    <h2 class="tab">
-                        <a href="{{sSeo::route('sSeo.templates')}}">
-                            <span><i class="@lang('sSeo::global.templates_icon')" data-tooltip="@lang('sSeo::global.templates_help')"></i> @lang('sSeo::global.templates')</span>
-                        </a>
-                    </h2>
-                    <script>tpResources.addTabPage(document.getElementById('templatesTab'));</script>
-                    <div class="container container-body">
-                        @if($name == 'templates')
-                            @include('sSeo::templatesTab')
-                            <script>tpResources.setSelectedTab('templatesTab');</script>
-                        @endif
-                    </div>
-                </div>
-            @endif
-            <div class="tab-page robotsTab" id="robotsTab">
-                <h2 class="tab">
-                    <a href="{{sSeo::route('sSeo.robots')}}">
-                        <span><i class="@lang('sSeo::global.robots_icon')" data-tooltip="@lang('sSeo::global.robots_help')"></i> @lang('sSeo::global.robots')</span>
-                    </a>
-                </h2>
-                <script>tpResources.addTabPage(document.getElementById('robotsTab'));</script>
-                <div class="container container-body">
-                    @if($name == 'robots')
-                        @include('sSeo::robotsTab')
-                        <script>tpResources.setSelectedTab('robotsTab');</script>
-                    @endif
-                </div>
-            </div>
-            <div class="tab-page configureTab" id="configureTab">
-                <h2 class="tab">
-                    <a href="{{sSeo::route('sSeo.configure')}}">
-                        <span><i class="@lang('sSeo::global.configure_icon')" data-tooltip="@lang('sSeo::global.configure_help')"></i> @lang('sSeo::global.configure')</span>
-                    </a>
-                </h2>
-                <script>tpResources.addTabPage(document.getElementById('configureTab'));</script>
-                <div class="container container-body">
-                    @if($name == 'configure')
-                        @include('sSeo::configureTab')
-                        <script>tpResources.setSelectedTab('configureTab');</script>
-                    @endif
-                </div>
-            </div>
-        </div>
+<!DOCTYPE html>
+<html lang="{{ManagerTheme::getLang()}}" dir="{{ManagerTheme::getTextDir()}}">
+<head>
+    <title>{{$tabName}} @lang('sSeo::global.title') - Evolution CMS</title>
+    <base href="{{EVO_MANAGER_URL}}">
+    <meta http-equiv="Content-Type" content="text/html; charset={{ManagerTheme::getCharset()}}"/>
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"/>
+    <meta name="theme-color" content="#0b1a2f"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="icon" type="image/svg+xml" href="/core/vendor/seiger/sseo/images/logo.svg" />
+    <style>[x-cloak]{display:none!important}</style>
+    <link rel="stylesheet" href="/core/vendor/seiger/sseo/css/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@latest/build/css/alertify.min.css"/>
+    @if(class_exists(Tracy\Debugger::class) && config('tracy.active')){!!Tracy\Debugger::renderLoader()!!}@endif
+    {!!ManagerTheme::getMainFrameHeaderHTMLBlock()!!}
+    <script defer src="https://unpkg.com/alpinejs@latest"></script>
+    <script defer src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alertifyjs@latest/build/alertify.min.js"></script>
+    <script>
+        if (!evo){var evo = {};}
+        if (!evo.config){evo.config = {};}
+        var actions,actionStay = [],dontShowWorker = false,documentDirty = false,timerForUnload,managerPath = '';
+        evo.lang = {!!json_encode(Illuminate\Support\Arr::only(
+            ManagerTheme::getLexicon(),
+            ['saving', 'error_internet_connection', 'warning_not_saved']
+        ))!!};
+        evo.style = {!!json_encode(Illuminate\Support\Arr::only(
+            ManagerTheme::getStyle(),
+            ['icon_file', 'icon_pencil', 'icon_reply', 'icon_plus']
+        ))!!};
+        evo.MODX_MANAGER_URL = '{{EVO_MANAGER_URL}}';
+        evo.config.which_browser = '{{evo()->getConfig('which_browser')}}';
+    </script>
+    <script src="media/script/main.js"></script>
+    <script src="/core/vendor/seiger/sseo/js/main.js"></script>
+    @stack('scripts.top')
+    {!!EvolutionCMS()->getRegisteredClientStartupScripts()!!}
+</head>
+<body class="{{ManagerTheme::getTextDir()}} {{ManagerTheme::getThemeStyle()}}" data-evocp="color">
+<h1 style="display:none"><i class="@lang('sSeo::global.icon')"></i> {{$tabName}} @lang('sSeo::global.title')</h1>
+<div x-data="sSeo.sPinner('sSidebarPinned')" class="s-document">
+    @include('sSeo::partials.menu')
+    <main :class="open?'ml-60':'ml-16'" class="flex-1 min-h-screen transition-all duration-300">
+        <header class="s-header">
+            <div class="flex items-center gap-2">{!!$tabIcon!!} <h2 class="s-header-title">{{$tabName}}</h2></div>
+            <div class="flex items-center gap-3">@section('header')@show</div>
+        </header>
+        @section('content')@show
+    </main>
+</div>
+<div x-data="{open:false}" @mouseenter="open=true" @mouseleave="open=false" :class="open ? 's-brand s-brand--open' : 's-brand'">
+    <div class="s-brand-logo">
+        <img src="/core/vendor/seiger/sseo/images/seigerit-blue.svg" alt="Seiger IT">
     </div>
-@endsection
+    <template x-if="open">
+        <div x-transition.opacity class="s-brand-text">
+            <a href="https://seiger.github.io/sSeo" target="_blank" class="s-brand-link">sSeo</a>
+            &nbsp;|&nbsp;
+            <a href="https://seigerit.com" target="_blank" class="s-brand-link">Seiger IT</a>
+        </div>
+    </template>
+</div>
+<script src="/core/vendor/seiger/sseo/js/tooltip.js" defer></script>
 @push('scripts.bot')
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
-    <script>function saveForm(selector){$(selector).submit()}</script>
-    <style>
-        #copyright{position:fixed;bottom:0;right:0;}
-        #copyright img{width:35px;}
-    </style>
-    <div id="copyright"><a href="https://seigerit.com/" target="_blank"><img src="{{evo()->getConfig('site_url', '/')}}assets/site/seigerit-blue.svg"/></a></div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if(session('success'))
+            alertify.success("{{session('success')}}", 10);
+            @endif
+
+            @if(session('error'))
+            alertify.error("{{session('error')}}", 10);
+            @endif
+        });
+    </script>
 @endpush
+@stack('scripts.bot')
+@include('manager::partials.debug')
+{!!evo()->getRegisteredClientScripts()!!}
+</body>
+</html>

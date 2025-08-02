@@ -2,35 +2,54 @@
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class sRedirect extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['site_key', 'old_url', 'new_url', 'redirect_type'];
+    protected $fillable = ['site_key', 'old_url', 'new_url', 'type'];
 
     /**
-     * Ensure the redirect is unique before saving.
+     * Apply human-friendly (natural) sorting to a query builder.
+     *
+     * This method ensures strings with numeric suffixes are sorted as humans expect
+     * (e.g., test1, test2, test10) instead of lexicographically (e.g., test1, test10, test2).
+     *
+     * Supports PostgreSQL, MySQL, MariaDB, and SQLite.
+     *
+     * @param \Illuminate\Database\Query\Builder $builder
+     * @param string $column
+     * @param string $direction
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public static function addRedirect(string $oldUrl, string $newUrl, int $type): bool
+    public function scopeOrderByNatural($builder, string $column, string $direction = 'asc')
     {
-        if (self::where('old_url', $oldUrl)->exists()) {
-            return false;
+        $driver = DB::getDriverName();
+        $direction = strtolower($direction) === 'desc' ? 'DESC' : 'ASC';
+
+        if ($driver === 'pgsql') {
+            return $builder->orderByRaw("
+                regexp_replace(CAST($column AS TEXT), '[0-9]+$', '') $direction,
+                COALESCE(CAST((regexp_match(CAST($column AS TEXT), '[0-9]+$'))[1] AS INTEGER), 0) $direction
+            ");
         }
 
-        return self::create([
-            'old_url' => trim($oldUrl),
-            'new_url' => trim($newUrl),
-            'type' => $type,
-        ]) ? true : false;
-    }
+        if (in_array($driver, ['mysql', 'mariadb'])) {
+            return $builder->orderByRaw("
+                REGEXP_REPLACE(CAST($column AS CHAR), '[0-9]+$', '') $direction,
+                CAST(REGEXP_SUBSTR(CAST($column AS CHAR), '[0-9]+$') AS UNSIGNED) $direction
+            ");
+        }
 
-    /**
-     * Retrieve all redirects, optionally sorted.
-     */
-    public static function getAllRedirects(string $orderBy = 'created_at', string $direction = 'desc')
-    {
-        return self::orderBy($orderBy, $direction)->get();
+        if ($driver === 'sqlite') {
+            return $builder->orderByRaw("
+                regexp_replace(CAST($column AS TEXT), '[0-9]+$', '') COLLATE NOCASE $direction,
+                CAST(substr(CAST($column AS TEXT), regexp_instr(CAST($column AS TEXT), '[0-9]+$')) AS INTEGER) $direction
+            ");
+        }
+
+        return $builder->orderBy($column, $direction);
     }
 
     /**

@@ -98,11 +98,11 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 Event::listen('evolution.OnPageNotFound', function () {
     if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
         $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-        $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'default';
-        $redirect = sRedirect::where('site_key', $siteKey)->where('old_url', $requestUri)->first();
+        $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'all';
+        $redirect = sRedirect::whereIn('site_key', [$siteKey, 'all'])->where('old_url', $requestUri)->first();
 
         if ($redirect) {
-            evo()->sendRedirect($redirect->new_url, 0, '', $redirect->type);
+            header('Location: ' . $redirect->new_url, true, $redirect->type);
             exit;
         }
     }
@@ -166,8 +166,8 @@ Event::listen('evolution.OnManagerMenuPrerender', function($params) {
     $menu['sseo'] = [
         'sseo',
         'tools',
-        '<i class="'.__('sSeo::global.icon').'"></i><span class="menu-item-text">'.__('sSeo::global.title').'</span>',
-        config('seiger.settings.sSeo.redirects_enabled', 0) == 1 ? sSeo::route('sSeo.redirects') : sSeo::route('sSeo.configure'),
+        '<i class="'.__('sSeo::global.icon').'"></i>'.__('sSeo::global.title'),
+        sSeo::route('sSeo.dashboard'),
         __('sSeo::global.title'),
         "",
         "",

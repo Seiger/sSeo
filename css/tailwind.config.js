@@ -37,8 +37,6 @@ module.exports = {
     theme: {
         extend: {
             ...(base?.theme?.extend || {}),
-            colors: {seoPrimary: '#2c7a7b'},
-            boxShadow: {sSeoCard: '0 2px 6px rgb(0 0 0 / .05)'},
         },
     },
 

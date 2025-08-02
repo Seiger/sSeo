@@ -1,184 +1,203 @@
-@if(!is_writable(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php'))<div class="alert alert-danger" role="alert">@lang('sSeo::global.not_writable')</div>@endif
-<p class="text-danger text-monospace text-center">@lang('sSeo::global.message_for_large_number_redirects')</p>
-<form id="form-redirects" name="form-redirects" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.update-redirects')}}" onsubmit="documentDirty=false;">
-    <div class="row form-row form-element-input">
-        <div class="col-12">
-            <table class="table table-bordered table-striped">
-                <thead>
+@extends('sSeo::index')
+@section('header')
+    <button class="s-btn s-btn--primary" onclick="openAddRedirectModal();" title="@lang('sSeo::global.add_redirect_help')">
+        <i data-lucide="plus" class="w-4 h-4"></i>@lang('sSeo::global.add_redirect')
+    </button>
+    <div class="relative group">
+        <input type="text" name="s" value="{{request()->input('s', '')}}" placeholder="Search…" class="s-input-search" />
+        <i data-lucide="search" class="js_search absolute left-2 top-1.5 w-4 h-4 text-slate-500 darkness:text-slate-400"></i>
+    </div>
+@endsection
+@section('content')
+    <section class="py-3">
+        <div class="overflow-x-auto border-t border-b border-slate-200 darkness:border-slate-800">
+            <table id="redirectsTable" class="min-w-full text-sm text-left text-slate-700 bg-white darkness:text-slate-200 darkness:bg-[#122739]">
+                <thead class="bg-sky-100 text-xs text-slate-700 uppercase tracking-wide darkness:bg-[#132a44] darkness:text-slate-200">
                 <tr>
-                    <th>@lang('sSeo::global.old_url')</th>
-                    <th>@lang('sSeo::global.new_url')</th>
-                    <th>@lang('sSeo::global.redirect_type')</th>
-                    @if (evo()->getConfig('check_sMultisite', false))<th>@lang('sSeo::global.site_key')</th>@endif
-                    <th>@lang('global.onlineusers_action')</th>
+                    <th data-by="old_url" class="px-4 py-3 whitespace-nowrap cursor-pointer hover:text-blue-600">
+                        <div class="flex items-center gap-1">@lang('sSeo::global.old_url')
+                            <i data-lucide="chevrons-up-down" class="w-4 h-4"></i>
+                        </div>
+                    </th>
+                    <th data-by="new_url" class="px-4 py-3 whitespace-nowrap cursor-pointer hover:text-blue-600">
+                        <div class="flex items-center gap-1">@lang('sSeo::global.new_url')
+                            <i data-lucide="chevrons-up-down" class="w-4 h-4"></i>
+                        </div>
+                    </th>
+                    <th data-by="type" class="px-4 py-3 whitespace-nowrap cursor-pointer hover:text-blue-600">
+                        <div class="flex items-center gap-1">@lang('sSeo::global.redirect_type')
+                            <i data-lucide="chevrons-up-down" class="w-4 h-4"></i>
+                        </div>
+                    </th>
+                    @if (evo()->getConfig('check_sMultisite', false))
+                        <th data-by="site_key" class="px-4 py-3 whitespace-nowrap cursor-pointer hover:text-blue-600">
+                            <div class="flex items-center gap-1">@lang('sSeo::global.site_key')
+                                <i data-lucide="chevrons-up-down" class="w-4 h-4"></i>
+                            </div>
+                        </th>
+                    @endif
+                    <th class="px-4 py-3 whitespace-nowrap cursor-pointer hover:text-blue-600 text-center">
+                        @lang('global.onlineusers_action')
+                    </th>
                 </tr>
                 </thead>
-                <tbody id="redirects-table-body">
-                @foreach($redirects as $index => $redirect)
-                    <tr>
-                        <td>
-                            <input type="text" name="redirects[{{$index}}][old]" value="{{$redirect->old_url}}" class="form-control old-url" onchange="documentDirty=true;">
-                        </td>
-                        <td>
-                            <input type="text" name="redirects[{{$index}}][new]" value="{{$redirect->new_url}}" class="form-control new-url" onchange="documentDirty=true;">
-                        </td>
-                        <td>
-                            <select name="redirects[{{$index}}][type]" class="form-control" onchange="documentDirty=true;">
-                                <option value="301" @if($redirect->type == 301) selected @endif>301 - Permanent</option>
-                                <option value="302" @if($redirect->type == 302) selected @endif>302 - Temporary</option>
-                                <option value="307" @if($redirect->type == 307) selected @endif>307 - Temporary (Keep Method)</option>
-                            </select>
-                        </td>
-                        @if (evo()->getConfig('check_sMultisite', false))
-                            <td>
-                                <select name="redirects[{{$index}}][site_key]" class="form-control" onchange="documentDirty=true;">
-                                    @foreach($availableSites as $site)
-                                        <option value="{{$site->key}}" @if($redirect->site_key == $site->key) selected @endif>
-                                            {{$site->site_name}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </td>
-                        @endif
-                        <td>
-                            <button type="button" class="btn btn-danger" onclick="removeRedirectRow(this);">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                <tbody class="divide-y divide-slate-100 darkness:divide-slate-600">
+                @foreach($redirects as $redirect)
+                    @include('sSeo::partials.redirects.tableRow', ['item' => $redirect])
                 @endforeach
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="split my-3"></div>
-</form>
-
+        <div class="flex items-center justify-between mt-6 px-6">
+            <div class="flex space-x-1 text-sm">{!!$redirects?->render()!!}</div>
+            @if($redirects?->count() > 10)@include('sSeo::partials.perPageSelector')@endif
+        </div>
+    </section>
+@endsection
 @push('scripts.bot')
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            @if(session('success'))
-                alertify.success("{{ session('success') }}");
-            @endif
-
-            @if(session('error'))
-                alertify.error("{{ session('error') }}");
-            @endif
-        });
-
         function openAddRedirectModal() {
-            let siteSelectHtml = "";
-            @if (evo()->getConfig('check_sMultisite', false))
-                siteSelectHtml = `
-                    <label>@lang('sSeo::global.site_key')</label>
-                    <select id="new_site_key" class="form-control">
-                        @foreach($availableSites as $site)
-                    <option value="{{$site->key}}">{{$site->site_name}}</option>
-                        @endforeach
-                    </select>
-                    <br>
-                `;
-            @endif
-
-            alertify.confirm()
-            .set({
-                title: "<b>@lang('sSeo::global.add_redirect')</b>",
-                message: `
-                    <label>@lang('sSeo::global.old_url')</label>
-                    <input id="new_old_url" type="text" class="form-control" />
-                    <br>
-                    <label>@lang('sSeo::global.new_url')</label>
-                    <input id="new_new_url" type="text" class="form-control" />
-                    <br>
-                    <label>@lang('sSeo::global.redirect_type')</label>
-                    <select id="new_redirect_type" class="form-control">
+            let formHtml = `
+                <div class="m-2">
+                    <label class="block text-sm font-medium mb-1">@lang('sSeo::global.old_url')
+                        <span class="inline-flex items-center justify-center align-middle translate-y-[-2px] text-slate-400">
+                            <i data-lucide="help-circle" data-tooltip="@lang('sSeo::global.old_url_help')" class="w-4 h-4 inline"></i>
+                        </span>
+                    </label>
+                    <input name="old_url" type="text" class="w-full border rounded px-3 py-2 text-sm darkness:bg-slate-800" placeholder="old-url"/>
+                </div>
+                <div class="m-2">
+                    <label class="block text-sm font-medium mb-1">@lang('sSeo::global.new_url')
+                        <span class="inline-flex items-center justify-center align-middle translate-y-[-2px] text-slate-400 darkness:bg-slate-800">
+                            <i data-lucide="help-circle" data-tooltip="@lang('sSeo::global.new_url_help')" class="w-4 h-4 inline"></i>
+                        </span>
+                    </label>
+                    <input name="new_url" type="text" class="w-full border rounded px-3 py-2 text-sm darkness:bg-slate-800" placeholder="new-url"/>
+                </div>
+                <div class="m-2">
+                    <label class="block text-sm font-medium mb-1">@lang('sSeo::global.redirect_type')
+                        <span class="inline-flex items-center justify-center align-middle translate-y-[-2px] text-slate-400">
+                            <i data-lucide="help-circle" data-tooltip="@lang('sSeo::global.redirect_type_help')" class="w-4 h-4 inline"></i>
+                        </span>
+                    </label>
+                    <select name="redirect_type" class="w-full border rounded px-3 py-2 text-sm darkness:bg-slate-800">
                         <option value="301">301 - Permanent</option>
                         <option value="302">302 - Temporary</option>
                         <option value="307">307 - Temporary (Keep Method)</option>
                     </select>
-                    ${siteSelectHtml}
-                `,
-                onok: function () {
-                    let oldUrl = document.getElementById("new_old_url").value.trim();
-                    let newUrl = document.getElementById("new_new_url").value.trim();
-                    let type = document.getElementById("new_redirect_type").value;
-                    let siteKey = "";
-                    @if (evo()->getConfig('check_sMultisite', false))
-                        siteKey = document.getElementById("new_site_key").value;
-                    @endif
-
-                    if (!oldUrl || !newUrl) {
-                        alertify.error("@lang('sSeo::global.error_empty_fields')");
-                        return false;
-                    }
-
-                    let existingUrls = Array.from(document.querySelectorAll("#redirects-table-body input[name*='[old]']")).map(el => el.value.trim());
-                    if (existingUrls.includes(oldUrl)) {
-                        alertify.error("@lang('sSeo::global.error_duplicate_redirect')");
-                        return false;
-                    }
-
-                    addRedirectRow(oldUrl, newUrl, type, siteKey);
-                    alertify.success("@lang('sSeo::global.redirect_added')");
-                },
-                oncancel: function () {
-                    alertify.error("@lang('sSeo::global.action_cancelled')");
-                }
-            })
-            .set('labels', {ok: "@lang('global.save')", cancel: "@lang('global.cancel')"})
-            .set('closable', false)
-            .set('transition', 'zoom')
-            .set('defaultFocus', 'cancel')
-            .show();
-            document.querySelector('.ajs-ok').classList.add('btn','btn-primary');
-        }
-
-        function addRedirectRow(oldUrl, newUrl, type, siteKey) {
-            let index = document.querySelectorAll('#redirects-table-body tr').length;
-            let siteField = "";
-
+                </div>
+            `;
             @if (evo()->getConfig('check_sMultisite', false))
-                siteField = `
-                    <td>
-                        <input type="hidden" name="redirects[${index}][site_key]" value="${siteKey}">
-                        ${siteKey}
-                    </td>
+                formHtml = formHtml + `
+                    <div class="m-2">
+                        <label class="block text-sm font-medium mb-1">@lang('sSeo::global.site_key')
+                            <span class="inline-flex items-center justify-center align-middle translate-y-[-2px] text-slate-400">
+                                <i data-lucide="help-circle" class="w-4 h-4 inline"></i>
+                            </span>
+                        </label>
+                        <select name="site_key" class="w-full border rounded px-3 py-2 text-sm darkness:bg-slate-800">
+                            @foreach($availableSites ?? [] as $site)
+                                <option value="{{$site->key}}">{{$site->site_name}}</option>
+                          @endforeach
+                        </select>
+                    </div>
                 `;
             @endif
 
-            let row = `
-                <tr>
-                    <td><input type="text" name="redirects[${index}][old]" value="${oldUrl}" class="form-control" onchange="documentDirty=true;"></td>
-                    <td><input type="text" name="redirects[${index}][new]" value="${newUrl}" class="form-control" onchange="documentDirty=true;"></td>
-                    <td>
-                        <select name="redirects[${index}][type]" class="form-control" onchange="documentDirty=true;">
-                            <option value="301" ${type === '301' ? 'selected' : ''}>301 - Permanent</option>
-                            <option value="302" ${type === '302' ? 'selected' : ''}>302 - Temporary</option>
-                            <option value="307" ${type === '307' ? 'selected' : ''}>307 - Temporary (Keep Method)</option>
-                        </select>
-                    </td>
-                    ${siteField}
-                    <td><button type="button" class="btn btn-danger" onclick="removeRedirectRow(this);"><i class="fa fa-trash"></i></button></td>
-                </tr>
-            `;
-            document.getElementById('redirects-table-body').insertAdjacentHTML('afterbegin', row);
-        }
+            alertify.confirm()
+                .set({
+                    title: "<h3>@lang('sSeo::global.add_redirect')</h3>",
+                    message: `
+                        <form id="redirectForm">${formHtml}</form>
+                        <p class="text-sm text-red-500 darkness:text-red-300 leading-snug mt-4 px-1 text-center max-w-xl mx-auto">
+                            @lang('sSeo::global.message_for_large_number_redirects')
+                        </p>
+                     `,
+                    onok: function () {
+                        window.parent.document.getElementById('mainloader')?.classList.add('show');
+                        let redirectForm = document.getElementById('redirectForm');
+                        let formData = new FormData(redirectForm);
 
-        function removeRedirectRow(button) {
-            button.closest('tr').remove();
-            documentDirty = true;
+                        if (!formData.get('old_url') || !formData.get('new_url')) {
+                            alertify.error("@lang('sSeo::global.error_empty_fields')");
+                            window.parent.document.getElementById('mainloader')?.classList.remove('show');
+                            return false;
+                        }
+
+                        (async () => {
+                            let response = await window.sSeo.callApi('{!!sSeo::route('sSeo.aredirect')!!}', formData);
+
+                            if (response.success === true) {
+                                redirectForm.reset();
+                                alertify.closeAll();
+                                alertify.success("@lang('sSeo::global.redirect_added')");
+
+                                const tableBody = document.querySelector('#redirectsTable tbody');
+                                tableBody.insertAdjacentHTML('afterbegin', response.html);
+                                window.sSeo.queueLucide();
+                            } else {
+                                alertify.error(response.message);
+                            }
+
+                            window.parent.document.getElementById('mainloader')?.classList.remove('show');
+                        })();
+                        return false;
+                    },
+                    oncancel: function () {
+                        alertify.notify("@lang('sSeo::global.action_cancelled')");
+                    }
+                })
+                .set('labels', {ok: "@lang('global.save')", cancel: "@lang('global.cancel')"})
+                .set('closable', false)
+                .set('transition', 'zoom')
+                .set('defaultFocus', 'cancel')
+                .set('notifier', 'delay', 5)
+                .show();
+            window.sSeo.queueLucide();
+        }
+        function deleteRedirect(id, uri) {
+            let message = `
+                <p class="text-sm text-red-500 darkness:text-red-300 leading-snug mt-4 px-1 text-center max-w-xl mx-auto">
+                    @lang('sSeo::global.you_shure_delete_redirect')
+                </p>
+            `;
+            message = message.replace(':uri', uri);
+
+            alertify.confirm()
+                .set({
+                    title: "<h3>@lang('global.are_you_sure')</h3>",
+                    message: message,
+                    onok: function () {
+                        window.parent.document.getElementById('mainloader')?.classList.add('show');
+
+                        (async () => {
+                            let formData = new FormData();
+                            formData.append('id', id);
+                            let response = await window.sSeo.callApi('{!!sSeo::route('sSeo.dredirect')!!}', formData, 'DELETE');
+
+                            if (response.success === true) {
+                                alertify.closeAll();
+                                alertify.success("@lang('sSeo::global.redirect_deleted')");
+                                document.getElementById(id)?.remove();
+                            } else {
+                                alertify.error(response.message);
+                            }
+
+                            window.parent.document.getElementById('mainloader')?.classList.remove('show');
+                        })();
+                        return false;
+                    },
+                    oncancel: function () {
+                        alertify.notify("@lang('sSeo::global.action_cancelled')");
+                    }
+                })
+                .set('labels', {ok: "@lang('global.yes')", cancel: "@lang('global.cancel')"})
+                .set('closable', false)
+                .set('transition', 'zoom')
+                .set('defaultFocus', 'cancel')
+                .set('notifier', 'delay', 5)
+                .show();
         }
     </script>
-
-    <div id="actions">
-        <div class="btn-group">
-            <button id="Button2" class="btn btn-primary" title="@lang('sSeo::global.add_redirect_help')" onclick="openAddRedirectModal();">
-                <i class="fa fa-plus"></i> <span>@lang('sSeo::global.add_redirect')</span>
-            </button>
-            <button id="Button1" class="btn btn-success" onclick="saveForm('#form-redirects');">
-                <i class="fa fa-save"></i> <span>@lang('global.save')</span>
-            </button>
-        </div>
-    </div>
 @endpush

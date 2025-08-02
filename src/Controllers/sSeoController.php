@@ -1,15 +1,19 @@
 <?php namespace Seiger\sSeo\Controllers;
 
 use Carbon\Carbon;
+use EvolutionCMS\Models\EventLog;
 use EvolutionCMS\Models\SiteContent;
 use EvolutionCMS\Models\SystemSetting;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Seiger\sArticles\Models\sArticle;
 use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
-use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use View;
 
@@ -21,21 +25,149 @@ use View;
 class sSeoController
 {
     /**
+     * Returns the view for the dashboard page.
+     *
+     * @return mixed The view for the dashboard page.
+     */
+    public function dashboard()
+    {
+        $data = [
+            'tabIcon' => '<i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.dashboard'),
+        ];
+
+        $data['pagesInSitemap'] = Cache::rememberForever('pagesInSitemap', function () {
+            return json_decode(
+                EventLog::whereEventid(1509)
+                    ->whereSource('sSeo Sitemap Generated')
+                    ->orderByDesc('createdon')
+                    ->first()?->description ?? '',
+                true);
+        });
+
+        return $this->view('dashboardTab', $data);
+    }
+
+    /**
      * Returns the view for the redirects page.
      *
      * @return mixed The view for the redirects page.
      */
     public function redirects()
     {
-        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
-        $redirects = sRedirect::getAllRedirects('old_url', 'asc');
+        $data = [
+            'tabIcon' => '<i data-lucide="refresh-cw" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.redirects'),
+        ];
+        Paginator::defaultView('sSeo::partials.pagination');
+        $b = request()->get('b', 'old_url');
+        $d = request()->get('d', 'asc');
+        $s = request()->get('s', '');
 
-        $availableSites = collect([]);
+        $query = sRedirect::query();
+        if (trim($s)) {
+            $query->where('site_key', 'like', '%' . $s . '%')
+                ->orWhere('old_url', 'like', '%' . $s . '%')
+                ->orWhere('new_url', 'like', '%' . $s . '%')
+                ->orWhere('type', 'like', '%' . $s . '%');
+        }
+        $query->orderByNatural($b, $d);
+        $data['redirects'] = $query->paginate((int)Cookie::get('sSeoPerPage', 50));
+
+        $data['availableSites'] = collect([]);
         if (evo()->getConfig('check_sMultisite', false)) {
-            $availableSites = sMultisite::all();
+            $data['availableSites'] = sMultisite::all();
         }
 
-        return $this->view('index', ['redirects' => $redirects, 'availableSites' => $availableSites]);
+        return $this->view('redirectsTab', $data);
+    }
+
+    /**
+     * Add a redirect to list with new data.
+     *
+     * This method:
+     * - Retrieves the submitted redirects from the request.
+     * - Validates the input and returns an error message if no redirects are provided.
+     * - Creates a backup of existing redirects if not already backed up for the current day.
+     * - Maintains a maximum of 5 recent backup files and removes backups older than 7 days.
+     * - Truncates the `sRedirect` table before inserting new redirects.
+     * - Prevents duplicate redirects by checking for existing `old_url` entries.
+     * - Inserts the validated redirects into the database.
+     * - Clears the site cache after updating redirects.
+     *
+     * @return \Illuminate\Http\RedirectResponse Redirects back with a success or error message.
+     */
+    public function addRedirect()
+    {
+        $redirect = request()->only(['old_url', 'new_url', 'redirect_type', 'site_key']);
+
+        if (empty($redirect)) {
+            return [
+                'success' => false,
+                'message' => __('sSeo::global.no_redirects_provided'),
+            ];
+        }
+
+        $item['site_key'] = $redirect['site_key'] ?? 'all';
+        $item['old_url'] = ltrim(trim($redirect['old_url'] ?? ''), '/');
+        $item['new_url'] = trim($redirect['new_url'] ?? '');
+        $item['type'] = intval($redirect['redirect_type'] ?? 302);
+
+        if (empty($item['old_url']) || empty($item['new_url']) || !in_array($item['type'], [301, 302, 307])) {
+            return [
+                'success' => false,
+                'message' => __('sSeo::global.error_empty_fields'),
+            ];
+        }
+
+        if (sRedirect::where('old_url', $item['old_url'])->whereIn('site_key', [$item['site_key'], 'all'])->exists()) {
+            return [
+                'success' => false,
+                'message' => __('sSeo::global.redirect_exists', ['uri' => $item['old_url']]),
+            ];
+        }
+
+        $itemDb = sRedirect::create($item);
+        evo()->clearCache('full');
+        return [
+            'success' => true,
+            'message' => __('sSeo::global.success_updated'),
+            'html' => view('sSeo::partials.redirects.tableRow', ['item' => $itemDb])->render(),
+        ];
+    }
+
+    /**
+     * Delete a redirect record by ID (AJAX).
+     *
+     * This method handles an incoming DELETE request and deletes a redirect entry from the database
+     * using the ID provided in the JSON request payload. It returns a success or error response
+     * depending on the request method and deletion outcome.
+     *
+     * Expected JSON payload:
+     * {
+     *     "id": int // ID of the redirect record to delete
+     * }
+     *
+     * @return array{
+     *     success: bool,
+     *     message: string
+     * }
+     */
+    public function delRedirect()
+    {
+        if (!request()->isMethod('DELETE')) {
+            return [
+                'success' => false,
+                'message' => __('global.cm_unknown_error'),
+            ];
+        }
+
+        sRedirect::find(request()->json()->getInt('id'))->delete();
+
+        return [
+            'success' => true,
+            'message' => __('sSeo::global.redirect_deleted'),
+        ];
     }
 
     /**
@@ -50,7 +182,10 @@ class sSeoController
      */
     public function templates()
     {
-        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
+        $data = [
+            'tabIcon' => '<i data-lucide="file-text" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.templates'),
+        ];
 
         $editor = [];
         $editor[] = 'sseo_meta_title_document_base';
@@ -59,16 +194,46 @@ class sSeoController
 
         if (evo()->getConfig('check_sCommerce', false)) {
             $editor[] = 'sseo_meta_title_prodcat_base';
-            $editor[] = 'sseo_meta_title_product_base';
             $editor[] = 'sseo_meta_description_prodcat_base';
-            $editor[] = 'sseo_meta_description_product_base';
             $editor[] = 'sseo_meta_keywords_prodcat_base';
+            $editor[] = 'sseo_meta_title_product_base';
+            $editor[] = 'sseo_meta_description_product_base';
             $editor[] = 'sseo_meta_keywords_product_base';
         }
 
         $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
 
-        return $this->view('index', compact('editor', 'codeEditor'));
+        return $this->view('templatesTab', array_merge($data, compact('data', 'editor', 'codeEditor')));
+    }
+
+    /**
+     * Update SEO templates in the system settings.
+     *
+     * This method processes the POST request containing the template data. For each template,
+     * it checks if the key starts with 'sseo_' (indicating an SEO template setting). It then sanitizes
+     * the value, updates the corresponding setting in the database, and also updates the system configuration.
+     * After processing the templates, it clears the cache and redirects back with a success message.
+     *
+     * @return \Illuminate\Http\RedirectResponse The response after updating the templates,
+     *         including a redirect with a success message.
+     */
+    public function updateTemplates()
+    {
+        $templates = request()->post();
+
+        foreach ($templates as $key => $value) {
+            if (str_starts_with($key, 'sseo_')) {
+                $value = removeSanitizeSeed($value);
+                DB::table('system_settings')->updateOrInsert(
+                    ['setting_name' => $key],
+                    ['setting_value' => $value]
+                );
+                evo()->setConfig($key, $value);
+            }
+        }
+
+        evo()->clearCache('full');
+        return redirect()->back()->with('success', __('sSeo::global.success_updated'));
     }
 
     /**
@@ -88,21 +253,27 @@ class sSeoController
      */
     public function robots()
     {
-        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
-        $sites = new \stdClass();
+        $data = [
+            'tabIcon' => '<i data-lucide="file-terminal" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.robots'),
+        ];
+
+        $sites = [];
         $editor = [];
+        $robots = [];
 
         if (evo()->getConfig('check_sMultisite', false)) {
-            $sites = sMultisite::all();
-            if ($sites->isEmpty()) {
-                $robots = '';
+            $sMultisite = sMultisite::all();
+            if ($sMultisite->isEmpty()) {
                 if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                    $robots = MODX_BASE_PATH . 'robots.txt';
+                    $file = MODX_BASE_PATH . 'robots.txt';
+                } else {
+                    $file = '';
                 }
+                $editor[] = 'robots';
+                $robots['robots'] = $file;
             } else {
-                $robots = [];
-                foreach ($sites as $site) {
-                    $editor[] = $site->key . '_robots';
+                foreach ($sMultisite as $site) {
                     if (file_exists(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt')) {
                         $file = EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt';
                     } elseif (file_exists(MODX_BASE_PATH . 'robots.txt')) {
@@ -110,153 +281,24 @@ class sSeoController
                     } else {
                         $file = '';
                     }
+                    $editor[] = $site->key . '_robots';
+                    $sites[$site->key . '_robots'] = $site->site_name;
                     $robots[$site->key . '_robots'] = $file;
                 }
             }
         } else {
-            $robots = '';
-            $editor[] = 'robots';
             if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                $robots = MODX_BASE_PATH . 'robots.txt';
+                $file = MODX_BASE_PATH . 'robots.txt';
+            } else {
+                $file = '';
             }
+            $editor[] = 'robots';
+            $sites['robots'] = evo()->getConfig('site_name', 'Current website');
+            $robots['robots'] = $file;
         }
 
         $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
-        return $this->view('index', compact('robots', 'sites', 'editor', 'codeEditor'));
-    }
-
-    /**
-     * Returns the view for the index page.
-     *
-     * @return mixed The view for the index page.
-     */
-    public function configure()
-    {
-        $GLOBALS['SystemAlertMsgQueque'] = &$_SESSION['SystemAlertMsgQueque'];
-        return $this->view('index');
-    }
-
-    /**
-     * Update the redirects list with new data and create backups of old redirects.
-     *
-     * This method:
-     * - Retrieves the submitted redirects from the request.
-     * - Validates the input and returns an error message if no redirects are provided.
-     * - Creates a backup of existing redirects if not already backed up for the current day.
-     * - Maintains a maximum of 5 recent backup files and removes backups older than 7 days.
-     * - Truncates the `sRedirect` table before inserting new redirects.
-     * - Prevents duplicate redirects by checking for existing `old_url` entries.
-     * - Inserts the validated redirects into the database.
-     * - Clears the site cache after updating redirects.
-     *
-     * @return \Illuminate\Http\RedirectResponse Redirects back with a success or error message.
-     */
-    public function updateRedirects()
-    {
-        $redirects = request()->input('redirects', []);
-
-        if (empty($redirects)) {
-            return redirect()->back()->with('error', trans('sSeo::global.no_redirects_provided'));
-        }
-
-        // Create backup directory if it doesn't exist
-        $backupDir = storage_path('backups/');
-        if (!file_exists($backupDir)) {
-            mkdir($backupDir, 0755, true);
-        }
-
-        // Backup file for today
-        $backupFile = $backupDir . 'redirects_backup_' . now()->format('Y-m-d') . '.json';
-
-        if (!file_exists($backupFile)) {
-            $backupRedirects = sRedirect::all()->toArray();
-            file_put_contents($backupFile, json_encode($backupRedirects, JSON_PRETTY_PRINT));
-        }
-
-        // Cleanup old backups: keep the 5 most recent and remove backups older than 7 days
-        $backupFiles = glob($backupDir . 'redirects_backup_*.json');
-        if (count($backupFiles) > 5) {
-            usort($backupFiles, function ($a, $b) {
-                return filemtime($a) - filemtime($b);
-            });
-
-            foreach (array_slice($backupFiles, 0, count($backupFiles) - 5) as $oldBackup) {
-                unlink($oldBackup);
-            }
-        }
-
-        foreach ($backupFiles as $file) {
-            if (filemtime($file) < strtotime('-7 days')) {
-                unlink($file);
-            }
-        }
-
-        // Truncate the redirects table
-        sRedirect::truncate();
-
-        $insertData = [];
-        foreach ($redirects as $redirect) {
-            if (!isset($redirect['old'], $redirect['new'], $redirect['type'])) {
-                continue;
-            }
-
-            $siteKey = trim($redirect['site_key']);
-            $oldUrl = trim($redirect['old']);
-            $newUrl = trim($redirect['new']);
-            $type = intval($redirect['type']);
-
-            if (empty($oldUrl) || empty($newUrl) || !in_array($type, [301, 302, 307])) {
-                continue;
-            }
-
-            // Prevent duplicate redirects
-            if (!sRedirect::where('old_url', $oldUrl)->exists()) {
-                $insertData[] = [
-                    'site_key' => $siteKey,
-                    'old_url' => $oldUrl,
-                    'new_url' => $newUrl,
-                    'type' => $type,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-        }
-
-        if (!empty($insertData)) {
-            sRedirect::insert($insertData);
-        }
-
-        // Clear full cache after updating redirects
-        evo()->clearCache('full');
-        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
-    }
-
-    /**
-     * Update SEO templates in the system settings.
-     *
-     * This method processes the POST request containing the template data. For each template,
-     * it checks if the key starts with 'sseo_' (indicating an SEO template setting). It then sanitizes
-     * the value, updates the corresponding setting in the database, and also updates the system configuration.
-     * After processing the templates, it clears the cache and redirects back with a success message.
-     *
-     * @return \Illuminate\Http\RedirectResponse The response after updating the templates,
-     *         including a redirect with a success message.
-     */
-    public function updateTemplates()
-    {
-        $templates = request()->post();
-        $tbl = evo()->getDatabase()->getFullTableName('system_settings');
-
-        foreach ($templates as $key => $value) {
-            if (str_starts_with($key, 'sseo_')) {
-                $value = removeSanitizeSeed($value);
-                evo()->getDatabase()->query("REPLACE INTO {$tbl} (`setting_name`, `setting_value`) VALUES ('{$key}', '{$value}')");
-                evo()->setConfig($key, $value);
-            }
-        }
-
-        evo()->clearCache('full');
-        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+        return $this->view('robotsTab', array_merge($data, compact('robots', 'sites', 'editor', 'codeEditor')));
     }
 
     /**
@@ -275,11 +317,12 @@ class sSeoController
         if (evo()->getConfig('check_sMultisite', false)) {
             $sites = sMultisite::all();
             if ($sites->isEmpty()) {
+                $robots = request()->input('robots', '');
+
                 if (empty($robots)) {
                     return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
                 }
 
-                $robots = request()->input('robots', '');
                 file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
             } else {
                 foreach ($sites as $site) {
@@ -303,6 +346,20 @@ class sSeoController
         }
 
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+    }
+
+    /**
+     * Returns the view for the configure page.
+     *
+     * @return mixed The view for the configure page.
+     */
+    public function configure()
+    {
+        $data = [
+            'tabIcon' => '<i data-lucide="settings" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.configure'),
+        ];
+        return $this->view('configureTab', $data);
     }
 
     /**
@@ -335,7 +392,7 @@ class sSeoController
         fclose($handle);
 
         evo()->clearCache('full');
-        return redirect()->back();
+        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
     }
 
     /**
@@ -592,22 +649,11 @@ class sSeoController
 
         // Write the XML file
         file_put_contents($file, $sitemap);
-    }
 
-    /**
-     * Updates SEO module fields and redirects back to the previous page.
-     *
-     * This method retrieves SEO field data from the request input and updates
-     * the corresponding fields using `sSeo::updateSeoFields()`. After updating,
-     * it redirects the user back to the previous page.
-     *
-     * @return void
-     */
-    public function updateModuleFields()
-    {
-        sSeo::updateSeoFields(request()->input('sseo', []));
-        header('Location: ' . htmlspecialchars_decode(back()->getTargetUrl()));
-        exit();
+        // Write log
+        $log = ['pages' => count($urls), 'time' => evo()->now()->toDateTimeString()];
+        Cache::forever('pagesInSitemap', $log);
+        evo()->logEvent(1509, 1, json_encode($log), 'sSeo Sitemap Generated');
     }
 
     /**
