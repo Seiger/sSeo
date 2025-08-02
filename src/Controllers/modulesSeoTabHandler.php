@@ -1,6 +1,6 @@
 <?php
 
-use Seiger\sCommerce\Controllers\tabProductController;
+use Seiger\sCommerce\Controllers\TabProductController;
 use Seiger\sSeo\Models\sSeoModel;
 
 switch (request()->input('get')) {
@@ -8,7 +8,7 @@ switch (request()->input('get')) {
         $requestId = (int)request()->input('i', 0);
         $iUrl = trim($iUrl) ?: '&i=0';
 
-        $result = (new tabProductController())->content($requestId);
+        $result = (new TabProductController())->content($requestId);
         $tabs = $result['tabs'] ?? [];
 
         evo()->documentObject['type'] = 'product';
