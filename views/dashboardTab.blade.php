@@ -35,7 +35,7 @@
                     @lang('sSeo::global.last_generated'):
                     <b>{{
                             trim($pagesInSitemap['time'] ?? '') ?
-                            Carbon\Carbon::parse($pagesInSitemap['time'])->locale('uk')->isoFormat('D MMM Y') :
+                            Carbon\Carbon::parse($pagesInSitemap['time'])->locale(ManagerTheme::getLang())->isoFormat('D MMM Y') :
                             __('sSeo::global.unknown')
                     }}</b>
                 </span>
