@@ -31,7 +31,7 @@ return new class extends Migration
             $table->longText('structured_data')->default('')->comment('JSON-LD for structured data');
             $table->jsonb('extra_meta')->default(new Expression('(JSON_ARRAY())'))->comment('Additional meta tags (key=value format)');
             $table->boolean('exclude_from_sitemap')->default(false)->comment('Indicates whether the resource should be excluded from the sitemap');
-            $table->unsignedDecimal('priority', 2, 1)->default(0.5)->comment('Page priority for XML Sitemap');
+            $table->decimal('priority', 2, 1)->unsigned()->default(0.5)->comment('Page priority for XML Sitemap');
             $table->enum('changefreq', ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])->default('weekly')->comment('Sitemap change frequency');
             $table->timestamp('last_modified')->nullable()->comment('Sitemap change frequency');
             $table->timestamps();
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->string('site_key')->default('all');
             $table->string('old_url');
             $table->string('new_url');
-            $table->unsignedMediumInteger('type')->default(301);
+            $table->mediumInteger('type')->default(301)->unsigned();
             $table->timestamps();
         });
     }
