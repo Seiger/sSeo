@@ -1,3 +1,9 @@
+---
+id: intro
+title: Introduction
+slug: /
+---
+
 Welcome to **Seiger Docs**. This documentation covers sSeo, sCommerce and other modules for Evolution CMS.
 
 - Clean Laravel-like layout

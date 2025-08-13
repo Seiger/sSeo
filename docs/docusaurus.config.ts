@@ -18,7 +18,7 @@ const config: Config = {
 
     i18n: {
         defaultLocale: 'en',
-        locales: ['en', 'uk']
+        locales: ['en']
     },
 
     presets: [
@@ -26,7 +26,7 @@ const config: Config = {
             'classic',
             {
                 docs: {
-                    routeBasePath: '/',                // документація від кореня
+                    routeBasePath: '/',
                     sidebarPath: require.resolve('./sidebars.ts')
                 },
                 blog: false,
