@@ -115,20 +115,21 @@ html[data-theme='dark'], body.darkness {
 /* прибираємо зовнішні відступи у пунктів, щоб фон не обрізався */
 .theme-doc-sidebar-menu .menu__list,
 .theme-doc-sidebar-menu .menu__list-item {
-    margin: 0;
+    margin: 0 !important;
 }
 
 /* Sidebar links: на всю ширину блока меню */
 .theme-doc-sidebar-menu .menu__link {
     color: var(--sidebar-text);
-    display: flex;                /* зберігаємо вирівнювання контенту */
+    display: block;                /* зберігаємо вирівнювання контенту */
     align-items: center;
     gap: 12px;
     width: 100%;                  /* ключ: розтягнути фон */
     box-sizing: border-box;       /* з урахуванням padding */
-    padding: 8px 12px 8px 16px;   /* pr трохи більше, щоб візуально врівень */
+    padding: 10px 12px 10px 16px;   /* pr трохи більше, щоб візуально врівень */
     border-radius: 0;             /* без заокруглень */
 }
+
 .theme-doc-sidebar-menu .menu__link:hover {
     background: rgba(255,255,255,.10);  /* hover: суцільний по ширині */
 }
@@ -136,7 +137,7 @@ html[data-theme='dark'], body.darkness {
 /* Active item: лінія зліва + тло по всій ширині */
 .theme-doc-sidebar-menu .menu__link--active {
     color: #fff;
-    background: var(--sidebar-active-bg);
+    background: var(--sidebar-active-bg);  /* #0051c7/50 */
     box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
     border-radius: 0;
     width: 100%;
@@ -167,31 +168,4 @@ html[data-theme='dark'], body.darkness {
     .theme-doc-sidebar-menu .menu {
         padding: 0 !important;              /* було .5rem 0 .5rem .5rem */
     }
-}
-
-/* Zero any inner margins so row background can span edge-to-edge */
-.theme-doc-sidebar-menu .menu__list,
-.theme-doc-sidebar-menu .menu__list-item {
-    margin: 0 !important;
-}
-
-/* Make each row fill full width of the sidebar */
-.theme-doc-sidebar-menu .menu__link {
-    display: block;                        /* block = tlo на всю ширину */
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px 10px 16px;          /* вирівняний текст */
-    border-radius: 0;                      /* без заокруглення */
-}
-
-.theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.10);     /* hover на всю ширину */
-}
-
-.theme-doc-sidebar-menu .menu__link--active {
-    color: #fff;
-    background: var(--sidebar-active-bg);  /* #0051c7/50 */
-    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
-    border-radius: 0;
-    width: 100%;
 }
