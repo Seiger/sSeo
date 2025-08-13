@@ -6,7 +6,15 @@
 
     --bg: #0b1220;   /* dark background */
     --fg: #d7e0ee;   /* dark text */
-    --ds-content-max: 880px; /* близько до Laravel Docs */
+    --ds-content-max: 960px; /* близько до Laravel Docs */
+
+    --bg-page:#F2F6FB;           /* світлий фон полотна */
+    --sidebar-start:#0E315F;     /* верх градієнта */
+    --sidebar-end:#0A2443;       /* низ градієнта */
+    --sidebar-text:#E7F0FF;
+    --sidebar-text-muted:#BBD0EF;
+    --sidebar-active-bg: rgba(255,255,255,.10);
+    --sidebar-active-border:#4DB2FF;
 }
 
 /* Імпортуємо згенерований Tailwind */
@@ -23,4 +31,74 @@ html[data-theme='dark'], body.darkness {
     --ifm-font-color-base: var(--fg);
     --ifm-link-color: var(--brand-400);
     --ifm-color-primary: var(--brand-500);
+}
+
+/* кнопка у стилі Docusaurus + твоя палітра */
+.button.button--primary {
+    border-radius: 0.75rem; /* ~rounded-2xl */
+    padding: 0.6rem 1rem;
+}
+
+.markdown {
+    max-width: var(--ds-content-max);
+    margin: 0 auto;
+}
+
+/* Фон сторінки як у модулі */
+.main-wrapper, .navbar ~ .main-wrapper {
+    background: var(--bg-page);
+}
+
+/* Ліва панель у стилі модуля */
+.theme-doc-sidebar-container {
+    background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
+    color: var(--sidebar-text);
+    border-right: none;
+}
+
+/* Посилання в меню (ліва колонка) */
+.theme-doc-sidebar-menu .menu__link {
+    color: var(--sidebar-text);
+    border-radius: 10px;
+}
+.theme-doc-sidebar-menu .menu__link:hover {
+    background: rgba(255,255,255,.06);
+}
+.theme-doc-sidebar-menu .menu__link--active {
+    color: #fff;
+    background: var(--sidebar-active-bg);
+    box-shadow: inset 0 0 0 1px var(--sidebar-active-border);
+}
+
+/* Заголовок документа/типографіка ближче до Laravel */
+.markdown h1 {
+    font-size: 2.25rem; /* ~36px */
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: .75rem;
+}
+.markdown h2 {
+    margin-top: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* Кнопки */
+.button.button--primary {
+    background: var(--brand-500);
+    border-color: var(--brand-500);
+    border-radius: 0.75rem;
+}
+.button.button--primary:hover {
+    background: var(--brand-600);
+    border-color: var(--brand-600);
+}
+
+/* Бейджі під картинками/шильдики */
+.badge { display:inline-block; margin-right:8px; margin-bottom:8px; vertical-align:middle; }
+
+/* Тонка лінія під navbar замість бордера */
+.navbar {
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid color-mix(in oklab, #fff, transparent 88%);
 }
