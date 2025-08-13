@@ -160,14 +160,6 @@ html[data-theme='dark'], body.darkness {
    Override theme paddings (desktop)
    ================================ */
 @media (min-width: 997px) {
-    /* зняти падінг із контейнера меню, що заважає суцільному фону */
-    .theme-doc-sidebar-menu .menu { padding: 0 !important; }
-
-    /* переписати внутрішнє правило теми з лівим відступом */
-    @supports (scrollbar-gutter: stable) {
-        .menu_SIkG {
-            padding: 0.5rem 0 0.5rem 0 !important;     /* було 0.5rem 0 0.5rem 0.5rem */
-            scrollbar-gutter: stable;
-        }
-    }
+    .theme-doc-sidebar-menu .menu {padding: 0 !important;}
+    nav.menu.thin-scrollbar.menu_SIkG {padding: 0.5rem 0 0.5rem 0 !important;}
 }
