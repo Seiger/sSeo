@@ -1,31 +1,37 @@
-/* === Brand palette as CSS variables === */
+/* ================================
+   Brand palette & layout variables
+   ================================ */
 :root {
+    /* Brand */
     --brand-50:#f5fbff; --brand-100:#e1f3ff; --brand-200:#bfe6ff;
     --brand-300:#8ed3ff; --brand-400:#57bbff; --brand-500:#2196f3;
     --brand-600:#1b7bd6; --brand-700:#175faf; --brand-800:#154f8f; --brand-900:#133f72;
 
-    --bg: #0b1220;   /* dark background */
-    --fg: #d7e0ee;   /* dark text */
-    --ds-content-max: 960px; /* близько до Laravel Docs */
+    /* Light/Dark base */
+    --bg-page:#F2F6FB;     /* page background */
+    --bg:#0b1220;          /* dark background */
+    --fg:#d7e0ee;          /* dark text */
 
-    --bg-page:#F2F6FB;           /* світлий фон полотна */
-    --sidebar-start:#0E315F;     /* верх градієнта */
-    --sidebar-end:#0A2443;       /* низ градієнта */
+    /* Layout widths */
+    --doc-sidebar-width:240px;  /* left nav width */
+    --doc-toc-width:300px;      /* right ToC width */
+    --ds-content-max:1040px;    /* content column */
+
+    /* Sidebar colors (module style) */
+    --sidebar-start:#0f2645;
+    --sidebar-end:#113c6E;
     --sidebar-text:#E7F0FF;
     --sidebar-text-muted:#BBD0EF;
-    --sidebar-active-bg: rgba(255,255,255,.10);
-    --sidebar-active-border:#4DB2FF;
+    --sidebar-active-bg:rgba(0,81,199,.5); /* #0051c7/50 */
+    --sidebar-active-border:#3b82f6;
 }
 
-/* Імпортуємо згенерований Tailwind */
+/* Tailwind build (generated) */
 @import './tailwind.generated.css';
 
-/* Docusaurus base tweaks */
-.navbar { backdrop-filter: saturate(180%) blur(8px); }
-.docSidebarContainer { border-right: 1px solid color-mix(in oklab, var(--fg), transparent 92%); }
-.markdown { max-width: var(--ds-content-max); margin: 0 auto; }
-
-/* Темний режим: або через data-theme=dark, або через body.darkness */
+/* ================================
+   Global + Theme tweaks
+   ================================ */
 html[data-theme='dark'], body.darkness {
     --ifm-background-color: var(--bg);
     --ifm-font-color-base: var(--fg);
@@ -33,46 +39,27 @@ html[data-theme='dark'], body.darkness {
     --ifm-color-primary: var(--brand-500);
 }
 
-/* кнопка у стилі Docusaurus + твоя палітра */
-.button.button--primary {
-    border-radius: 0.75rem; /* ~rounded-2xl */
-    padding: 0.6rem 1rem;
+.navbar {
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid color-mix(in oklab, #fff, transparent 88%);
 }
 
+.main-wrapper,
+.navbar ~ .main-wrapper {
+    background: var(--bg-page);
+}
+
+/* Content column */
 .markdown {
     max-width: var(--ds-content-max);
     margin: 0 auto;
 }
 
-/* Фон сторінки як у модулі */
-.main-wrapper, .navbar ~ .main-wrapper {
-    background: var(--bg-page);
-}
-
-/* Ліва панель у стилі модуля */
-.theme-doc-sidebar-container {
-    background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-    color: var(--sidebar-text);
-    border-right: none;
-}
-
-/* Посилання в меню (ліва колонка) */
-.theme-doc-sidebar-menu .menu__link {
-    color: var(--sidebar-text);
-    border-radius: 10px;
-}
-.theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.06);
-}
-.theme-doc-sidebar-menu .menu__link--active {
-    color: #fff;
-    background: var(--sidebar-active-bg);
-    box-shadow: inset 0 0 0 1px var(--sidebar-active-border);
-}
-
-/* Заголовок документа/типографіка ближче до Laravel */
+/* ================================
+   Typography (Laravel-like)
+   ================================ */
 .markdown h1 {
-    font-size: 2.25rem; /* ~36px */
+    font-size: 2.25rem; /* 36px */
     line-height: 1.2;
     letter-spacing: -0.02em;
     margin-bottom: .75rem;
@@ -83,22 +70,84 @@ html[data-theme='dark'], body.darkness {
     letter-spacing: -0.01em;
 }
 
-/* Кнопки */
+/* ================================
+   Buttons & badges
+   ================================ */
 .button.button--primary {
     background: var(--brand-500);
     border-color: var(--brand-500);
-    border-radius: 0.75rem;
+    border-radius: 12px; /* ~rounded-2xl */
+    padding: .6rem 1rem;
 }
 .button.button--primary:hover {
     background: var(--brand-600);
     border-color: var(--brand-600);
 }
+.badge {
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    vertical-align: middle;
+}
 
-/* Бейджі під картинками/шильдики */
-.badge { display:inline-block; margin-right:8px; margin-bottom:8px; vertical-align:middle; }
+/* ================================
+   Left sidebar (module gradient)
+   ================================ */
+.theme-doc-sidebar-container {
+    background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
+    color: var(--sidebar-text);
+    border-right: none;
+}
 
-/* Тонка лінія під navbar замість бордера */
-.navbar {
-    backdrop-filter: saturate(180%) blur(8px);
-    border-bottom: 1px solid color-mix(in oklab, #fff, transparent 88%);
+/* Sidebar menu list & scrollbar */
+.theme-doc-sidebar-menu {
+    padding-right: 4px;                 /* room for thin scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.2) transparent;
+}
+.theme-doc-sidebar-menu::-webkit-scrollbar { width: 6px; }
+.theme-doc-sidebar-menu::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.2);
+    border-radius: 3px;
+}
+
+/* Sidebar links */
+.theme-doc-sidebar-menu .menu__link {
+    color: var(--sidebar-text);
+    border-radius: 10px;
+    padding: 8px 10px 8px 16px;         /* pl-4 pr-2 py-2 */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+.theme-doc-sidebar-menu .menu__link:hover {
+    background: rgba(255,255,255,.10);  /* hover:bg-white/10 */
+}
+
+/* Active item (as on screenshot 3) */
+.theme-doc-sidebar-menu .menu__link--active {
+    color: #fff;
+    background: var(--sidebar-active-bg);
+    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border); /* left indicator */
+}
+
+/* Muted nested items */
+.theme-doc-sidebar-menu .menu__link:not(.menu__link--active).menu__link--sublist {
+    color: var(--sidebar-text-muted);
+}
+
+/* ================================
+   Right ToC
+   ================================ */
+.table-of-contents { padding-top: .5rem; }
+.table-of-contents__link { color: #6b7280; }              /* slate-500 */
+.table-of-contents__link--active { color: var(--brand-500); }
+
+/* ================================
+   Responsive
+   ================================ */
+@media (max-width: 996px) {
+    :root { --doc-toc-width: 0px; }     /* hide/collapse ToC column on mobile */
+    .theme-doc-toc-mobile { display: none; }
 }
