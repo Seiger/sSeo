@@ -111,25 +111,28 @@ html[data-theme='dark'], body.darkness {
     border-radius: 3px;
 }
 
-/* Sidebar links */
+/* Пункти меню */
 .theme-doc-sidebar-menu .menu__link {
     color: var(--sidebar-text);
-    border-radius: 10px;
-    padding: 8px 10px 8px 16px;         /* pl-4 pr-2 py-2 */
+    border-radius: 0; /* прибрали заокруглення */
+    padding: 8px 10px 8px 16px;  /* pl-4 pr-2 py-2 */
     display: flex;
     align-items: center;
     gap: 12px;
     position: relative;
+    width: 100%; /* розтягнути на всю ширину */
 }
 .theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.10);  /* hover:bg-white/10 */
+    background: rgba(255,255,255,.10);
 }
 
-/* Active item (as on screenshot 3) */
+/* Активний пункт */
 .theme-doc-sidebar-menu .menu__link--active {
     color: #fff;
     background: var(--sidebar-active-bg);
-    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border); /* left indicator */
+    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
+    border-radius: 0; /* без заокруглення */
+    width: 100%; /* на всю ширину */
 }
 
 /* Muted nested items */
