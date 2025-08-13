@@ -8,29 +8,29 @@
     --brand-600:#1b7bd6; --brand-700:#175faf; --brand-800:#154f8f; --brand-900:#133f72;
 
     /* Light/Dark base */
-    --bg-page:#F2F6FB;   /* page background */
-    --bg:#0b1220;        /* dark background */
-    --fg:#d7e0ee;        /* dark text */
+    --bg-page:#F2F6FB;
+    --bg:#0b1220;
+    --fg:#d7e0ee;
 
     /* Layout widths */
-    --doc-sidebar-width:240px;   /* left nav width */
-    --doc-toc-width:300px;       /* right ToC width */
-    --ds-content-max:1040px;     /* content column */
+    --doc-sidebar-width:15rem;   /* 240px */
+    --doc-toc-width:18.75rem;    /* 300px */
+    --ds-content-max:65rem;      /* 1040px */
 
-    /* Sidebar colors (module style) */
+    /* Sidebar (module style) */
     --sidebar-start:#0f2645;
     --sidebar-end:#113c6E;
     --sidebar-text:#E7F0FF;
     --sidebar-text-muted:#BBD0EF;
-    --sidebar-active-bg:rgba(0,81,199,.5); /* #0051c7/50 */
-    --sidebar-active-border:#3b82f6;       /* left indicator */
+    --sidebar-active-bg:rgba(0,81,199,.5);    /* #0051c7/50 */
+    --sidebar-active-border:#3b82f6;          /* left indicator */
 }
 
-/* Tailwind build (generated) */
+/* Tailwind bundle (generated) */
 @import './tailwind.generated.css';
 
 /* ================================
-   Global + Theme tweaks
+   Global + theme tweaks
    ================================ */
 html[data-theme='dark'], body.darkness {
     --ifm-background-color: var(--bg);
@@ -44,8 +44,7 @@ html[data-theme='dark'], body.darkness {
     border-bottom: 1px solid color-mix(in oklab, #fff, transparent 88%);
 }
 
-.main-wrapper,
-.navbar ~ .main-wrapper {
+.main-wrapper, .navbar ~ .main-wrapper {
     background: var(--bg-page);
 }
 
@@ -59,10 +58,10 @@ html[data-theme='dark'], body.darkness {
    Typography (Laravel-like)
    ================================ */
 .markdown h1 {
-    font-size: 2.25rem; /* 36px */
+    font-size: 2.25rem;           /* 36px */
     line-height: 1.2;
     letter-spacing: -0.02em;
-    margin-bottom: .75rem;
+    margin-bottom: 0.75rem;
 }
 .markdown h2 {
     margin-top: 2rem;
@@ -76,8 +75,8 @@ html[data-theme='dark'], body.darkness {
 .button.button--primary {
     background: var(--brand-500);
     border-color: var(--brand-500);
-    border-radius: 12px; /* ~rounded-2xl */
-    padding: .6rem 1rem;
+    border-radius: 0.75rem;       /* 12px */
+    padding: 0.6rem 1rem;
 }
 .button.button--primary:hover {
     background: var(--brand-600);
@@ -85,8 +84,8 @@ html[data-theme='dark'], body.darkness {
 }
 .badge {
     display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    margin-right: 0.5rem;         /* 8px */
+    margin-bottom: 0.5rem;        /* 8px */
     vertical-align: middle;
 }
 
@@ -101,49 +100,43 @@ html[data-theme='dark'], body.darkness {
 
 /* Sidebar list & scrollbar */
 .theme-doc-sidebar-menu {
-    /* важливо: без правого внутрішнього відступу,
-       щоб hover/active тло тягнулося до самого краю */
-    padding-right: 0;
+    padding-right: 0;                              /* без правого відступу */
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,.2) transparent;
 }
-.theme-doc-sidebar-menu::-webkit-scrollbar { width: 6px; }
+.theme-doc-sidebar-menu::-webkit-scrollbar { width: 0.375rem; }        /* 6px */
 .theme-doc-sidebar-menu::-webkit-scrollbar-thumb {
     background: rgba(255,255,255,.2);
-    border-radius: 3px;
-}
-/* прибираємо зовнішні відступи у пунктів, щоб фон не обрізався */
-.theme-doc-sidebar-menu .menu__list,
-.theme-doc-sidebar-menu .menu__list-item {
-    margin: 0 !important;
+    border-radius: 0.1875rem;                      /* 3px */
 }
 
-/* Sidebar links: на всю ширину блока меню */
+/* прибрати зовнішні відступи, щоб фон не обрізався */
+.theme-doc-sidebar-menu .menu__list,
+.theme-doc-sidebar-menu .menu__list-item { margin: 0 !important; }
+
+/* Sidebar links: заповнюють усю ширину */
 .theme-doc-sidebar-menu .menu__link {
     color: var(--sidebar-text);
-    display: block;                /* зберігаємо вирівнювання контенту */
-    align-items: center;
-    gap: 12px;
-    width: 100%;                  /* ключ: розтягнути фон */
-    box-sizing: border-box;       /* з урахуванням padding */
-    padding: 10px 12px 10px 16px;   /* pr трохи більше, щоб візуально врівень */
-    border-radius: 0;             /* без заокруглень */
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.625rem 0.75rem 0.625rem 1rem;       /* 10px 12px 10px 16px */
+    border-radius: 0;
 }
-
 .theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.10);  /* hover: суцільний по ширині */
+    background: rgba(255,255,255,.10);             /* hover edge-to-edge */
 }
 
-/* Active item: лінія зліва + тло по всій ширині */
+/* Active item: left indicator + full-width background */
 .theme-doc-sidebar-menu .menu__link--active {
     color: #fff;
-    background: var(--sidebar-active-bg);  /* #0051c7/50 */
-    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
+    background: var(--sidebar-active-bg);
+    box-shadow: inset 0.1875rem 0 0 0 var(--sidebar-active-border);  /* 3px */
     border-radius: 0;
     width: 100%;
 }
 
-/* Muted nested items */
+/* Nested items (muted) */
 .theme-doc-sidebar-menu .menu__link:not(.menu__link--active).menu__link--sublist {
     color: var(--sidebar-text-muted);
 }
@@ -151,33 +144,30 @@ html[data-theme='dark'], body.darkness {
 /* ================================
    Right ToC
    ================================ */
-.table-of-contents { padding-top: .5rem; }
-.table-of-contents__link { color: #6b7280; }            /* slate-500 */
+.table-of-contents { padding-top: 0.5rem; }
+.table-of-contents__link { color: #6b7280; }             /* slate-500 */
 .table-of-contents__link--active { color: var(--brand-500); }
 
 /* ================================
    Responsive
    ================================ */
 @media (max-width: 996px) {
-    :root { --doc-toc-width: 0px; }     /* ховаємо/колапсимо ToC на мобільному */
+    :root { --doc-toc-width: 0rem; }
     .theme-doc-toc-mobile { display: none; }
 }
 
-/* Kill default sidebar menu padding set by theme (desktop) */
+/* ================================
+   Override theme paddings (desktop)
+   ================================ */
 @media (min-width: 997px) {
-    .theme-doc-sidebar-menu .menu {
-        padding: 0 !important;              /* було .5rem 0 .5rem .5rem */
-    }
+    /* зняти падінг із контейнера меню, що заважає суцільному фону */
+    .theme-doc-sidebar-menu .menu { padding: 0 !important; }
 
+    /* переписати внутрішнє правило теми з лівим відступом */
     @supports (scrollbar-gutter: stable) {
         .menu_SIkG {
-            padding: .5rem 0 .5rem 0 !important;
+            padding: 0.5rem 0 0.5rem 0 !important;     /* було 0.5rem 0 0.5rem 0.5rem */
             scrollbar-gutter: stable;
         }
     }
-}
-
-.theme-doc-sidebar-menu .menu__link {
-    padding-left: 1rem !important; /* або 0, якщо хочеш без відступу */
-    padding-right: 1rem !important; /* або 0 */
 }
