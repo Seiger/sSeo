@@ -176,3 +176,8 @@ html[data-theme='dark'], body.darkness {
         }
     }
 }
+
+.theme-doc-sidebar-menu .menu__link {
+    padding-left: 1rem !important; /* або 0, якщо хочеш без відступу */
+    padding-right: 1rem !important; /* або 0 */
+}
