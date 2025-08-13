@@ -161,3 +161,37 @@ html[data-theme='dark'], body.darkness {
     :root { --doc-toc-width: 0px; }     /* ховаємо/колапсимо ToC на мобільному */
     .theme-doc-toc-mobile { display: none; }
 }
+
+/* Kill default sidebar menu padding set by theme (desktop) */
+@media (min-width: 997px) {
+    .theme-doc-sidebar-menu .menu {
+        padding: 0 !important;              /* було .5rem 0 .5rem .5rem */
+    }
+}
+
+/* Zero any inner margins so row background can span edge-to-edge */
+.theme-doc-sidebar-menu .menu__list,
+.theme-doc-sidebar-menu .menu__list-item {
+    margin: 0 !important;
+}
+
+/* Make each row fill full width of the sidebar */
+.theme-doc-sidebar-menu .menu__link {
+    display: block;                        /* block = tlo на всю ширину */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px 10px 16px;          /* вирівняний текст */
+    border-radius: 0;                      /* без заокруглення */
+}
+
+.theme-doc-sidebar-menu .menu__link:hover {
+    background: rgba(255,255,255,.10);     /* hover на всю ширину */
+}
+
+.theme-doc-sidebar-menu .menu__link--active {
+    color: #fff;
+    background: var(--sidebar-active-bg);  /* #0051c7/50 */
+    box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
+    border-radius: 0;
+    width: 100%;
+}
