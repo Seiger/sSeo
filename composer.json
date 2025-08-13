@@ -1,44 +1,53 @@
 {
-    "name": "seiger/sseo",
-    "license": "GPL-3.0",
-    "type": "EvolutionCMS-Plugin",
-    "description": "Evocms package for collection of SEO Tools for Evolution CMS.",
-    "keywords": ["evocms", "evolution-cms", "seo", "evolution-cms-seo", "seo-tools", "cms-seo", "evolution-cms-plugin"],
-    "authors": [
-        {
-            "name": "Serhii Korneliuk",
-            "email": "info@seigerit.com"
-        }
-    ],
-    "require": {
-        "php": ">=8.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Seiger\\sSeo\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Seiger\\sSeo\\sSeoServiceProvider"
-            ],
-            "aliases": {
-                "sSeo": "Seiger\\sSeo\\Facades\\sSeo"
-            }
-        }
-    },
-    "config": {
-        "exclude-files": [
-            "docs/*",
-            ".git/*",
-            ".github/*",
-            ".idea/*",
-            "README.md",
-            "LICENSE"
-        ]
-    },
-    "scripts": {
-        "post-autoload-dump": []
+  "name": "seiger/sseo",
+  "license": "GPL-3.0",
+  "type": "EvolutionCMS-Plugin",
+  "description": "Evocms package for collection of SEO Tools for Evolution CMS.",
+  "keywords": [
+    "evocms",
+    "evolution-cms",
+    "seo",
+    "evolution-cms-seo",
+    "seo-tools",
+    "cms-seo",
+    "evolution-cms-plugin"
+  ],
+  "authors": [
+    {
+      "name": "Serhii Korneliuk",
+      "email": "info@seigerit.com"
     }
+  ],
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Seiger\\sSeo\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Seiger\\sSeo\\sSeoServiceProvider"
+      ],
+      "aliases": {
+        "sSeo": "Seiger\\sSeo\\Facades\\sSeo"
+      }
+    }
+  },
+  "config": {
+    "exclude-files": [
+      "/docs",
+      "/docs/**",
+      "/.git/*",
+      "/.github/*",
+      "/.idea/*",
+      "README.md",
+      "LICENSE"
+    ]
+  },
+  "scripts": {
+    "post-autoload-dump": []
+  }
 }

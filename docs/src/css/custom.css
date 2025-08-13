@@ -1,0 +1,26 @@
+/* === Brand palette as CSS variables === */
+:root {
+    --brand-50:#f5fbff; --brand-100:#e1f3ff; --brand-200:#bfe6ff;
+    --brand-300:#8ed3ff; --brand-400:#57bbff; --brand-500:#2196f3;
+    --brand-600:#1b7bd6; --brand-700:#175faf; --brand-800:#154f8f; --brand-900:#133f72;
+
+    --bg: #0b1220;   /* dark background */
+    --fg: #d7e0ee;   /* dark text */
+    --ds-content-max: 880px; /* близько до Laravel Docs */
+}
+
+/* Імпортуємо згенерований Tailwind */
+@import './tailwind.generated.css';
+
+/* Docusaurus base tweaks */
+.navbar { backdrop-filter: saturate(180%) blur(8px); }
+.docSidebarContainer { border-right: 1px solid color-mix(in oklab, var(--fg), transparent 92%); }
+.markdown { max-width: var(--ds-content-max); margin: 0 auto; }
+
+/* Темний режим: або через data-theme=dark, або через body.darkness */
+html[data-theme='dark'], body.darkness {
+    --ifm-background-color: var(--bg);
+    --ifm-font-color-base: var(--fg);
+    --ifm-link-color: var(--brand-400);
+    --ifm-color-primary: var(--brand-500);
+}
