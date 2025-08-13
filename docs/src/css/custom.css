@@ -168,4 +168,11 @@ html[data-theme='dark'], body.darkness {
     .theme-doc-sidebar-menu .menu {
         padding: 0 !important;              /* було .5rem 0 .5rem .5rem */
     }
+
+    @supports (scrollbar-gutter: stable) {
+        .menu_SIkG {
+            padding: .5rem 0 .5rem 0 !important;
+            scrollbar-gutter: stable;
+        }
+    }
 }
