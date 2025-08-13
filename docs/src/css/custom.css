@@ -8,14 +8,14 @@
     --brand-600:#1b7bd6; --brand-700:#175faf; --brand-800:#154f8f; --brand-900:#133f72;
 
     /* Light/Dark base */
-    --bg-page:#F2F6FB;     /* page background */
-    --bg:#0b1220;          /* dark background */
-    --fg:#d7e0ee;          /* dark text */
+    --bg-page:#F2F6FB;   /* page background */
+    --bg:#0b1220;        /* dark background */
+    --fg:#d7e0ee;        /* dark text */
 
     /* Layout widths */
-    --doc-sidebar-width:240px;  /* left nav width */
-    --doc-toc-width:300px;      /* right ToC width */
-    --ds-content-max:1040px;    /* content column */
+    --doc-sidebar-width:240px;   /* left nav width */
+    --doc-toc-width:300px;       /* right ToC width */
+    --ds-content-max:1040px;     /* content column */
 
     /* Sidebar colors (module style) */
     --sidebar-start:#0f2645;
@@ -23,7 +23,7 @@
     --sidebar-text:#E7F0FF;
     --sidebar-text-muted:#BBD0EF;
     --sidebar-active-bg:rgba(0,81,199,.5); /* #0051c7/50 */
-    --sidebar-active-border:#3b82f6;
+    --sidebar-active-border:#3b82f6;       /* left indicator */
 }
 
 /* Tailwind build (generated) */
@@ -99,9 +99,11 @@ html[data-theme='dark'], body.darkness {
     border-right: none;
 }
 
-/* Sidebar menu list & scrollbar */
+/* Sidebar list & scrollbar */
 .theme-doc-sidebar-menu {
-    padding-right: 4px;                 /* room for thin scrollbar */
+    /* важливо: без правого внутрішнього відступу,
+       щоб hover/active тло тягнулося до самого краю */
+    padding-right: 0;
     scrollbar-width: thin;
     scrollbar-color: rgba(255,255,255,.2) transparent;
 }
@@ -110,29 +112,34 @@ html[data-theme='dark'], body.darkness {
     background: rgba(255,255,255,.2);
     border-radius: 3px;
 }
+/* прибираємо зовнішні відступи у пунктів, щоб фон не обрізався */
+.theme-doc-sidebar-menu .menu__list,
+.theme-doc-sidebar-menu .menu__list-item {
+    margin: 0;
+}
 
-/* Пункти меню */
+/* Sidebar links: на всю ширину блока меню */
 .theme-doc-sidebar-menu .menu__link {
     color: var(--sidebar-text);
-    border-radius: 0; /* прибрали заокруглення */
-    padding: 8px 10px 8px 16px;  /* pl-4 pr-2 py-2 */
-    display: flex;
+    display: flex;                /* зберігаємо вирівнювання контенту */
     align-items: center;
     gap: 12px;
-    position: relative;
-    width: 100%; /* розтягнути на всю ширину */
+    width: 100%;                  /* ключ: розтягнути фон */
+    box-sizing: border-box;       /* з урахуванням padding */
+    padding: 8px 12px 8px 16px;   /* pr трохи більше, щоб візуально врівень */
+    border-radius: 0;             /* без заокруглень */
 }
 .theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.10);
+    background: rgba(255,255,255,.10);  /* hover: суцільний по ширині */
 }
 
-/* Активний пункт */
+/* Active item: лінія зліва + тло по всій ширині */
 .theme-doc-sidebar-menu .menu__link--active {
     color: #fff;
     background: var(--sidebar-active-bg);
     box-shadow: inset 3px 0 0 0 var(--sidebar-active-border);
-    border-radius: 0; /* без заокруглення */
-    width: 100%; /* на всю ширину */
+    border-radius: 0;
+    width: 100%;
 }
 
 /* Muted nested items */
@@ -144,13 +151,13 @@ html[data-theme='dark'], body.darkness {
    Right ToC
    ================================ */
 .table-of-contents { padding-top: .5rem; }
-.table-of-contents__link { color: #6b7280; }              /* slate-500 */
+.table-of-contents__link { color: #6b7280; }            /* slate-500 */
 .table-of-contents__link--active { color: var(--brand-500); }
 
 /* ================================
    Responsive
    ================================ */
 @media (max-width: 996px) {
-    :root { --doc-toc-width: 0px; }     /* hide/collapse ToC column on mobile */
+    :root { --doc-toc-width: 0px; }     /* ховаємо/колапсимо ToC на мобільному */
     .theme-doc-toc-mobile { display: none; }
 }
