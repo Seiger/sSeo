@@ -163,3 +163,12 @@ html[data-theme='dark'], body.darkness {
     .theme-doc-sidebar-menu .menu {padding: 0 !important;}
     nav.menu.thin-scrollbar.menu_SIkG {padding: 0.5rem 0 0.5rem 0 !important;}
 }
+
+.theme-doc-sidebar-menu .menu__link {
+    padding-right: 0 !important;
+}
+
+/* Додатково: щоб фон займав усю ширину */
+.theme-doc-sidebar-menu .menu__list-item {
+    margin-right: 0 !important;
+}
