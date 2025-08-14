@@ -40,7 +40,7 @@ const config: Config = {
 
     themeConfig: {
         navbar: {
-            title: 'Seiger Docs',
+            title: 'sSeo Docs',
             items: [
                 {type: 'localeDropdown', position: 'right'}
             ]

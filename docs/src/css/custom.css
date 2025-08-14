@@ -164,11 +164,52 @@ html[data-theme='dark'], body.darkness {
     nav.menu.thin-scrollbar.menu_SIkG {padding: 0.5rem 0 0.5rem 0 !important;}
 }
 
-.theme-doc-sidebar-menu .menu__link {
-    padding-right: 0 !important;
+/* ==== Header (module-like) ==== */
+/* висота 3rem (h-12) */
+:root { --ifm-navbar-height: 3rem; }
+
+/* прозорий фон із blur + тінь */
+.navbar {
+    position: sticky; top: 0;
+    height: var(--ifm-navbar-height);
+    background: rgba(255,255,255,.8);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    padding-left: 1.5rem;   /* px-6 */
+    padding-right: 1.5rem;  /* px-6 */
+    display: flex; align-items: center;
 }
 
-/* Додатково: щоб фон займав усю ширину */
-.theme-doc-sidebar-menu .menu__list-item {
-    margin-right: 0 !important;
+/* темна тема */
+html[data-theme='dark'] .navbar,
+body.darkness .navbar {
+    background: rgba(0,0,0,.8);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08);
 }
+
+/* заголовок — як .s-header-title */
+.navbar__title {
+    font-size: 1.25rem;     /* text-xl */
+    font-weight: 600;       /* semibold */
+    color: #0f172a;         /* slate-900 */
+}
+html[data-theme='dark'] .navbar__title,
+body.darkness .navbar__title { color: #fff; }
+
+/* вирівнюємо праві елементи в один ряд: 🌐 English | ☀️/🌙 */
+.navbar__items--right {
+    display: flex; align-items: center; gap: .75rem; /* gap-3 */
+}
+
+/* приберемо сторонні марджини, щоб не ламався ряд */
+.navbar__items--right > * { margin: 0 !important; }
+
+/* кнопка перемикача теми поруч із дропдауном локалі */
+.navbar__items--right :where(button[aria-label*="mode"], .theme-switch__toggle) {
+    display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* дрібний фікс: заголовок і контент не перекриваються */
+.navbar .navbar__inner { align-items: center; }
+
