@@ -1,3 +1,4 @@
+// @ts-ignore
 import React, { useEffect } from 'react';
 
 /** Sync Docusaurus dark theme with custom `.darkness` on <body>. */
@@ -14,5 +15,6 @@ export default function Root({ children }: { children: React.ReactNode }) {
         apply();
         return () => mo.disconnect();
     }, []);
+    // @ts-ignore
     return <>{children}</>;
 }

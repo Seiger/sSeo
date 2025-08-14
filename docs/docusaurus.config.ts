@@ -18,7 +18,11 @@ const config: Config = {
 
     i18n: {
         defaultLocale: 'en',
-        locales: ['en', 'uk']
+        locales: ['en', 'uk'],
+        localeConfigs: {
+            en: { label: 'English', htmlLang: 'en' },
+            uk: { label: 'Українська', htmlLang: 'uk' },
+        },
     },
 
     presets: [
@@ -28,7 +32,9 @@ const config: Config = {
                 docs: {
                     path: 'pages',
                     routeBasePath: '/',
-                    sidebarPath: require.resolve('./sidebars.ts')
+                    sidebarPath: require.resolve('./sidebars.ts'),
+                    editLocalizedFiles: true,
+                    includeCurrentVersion: true,
                 },
                 blog: false,
                 theme: {
@@ -44,7 +50,7 @@ const config: Config = {
             logo: {
                 alt: 'sSeo',
                 src: 'img/logo.svg',
-                width: 24, height: 24               // можна підкрутити
+                width: 24, height: 24
             },
             items: [
                 {type: 'localeDropdown', position: 'right'}
