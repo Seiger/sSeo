@@ -421,3 +421,28 @@ html[data-theme='dark'] .table-of-contents__link--active { color: var(--brand-30
 
 /* Картинки без “приглушення” */
 html[data-theme='dark'] img { opacity: 1; filter: none; }
+
+/* Dark theme: match s-document module background */
+html[data-theme='dark'] {
+    --ifm-background-color: #0b1a2f !important;
+    background-color: #0b1a2f !important;
+}
+
+html[data-theme='dark'] .main-wrapper,
+html[data-theme='dark'] .theme-doc-markdown,
+html[data-theme='dark'] .theme-doc-content,
+html[data-theme='dark'] .navbar,
+html[data-theme='dark'] footer {
+    background-color: #0b1a2f !important;
+}
+
+/* Ensure text is readable on the dark background */
+html[data-theme='dark'] {
+    --ifm-font-color-base: #e6edf7;
+    --ifm-color-primary: #4ea1f3; /* можна підігнати під бренд */
+}
+
+html[data-theme='dark'] .markdown {
+    color: var(--ifm-font-color-base);
+}
+
