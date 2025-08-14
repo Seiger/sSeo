@@ -1,37 +1,37 @@
-/* ================================
-   Brand palette & layout variables
-   ================================ */
 :root {
-    /* Brand */
     --brand-50:#f5fbff; --brand-100:#e1f3ff; --brand-200:#bfe6ff;
     --brand-300:#8ed3ff; --brand-400:#57bbff; --brand-500:#2196f3;
     --brand-600:#1b7bd6; --brand-700:#175faf; --brand-800:#154f8f; --brand-900:#133f72;
 
-    /* Light/Dark base */
     --bg-page:#F2F6FB;
     --bg:#0b1220;
     --fg:#d7e0ee;
 
-    /* Layout widths */
-    --doc-sidebar-width:15rem;   /* 240px */
-    --doc-toc-width:18.75rem;    /* 300px */
-    --ds-content-max:90rem;      /* 1040px 65rem*/
+    --doc-sidebar-width:15rem;
+    --doc-toc-width:18.75rem;
+    --ds-content-max:90rem;
 
-    /* Sidebar (module style) */
     --sidebar-start:#0f2645;
     --sidebar-end:#113c6E;
     --sidebar-text:#E7F0FF;
     --sidebar-text-muted:#BBD0EF;
-    --sidebar-active-bg:rgba(0,81,199,.5);    /* #0051c7/50 */
-    --sidebar-active-border:#3b82f6;          /* left indicator */
+    --sidebar-active-bg:rgba(0,81,199,.5);
+    --sidebar-active-border:#3b82f6;
+
+    --cb-size:1rem;
+    --cb-radius:.25rem;
+    --cb-bg:#fff;
+    --cb-border:#cbd5e1;
+    --cb-border-hover:#94a3b8;
+    --cb-checked:#1e63d6;
+    --cb-checked-border:#1750ad;
+    --cb-checkmark:#fff;
+
+    --ifm-navbar-height:3rem;
 }
 
-/* Tailwind bundle (generated) */
 @import './tailwind.generated.css';
 
-/* ================================
-   Global + theme tweaks
-   ================================ */
 html[data-theme='dark'], body.darkness {
     --ifm-background-color: var(--bg);
     --ifm-font-color-base: var(--fg);
@@ -44,624 +44,244 @@ html[data-theme='dark'], body.darkness {
     border-bottom: 1px solid color-mix(in oklab, #fff, transparent 88%);
 }
 
-.main-wrapper, .navbar ~ .main-wrapper {
-    background: var(--bg-page);
+.main-wrapper,
+.navbar ~ .main-wrapper { background: var(--bg-page); }
+
+.markdown { max-width: var(--ds-content-max); margin: 0 auto; }
+
+.markdown h1{
+    font-size: 2.25rem; line-height:1.2; letter-spacing:-0.02em; margin-bottom:.75rem;
+}
+.markdown h2{
+    margin-top:2rem; font-weight:700; letter-spacing:-0.01em;
 }
 
-/* Content column */
-.markdown {
-    max-width: var(--ds-content-max);
-    margin: 0 auto;
+.button.button--primary{
+    background:var(--brand-500); border-color:var(--brand-500);
+    border-radius:.75rem; padding:.6rem 1rem;
 }
+.button.button--primary:hover{
+    background:var(--brand-600); border-color:var(--brand-600);
+}
+.badge{ display:inline-block; margin-right:.5rem; margin-bottom:.5rem; vertical-align:middle; }
 
-/* ================================
-   Typography (Laravel-like)
-   ================================ */
-.markdown h1 {
-    font-size: 2.25rem;           /* 36px */
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem;
-}
-.markdown h2 {
-    margin-top: 2rem;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-}
-
-/* ================================
-   Buttons & badges
-   ================================ */
-.button.button--primary {
-    background: var(--brand-500);
-    border-color: var(--brand-500);
-    border-radius: 0.75rem;       /* 12px */
-    padding: 0.6rem 1rem;
-}
-.button.button--primary:hover {
-    background: var(--brand-600);
-    border-color: var(--brand-600);
-}
-.badge {
-    display: inline-block;
-    margin-right: 0.5rem;         /* 8px */
-    margin-bottom: 0.5rem;        /* 8px */
-    vertical-align: middle;
-}
-
-/* ================================
-   Left sidebar (module gradient)
-   ================================ */
-.theme-doc-sidebar-container {
+.theme-doc-sidebar-container{
     background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-    color: var(--sidebar-text);
-    border-right: none;
+    color: var(--sidebar-text); border-right:none;
 }
 
-/* Sidebar list & scrollbar */
-.theme-doc-sidebar-menu {
-    padding-right: 0;                              /* без правого відступу */
-    scrollbar-width: thin;
+.theme-doc-sidebar-menu{
+    padding-right:0;
+    scrollbar-width:thin;
     scrollbar-color: rgba(255,255,255,.2) transparent;
 }
-.theme-doc-sidebar-menu::-webkit-scrollbar { width: 0.375rem; }        /* 6px */
-.theme-doc-sidebar-menu::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.2);
-    border-radius: 0.1875rem;                      /* 3px */
-}
+.theme-doc-sidebar-menu::-webkit-scrollbar{ width:.375rem; }
+.theme-doc-sidebar-menu::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.2); border-radius:.1875rem; }
 
-/* прибрати зовнішні відступи, щоб фон не обрізався */
 .theme-doc-sidebar-menu .menu__list,
-.theme-doc-sidebar-menu .menu__list-item { margin: 0 !important; }
+.theme-doc-sidebar-menu .menu__list-item{ margin:0 !important; }
 
-/* Sidebar links: заповнюють усю ширину */
-.theme-doc-sidebar-menu .menu__link {
-    color: var(--sidebar-text);
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.625rem 0.75rem 0.625rem 1rem;       /* 10px 12px 10px 16px */
-    border-radius: 0;
+.theme-doc-sidebar-menu .menu__link{
+    color:var(--sidebar-text);
+    display:block; width:100%; box-sizing:border-box;
+    padding:.625rem .75rem .625rem 1rem; border-radius:0;
 }
-.theme-doc-sidebar-menu .menu__link:hover {
-    background: rgba(255,255,255,.10);             /* hover edge-to-edge */
-}
+.theme-doc-sidebar-menu .menu__link:hover{ background:rgba(255,255,255,.10); }
 
-/* Active item: left indicator + full-width background */
-.theme-doc-sidebar-menu .menu__link--active {
-    color: #fff;
-    background: var(--sidebar-active-bg);
-    box-shadow: inset 0.1875rem 0 0 0 var(--sidebar-active-border);  /* 3px */
-    border-radius: 0;
-    width: 100%;
+.theme-doc-sidebar-menu .menu__link--active{
+    color:#fff; background:var(--sidebar-active-bg);
+    box-shadow: inset .1875rem 0 0 0 var(--sidebar-active-border);
+    border-radius:0; width:100%;
 }
 
-/* Nested items (muted) */
-.theme-doc-sidebar-menu .menu__link:not(.menu__link--active).menu__link--sublist {
-    color: var(--sidebar-text-muted);
+.theme-doc-sidebar-menu .menu__link:not(.menu__link--active).menu__link--sublist{
+    color:var(--sidebar-text-muted);
 }
 
-/* ================================
-   Right ToC
-   ================================ */
-.table-of-contents { padding-top: 0.5rem; }
-.table-of-contents__link { color: #6b7280; }             /* slate-500 */
-.table-of-contents__link--active { color: var(--sidebar-active-bg); }
+.table-of-contents{ padding-top:.5rem; }
+.table-of-contents__link{ color:#6b7280; }
+.table-of-contents__link--active{ color: var(--sidebar-active-border); }
 
-/* ================================
-   Responsive
-   ================================ */
-@media (max-width: 996px) {
-    :root { --doc-toc-width: 0rem; }
-    .theme-doc-toc-mobile { display: none; }
+@media (max-width:996px){
+    :root{--doc-toc-width:0rem;}
+    .theme-doc-toc-mobile{display:none;}
 }
 
-/* ================================
-   Override theme paddings (desktop)
-   ================================ */
-@media (min-width: 997px) {
-    .theme-doc-sidebar-menu .menu {padding: 0 !important;}
-    nav.menu.thin-scrollbar.menu_SIkG {padding: 0.5rem 0 0.5rem 0 !important;}
+@media (min-width:997px){
+    .theme-doc-sidebar-menu .menu{padding:0 !important;}
+    nav.menu.thin-scrollbar.menu_SIkG{padding:.5rem 0 .5rem 0 !important;}
 }
 
-/* ==== Header (module-like) ==== */
-/* висота 3rem (h-12) */
-:root { --ifm-navbar-height: 3rem; }
-
-/* прозорий фон із blur + тінь */
-.navbar {
-    position: sticky; top: 0;
-    height: var(--ifm-navbar-height);
-    background: rgba(255,255,255,.8);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 1px 0 rgba(0,0,0,.06);
-    padding-left: 1.5rem;   /* px-6 */
-    padding-right: 1.5rem;  /* px-6 */
-    display: flex; align-items: center;
+.navbar{
+    position:sticky; top:0; height:var(--ifm-navbar-height);
+    background:rgba(255,255,255,.8);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    box-shadow:0 1px 0 rgba(0,0,0,.06);
+    padding-left:1.5rem; padding-right:1.5rem;
+    display:flex; align-items:center;
 }
-
-/* темна тема */
 html[data-theme='dark'] .navbar,
-body.darkness .navbar {
-    background: rgba(0,0,0,.8);
-    box-shadow: 0 1px 0 rgba(255,255,255,.08);
-}
+body.darkness .navbar{ background:rgba(0,0,0,.8); box-shadow:0 1px 0 rgba(255,255,255,.08); }
 
-/* заголовок — як .s-header-title */
-.navbar__title {
-    font-size: 1.25rem;     /* text-xl */
-    font-weight: 600;       /* semibold */
-    color: #0f172a;         /* slate-900 */
-}
-html[data-theme='dark'] .navbar__title,
-body.darkness .navbar__title { color: #fff; }
+.navbar__title{ font-size:1.25rem; font-weight:600; color:#0f172a; }
+html[data-theme='dark'] .navbar__title, body.darkness .navbar__title{ color:#fff; }
 
-/* вирівнюємо праві елементи в один ряд: 🌐 English | ☀️/🌙 */
-.navbar__items--right {
-    display: flex; align-items: center; gap: .75rem; /* gap-3 */
-}
+.navbar__items--right{ display:flex; align-items:center; gap:.75rem; }
+.navbar__items--right > *{ margin:0 !important; }
+.navbar__items--right :where(button[aria-label*="mode"], .theme-switch__toggle) {display:inline-flex; align-items:center; justify-content:center;}
+.navbar .navbar__inner{ align-items:center; }
 
-/* приберемо сторонні марджини, щоб не ламався ряд */
-.navbar__items--right > * { margin: 0 !important; }
+.navbar__item a.navbar__link{ display:inline-flex; align-items:center; gap:5px; }
+.iconLanguage_nIXk{ margin:0; vertical-align:middle; }
 
-/* кнопка перемикача теми поруч із дропдауном локалі */
-.navbar__items--right :where(button[aria-label*="mode"], .theme-switch__toggle) {
-    display: inline-flex; align-items: center; justify-content: center;
-}
-
-/* дрібний фікс: заголовок і контент не перекриваються */
-.navbar .navbar__inner { align-items: center; }
-
-/* Вирівнювання іконки та тексту мови */
-.navbar__item a.navbar__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px; /* відстань між іконкою та текстом */
-}
-
-/* Іконка мови */
-.iconLanguage_nIXk {
-    margin: 0;
-    vertical-align: middle;
-}
-
-/* ================================
-   Mobile navbar/sidebar drawer
-   ================================ */
-@media (max-width: 996px) {
-    /* Бекдроп шторки */
-    .navbar-sidebar__backdrop {
-        background: rgba(2, 6, 23, .5);          /* темний прозорий */
-        -webkit-backdrop-filter: blur(2px);
-        backdrop-filter: blur(2px);
+@media (max-width:996px){
+    .navbar-sidebar__backdrop{
+        background: rgba(2,6,23,.5); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
     }
+    .navbar-sidebar{
+        width:18rem; max-width:85vw;
+        background:linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
+        color:var(--sidebar-text); box-shadow:0 .25rem 1rem rgba(0,0,0,.25); border-right:none;
+    }
+    .navbar-sidebar__brand{
+        height:3rem; display:flex; align-items:center; justify-content:space-between;
+        padding:0 1rem; background:transparent; border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .navbar-sidebar__brand .navbar__title{ font-size:1.125rem; font-weight:600; color:#fff; }
 
-    /* Контейнер шторки */
-    .navbar-sidebar {
-        width: 18rem;                              /* ~288px */
-        max-width: 85vw;
-        background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-        color: var(--sidebar-text);
-        box-shadow: 0 .25rem 1rem rgba(0,0,0,.25);
-        border-right: none;
-    }
-
-    /* Хедер шторки (як у модуля) */
-    .navbar-sidebar__brand {
-        height: 3rem;                              /* h-12 */
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 1rem;                           /* px-4 */
-        background: transparent;
-        border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .navbar-sidebar__brand .navbar__title {
-        font-size: 1.125rem;                       /* text-lg */
-        font-weight: 600;
-        color: #fff;
-    }
-
-    /* Список пунктів */
-    .navbar-sidebar__items {
-        padding: .5rem 0;                          /* відступи зверху/знизу */
-    }
-    .navbar-sidebar__items .menu {
-        padding: 0 !important;                     /* прибираємо внутр. падінги теми */
-    }
+    .navbar-sidebar__items{ padding:.5rem 0; }
+    .navbar-sidebar__items .menu{ padding:0 !important; }
     .navbar-sidebar__items .menu__list,
-    .navbar-sidebar__items .menu__list-item {
-        margin: 0 !important;
+    .navbar-sidebar__items .menu__list-item{ margin:0 !important; }
+
+    .navbar-sidebar__items .menu__link{
+        display:block; width:100%; color:var(--sidebar-text);
+        padding:.75rem 1rem; border-radius:0; box-sizing:border-box;
+    }
+    .navbar-sidebar__items .menu__link:hover{ background:rgba(255,255,255,.10); }
+    .navbar-sidebar__items .menu__link--active{
+        color:#fff; background:var(--sidebar-active-bg);
+        box-shadow: inset .1875rem 0 0 0 var(--sidebar-active-border);
+        border-radius:0;
     }
 
-    /* Посилання — edge-to-edge + без заокруглень */
-    .navbar-sidebar__items .menu__link {
-        display: block;
-        width: 100%;
-        color: var(--sidebar-text);
-        padding: 0.75rem 1rem;                     /* py-3 px-4 */
-        border-radius: 0;
-        box-sizing: border-box;
-    }
-    .navbar-sidebar__items .menu__link:hover {
-        background: rgba(255,255,255,.10);         /* hover на всю ширину */
-    }
-    .navbar-sidebar__items .menu__link--active {
-        color: #fff;
-        background: var(--sidebar-active-bg);      /* #0051c7/50 */
-        box-shadow: inset 0.1875rem 0 0 0 var(--sidebar-active-border); /* 3px сліва */
-        border-radius: 0;
-    }
-
-    /* Іконка “бургер/закрити” в ряд */
-    .navbar-sidebar__close {
-        margin: 0;
-        display: inline-flex; align-items: center; justify-content: center;
-    }
+    .navbar-sidebar__close{ margin:0; display:inline-flex; align-items:center; justify-content:center; }
 }
 
-/* ================================
-   Mobile docs sidebar (кнопка “hamburger” на сторінці docs)
-   — застосовуємо ті самі правила до docs‑меню в мобільному.
-   ================================ */
-@media (max-width: 996px) {
-    .theme-doc-sidebar-container {
-        background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-        color: var(--sidebar-text);
-        border-right: none;
+@media (max-width:996px){
+    .theme-doc-sidebar-container{
+        background:linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
+        color:var(--sidebar-text); border-right:none;
     }
-    .theme-doc-sidebar-menu { padding-right: 0; }
-    .theme-doc-sidebar-menu .menu { padding: 0 !important; }
+    .theme-doc-sidebar-menu{ padding-right:0; }
+    .theme-doc-sidebar-menu .menu{ padding:0 !important; }
     .theme-doc-sidebar-menu .menu__list,
-    .theme-doc-sidebar-menu .menu__list-item { margin: 0 !important; }
+    .theme-doc-sidebar-menu .menu__list-item{ margin:0 !important; }
 
-    .theme-doc-sidebar-menu .menu__link {
-        display: block; width: 100%; border-radius: 0;
-        padding: 0.75rem 1rem;
-        color: var(--sidebar-text);
+    .theme-doc-sidebar-menu .menu__link{
+        display:block; width:100%; border-radius:0; padding:.75rem 1rem; color:var(--sidebar-text);
     }
-    .theme-doc-sidebar-menu .menu__link:hover {
-        background: rgba(255,255,255,.10);
-    }
-    .theme-doc-sidebar-menu .menu__link--active {
-        color: #fff;
-        background: var(--sidebar-active-bg);
-        box-shadow: inset 0.1875rem 0 0 0 var(--sidebar-active-border);
-    }
-
-    /* Хедер має бути нижче за шторку */
-    .navbar { z-index: 200; }
-
-    /* Бекдроп на весь екран */
-    .navbar-sidebar__backdrop {
-        position: fixed !important;
-        inset: 0 !important;
-        background: rgba(2, 6, 23, .5);
-        -webkit-backdrop-filter: blur(2px);
-        backdrop-filter: blur(2px);
-        z-index: 9998;
-    }
-
-    /* Сама шторка — фулскрін поверх усього */
-    .navbar-sidebar {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        bottom: 0 !important;
-        height: 100vh !important;
-        max-height: 100vh !important;
-        z-index: 9999;
-        /* стилізація як раніше */
-        width: 18rem;
-        max-width: 85vw;
-        background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
-        color: var(--sidebar-text);
-        box-shadow: 0 .25rem 1rem rgba(0,0,0,.25);
-        border-right: none;
-    }
-
-    /* Коли відкрито — забороняємо скрол фону */
-    html.navbar-sidebar--show,
-    body.navbar-sidebar--show { overflow: hidden; }
-
-    /* Бренд-рядок шторки */
-    .navbar-sidebar__brand {
-        height: 3rem;
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 0 1rem;
-        border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .navbar-sidebar__brand .navbar__title { color: #fff; font-size: 1.125rem; font-weight: 600; }
-
-    /* Меню в шторці — edge-to-edge */
-    .navbar-sidebar__items .menu { padding: 0 !important; }
-    .navbar-sidebar__items .menu__list,
-    .navbar-sidebar__items .menu__list-item { margin: 0 !important; }
-    .navbar-sidebar__items .menu__link {
-        display: block; width: 100%; border-radius: 0;
-        padding: .75rem 1rem; color: var(--sidebar-text);
-    }
-    .navbar-sidebar__items .menu__link:hover { background: rgba(255,255,255,.10); }
-    .navbar-sidebar__items .menu__link--active {
-        color: #fff; background: var(--sidebar-active-bg);
+    .theme-doc-sidebar-menu .menu__link:hover{ background:rgba(255,255,255,.10); }
+    .theme-doc-sidebar-menu .menu__link--active{
+        color:#fff; background:var(--sidebar-active-bg);
         box-shadow: inset .1875rem 0 0 0 var(--sidebar-active-border);
     }
+
+    .navbar{ z-index:200; }
+
+    .navbar-sidebar__backdrop{
+        position:fixed !important; inset:0 !important; z-index:9998;
+        background:rgba(2,6,23,.5); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px);
+    }
+    .navbar-sidebar{
+        position:fixed !important; top:0 !important; left:0 !important; bottom:0 !important;
+        height:100vh !important; max-height:100vh !important; z-index:9999;
+    }
+    html.navbar-sidebar--show, body.navbar-sidebar--show{ overflow:hidden; }
 }
 
-/* Hide breadcrumbs globally */
-.theme-doc-breadcrumbs, .breadcrumbs { display: none !important; }
+.theme-doc-breadcrumbs, .breadcrumbs{ display:none !important; }
 
-/* Компенсуємо зайвий верхній відступ, коли крихти сховані */
-.theme-doc-markdown,
-.theme-doc-content .container { padding-top: 0.5rem; }  /* підкрути за смаком */
+.theme-doc-markdown, .theme-doc-content .container{ padding-top:.5rem; }
 
-/* Dark theme tuning for main content */
-html[data-theme='dark'], body.darkness {
-    --bg-page: #0c1424;                 /* темніший фон полотна */
-    --ifm-background-color: #0b1220;    /* базовий фон */
-    --ifm-font-color-base: #e6edf7;     /* читабельний текст */
-    --ifm-color-primary: var(--brand-400);
-    --ifm-link-color: var(--brand-300);
+html[data-theme='dark'], body.darkness{
+    --bg-page:#0c1424;
+    --ifm-background-color:#0b1220;
+    --ifm-font-color-base:#e6edf7;
+    --ifm-color-primary:var(--brand-400);
+    --ifm-link-color:var(--brand-300);
 }
 
-/* Контент не “сіріє” у дарку */
-html[data-theme='dark'] .markdown,
-body.darkness .markdown {
-    color: var(--ifm-font-color-base);
+html[data-theme='dark']{
+    --ifm-background-color:#0b1a2f !important;
+    background-color:#0b1a2f !important;
 }
-
-/* Заголовки у дарку трохи яскравіше */
-html[data-theme='dark'] .markdown h1,
-html[data-theme='dark'] .markdown h2 {
-    color: #f3f6fb;
-}
-
-/* Блоки списку та ToC у дарку */
-html[data-theme='dark'] .table-of-contents__link { color: #aab7cf; }
-html[data-theme='dark'] .table-of-contents__link--active { color: var(--sidebar-active-border); }
-
-/* Картинки без “приглушення” */
-html[data-theme='dark'] img { opacity: 1; filter: none; }
-
-/* Dark theme: match s-document module background */
-html[data-theme='dark'] {
-    --ifm-background-color: #0b1a2f !important;
-    background-color: #0b1a2f !important;
-}
-
 html[data-theme='dark'] .main-wrapper,
 html[data-theme='dark'] .theme-doc-markdown,
 html[data-theme='dark'] .theme-doc-content,
 html[data-theme='dark'] .navbar,
-html[data-theme='dark'] footer {
-    background-color: #0b1a2f !important;
+html[data-theme='dark'] footer{ background-color:#0b1a2f !important; }
+
+html[data-theme='dark']{ --ifm-font-color-base:#e6edf7; --ifm-color-primary:#4ea1f3; }
+html[data-theme='dark'] .markdown{ color:var(--ifm-font-color-base); }
+html[data-theme='dark'] .markdown h1,
+html[data-theme='dark'] .markdown h2{ color:#f3f6fb; }
+html[data-theme='dark'] .table-of-contents__link{ color:#aab7cf; }
+html[data-theme='dark'] .table-of-contents__link--active{ color:var(--sidebar-active-border); }
+html[data-theme='dark'] img{ opacity:1; filter:none; }
+
+.navbar__brand{ display:inline-flex; align-items:center; gap:.5rem; }
+.navbar__logo img{ width:1.25rem; height:1.25rem; }
+
+.pagination-nav{ display:none !important; }
+
+.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]){
+    display:flex; flex-wrap:wrap; align-items:center; gap:.375rem; line-height:1; margin:.75rem 0;
 }
-
-/* Ensure text is readable on the dark background */
-html[data-theme='dark'] {
-    --ifm-font-color-base: #e6edf7;
-    --ifm-color-primary: #4ea1f3; /* можна підігнати під бренд */
-}
-
-html[data-theme='dark'] .markdown {
-    color: var(--ifm-font-color-base);
-}
-
-.navbar__brand {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-}
-.navbar__logo img { width: 1.25rem; height: 1.25rem; }
-.pagination-nav { display: none !important; }
-
-/* === GitHub-like badges from shields.io === */
-
-/* Робимо абзац із бейджами флекс-рядком навіть якщо в Markdown стоять переноси рядків */
-.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) {
-    display: flex;
-    flex-wrap: wrap;           /* перенос на новий рядок при нестачі ширини */
-    align-items: center;
-    gap: .375rem;              /* ~6px як на GitHub */
-    line-height: 1;            /* щільніший рядок для бейджів */
-    margin: .75rem 0;          /* відступ зверху/знизу */
-}
-
-/* Самі бейджі: висота 20px, вирівнювання та прибираємо артефакти */
 .markdown img[src*="img.shields.io"],
-.markdown a > img[src*="img.shields.io"] {
-    height: 1.25rem;           /* 20px — стандарт */
-    display: inline-block;
-    vertical-align: middle;
-    border: 0;
-    box-shadow: none;
+.markdown a > img[src*="img.shields.io"]{
+    height:1.25rem; display:inline-block; vertical-align:middle; border:0; box-shadow:none;
 }
+.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) a{ line-height:0; }
+html[data-theme='dark'] .markdown img[src*="img.shields.io"]{ opacity:1; filter:none; }
 
-/* Посилання навколо бейджів не мають додавати зайвий інлайн-відступ */
-.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) a {
-    line-height: 0;
-}
+.markdown ul, .markdown ol{ padding-left:1.5rem; margin:.5rem 0 .75rem; }
+.markdown li{ margin:.25rem 0; }
+.markdown li > p{ margin:0; }
 
-/* Дарк‑тема: не тьмянити бейджі */
-html[data-theme='dark'] .markdown img[src*="img.shields.io"] {
-    opacity: 1;
-    filter: none;
-}
-
-/* ================================
-   Lists like GitHub + brand checkboxes
-   ================================ */
-
-/* Базові списки (ul/ol) як на GitHub */
-.markdown ul,
-.markdown ol {
-    padding-left: 1.5rem;          /* стандартний відступ */
-    margin: .5rem 0 .75rem;
-}
-.markdown li { margin: .25rem 0; }
-.markdown li > p { margin: 0; }
-
-/* Task lists: прибираємо маркери та вирівнюємо рядок */
 .markdown ul.contains-task-list,
-.markdown ol.contains-task-list { list-style: none; padding-left: 0; }
-.markdown li:has(> input[type="checkbox"]) { list-style: none; }
+.markdown ol.contains-task-list{ list-style:none; padding-left:0; }
+.markdown li:has(> input[type="checkbox"]){ list-style:none; display:flex; align-items:flex-start; gap:.5rem; }
+.markdown li ul{margin-left:1.25rem;}
 
-/* ----------------
-   Checkbox tokens
-   ---------------- */
-:root {
-    --cb-size: 1rem;                          /* 16px */
-    --cb-radius: .25rem;                      /* 4px */
-    --cb-bg: #fff;
-    --cb-border: #cbd5e1;                     /* slate-300 */
-    --cb-border-hover: #94a3b8;               /* slate-400 */
-    --cb-checked: var(--brand-500);           /* бренд */
-    --cb-checked-border: var(--brand-600);
-    --cb-checkmark: #fff;
-}
-html[data-theme="dark"] {
-    --cb-bg: #0b1a2f;                         /* фон як у модуля */
-    --cb-border: #37527a;                     /* приглушений бордер у dark */
-    --cb-border-hover: #4a6b9e;
+html[data-theme="dark"]{
+    --cb-bg:#0b1a2f;
+    --cb-border:#37527a;
+    --cb-border-hover:#4a6b9e;
+    --cb-checked:var(--brand-500);
+    --cb-checked-border:var(--brand-600);
 }
 
-/* Власний вигляд чекбоксів (accessible) */
-.markdown input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    position: relative;
-    width: var(--cb-size);
-    height: var(--cb-size);
-    margin: 0 .5rem 0 0;                      /* відступ праворуч від галочки */
-    border: 2px solid var(--cb-border);
-    border-radius: var(--cb-radius);
-    background: var(--cb-bg);
-    vertical-align: -.125rem;                 /* вирівнювання з текстом */
-    cursor: pointer;
-    transition: border-color .15s, background-color .15s, box-shadow .15s;
+.markdown input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none; position:relative;
+    width:var(--cb-size); height:var(--cb-size); margin:0 .5rem 0 0;
+    border:2px solid var(--cb-border); border-radius:var(--cb-radius);
+    background:var(--cb-bg); vertical-align:-.125rem; cursor:pointer;
+    transition:border-color .15s, background-color .15s, box-shadow .15s;
 }
-
-/* Hover / focus */
-.markdown input[type="checkbox"]:hover {
-    border-color: var(--cb-border-hover);
+.markdown input[type="checkbox"]:hover{ border-color:var(--cb-border-hover); }
+.markdown input[type="checkbox"]:focus-visible{
+    outline:2px solid color-mix(in oklab, var(--cb-checked), transparent 35%); outline-offset:2px;
 }
-.markdown input[type="checkbox"]:focus-visible {
-    outline: 2px solid color-mix(in oklab, var(--cb-checked), transparent 35%);
-    outline-offset: 2px;
+.markdown input[type="checkbox"]:checked{
+    background:var(--cb-checked); border-color:var(--cb-checked-border);
 }
-
-/* Checked */
-.markdown input[type="checkbox"]:checked {
-    background: var(--cb-checked);
-    border-color: var(--cb-checked-border);
-}
-
-/* Галочка через mask SVG — чітка на будь-якому масштабі */
-.markdown input[type="checkbox"]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: .125rem;                          /* внутрішній відступ для чек-марку */
-    background: var(--cb-checkmark);
-    mask: url("data:image/svg+xml;utf8,\
+.markdown input[type="checkbox"]::after{
+    content:""; position:absolute; inset:0; margin:.125rem; background:var(--cb-checkmark);
+    mask:url("data:image/svg+xml;utf8,\
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>\
 <path fill='white' d='M6.2 12.1 2.8 8.7l1.4-1.4 2 2 5.6-5.6 1.4 1.4z'/>\
 </svg>") center/contain no-repeat;
-    display: none;
+    display:none;
 }
-.markdown input[type="checkbox"]:checked::after { display: block; }
-
-/* Disabled (на всяк випадок) */
-.markdown input[type="checkbox"]:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-}
-
-/* Відступи для пунктів з чекбоксами (щоб текст не “стрибав”) */
-.markdown li:has(> input[type="checkbox"]) {
-    display: flex;
-    align-items: flex-start;
-    gap: .5rem;
-}
-.markdown li:has(> input[type="checkbox"]) > input[type="checkbox"] {
-    flex: 0 0 auto;
-    margin-top: .125rem;
-}
-
-/* Світла тема — як активний пункт меню */
-:root {
-    --cb-size: 1rem;
-    --cb-radius: .25rem;
-    --cb-bg: #fff;
-    --cb-border: #cbd5e1;
-    --cb-border-hover: #94a3b8;
-
-    /* активний чекбокс (світла тема) */
-    --cb-checked: #2563eb; /* або твій бренд-синій */
-    --cb-checked-border: #1d4ed8;
-    --cb-checkmark: #fff;
-}
-
-/* Темна тема */
-html[data-theme="dark"] {
-    --cb-bg: #0b1a2f;
-    --cb-border: #37527a;
-    --cb-border-hover: #4a6b9e;
-    --cb-checked: var(--brand-500);
-    --cb-checked-border: var(--brand-600);
-}
-
-/* Стиль чекбокса */
-.markdown input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    position: relative;
-    width: var(--cb-size);
-    height: var(--cb-size);
-    margin: 0 .5rem 0 0;
-    border: 2px solid var(--cb-border);
-    border-radius: var(--cb-radius);
-    background: var(--cb-bg);
-    cursor: pointer;
-    transition: border-color .15s, background-color .15s;
-}
-
-.markdown input[type="checkbox"]:hover {
-    border-color: var(--cb-border-hover);
-}
-
-/* Checked */
-.markdown input[type="checkbox"]:checked {
-    background: var(--cb-checked);
-    border-color: var(--cb-checked-border);
-}
-
-/* Галочка */
-.markdown input[type="checkbox"]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: .125rem;
-    background: var(--cb-checkmark);
-    mask: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'>\
-<path fill='white' d='M6.2 12.1 2.8 8.7l1.4-1.4 2 2 5.6-5.6 1.4 1.4z'/>\
-</svg>") center/contain no-repeat;
-    display: none;
-}
-
-.markdown input[type="checkbox"]:checked::after {
-    display: block;
-}
-
-/* Вирівнювання пунктів */
-.markdown li:has(> input[type="checkbox"]) {
-    display: flex;
-    align-items: flex-start;
-    gap: .5rem;
-}
-
-/* Менший відступ для вкладених пунктів */
-.markdown li ul {
-    margin-left: 1.25rem; /* було більше */
-}
-
+.markdown input[type="checkbox"]:checked::after{ display:block; }
