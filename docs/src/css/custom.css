@@ -454,18 +454,35 @@ html[data-theme='dark'] .markdown {
 .navbar__logo img { width: 1.25rem; height: 1.25rem; }
 .pagination-nav { display: none !important; }
 
-/* Бейджі GitHub/Shields: висота, відступи, вирівнювання */
-.markdown a > img[src*="img.shields.io"],
-.markdown img[src*="img.shields.io"] {
-    height: 1.25rem;          /* 20px — стандартний розмір бейджів на GitHub */
-    vertical-align: middle;
-    margin-right: .375rem;    /* 6px проміжок між бейджами */
-    display: inline-block;
+/* === GitHub-like badges from shields.io === */
+
+/* Робимо абзац із бейджами флекс-рядком навіть якщо в Markdown стоять переноси рядків */
+.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) {
+    display: flex;
+    flex-wrap: wrap;           /* перенос на новий рядок при нестачі ширини */
+    align-items: center;
+    gap: .375rem;              /* ~6px як на GitHub */
+    line-height: 1;            /* щільніший рядок для бейджів */
+    margin: .75rem 0;          /* відступ зверху/знизу */
 }
 
-/* Якщо рядок дуже довгий — нехай переноситься красиво */
-.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) {
-    line-height: 1;           /* щільніше як на GitHub */
-    margin-top: .75rem;
-    margin-bottom: .75rem;
+/* Самі бейджі: висота 20px, вирівнювання та прибираємо артефакти */
+.markdown img[src*="img.shields.io"],
+.markdown a > img[src*="img.shields.io"] {
+    height: 1.25rem;           /* 20px — стандарт */
+    display: inline-block;
+    vertical-align: middle;
+    border: 0;
+    box-shadow: none;
+}
+
+/* Посилання навколо бейджів не мають додавати зайвий інлайн-відступ */
+.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) a {
+    line-height: 0;
+}
+
+/* Дарк‑тема: не тьмянити бейджі */
+html[data-theme='dark'] .markdown img[src*="img.shields.io"] {
+    opacity: 1;
+    filter: none;
 }

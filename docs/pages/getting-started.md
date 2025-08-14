@@ -1,3 +1,9 @@
+---
+id: getting-started
+title: Getting started
+slug: /getting-started/
+---
+
 ## Install by artisan package
 
 Go to You /core/ folder
@@ -30,9 +36,9 @@ Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>
 
 ```html
 <!DOCTYPE html>
-<html lang="{% raw %}{{evo()->getConfig('lang', 'en')}}{% endraw %}">
+<html lang="{{evo()->getConfig('lang', 'en')}}">
 <head>
-    <base href="{% raw %}{{evo()->getConfig('site_url', '/')}}{% endraw %}"/>
+    <base href="{{evo()->getConfig('site_url', '/')}}"/>
     @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender')))
         {!!implode('', $evtHead)!!}
     @endif
