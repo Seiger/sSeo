@@ -387,3 +387,37 @@ body.darkness .navbar__title { color: #fff; }
     }
 }
 
+/* Hide breadcrumbs globally */
+.theme-doc-breadcrumbs, .breadcrumbs { display: none !important; }
+
+/* Компенсуємо зайвий верхній відступ, коли крихти сховані */
+.theme-doc-markdown,
+.theme-doc-content .container { padding-top: 0.5rem; }  /* підкрути за смаком */
+
+/* Dark theme tuning for main content */
+html[data-theme='dark'], body.darkness {
+    --bg-page: #0c1424;                 /* темніший фон полотна */
+    --ifm-background-color: #0b1220;    /* базовий фон */
+    --ifm-font-color-base: #e6edf7;     /* читабельний текст */
+    --ifm-color-primary: var(--brand-400);
+    --ifm-link-color: var(--brand-300);
+}
+
+/* Контент не “сіріє” у дарку */
+html[data-theme='dark'] .markdown,
+body.darkness .markdown {
+    color: var(--ifm-font-color-base);
+}
+
+/* Заголовки у дарку трохи яскравіше */
+html[data-theme='dark'] .markdown h1,
+html[data-theme='dark'] .markdown h2 {
+    color: #f3f6fb;
+}
+
+/* Блоки списку та ToC у дарку */
+html[data-theme='dark'] .table-of-contents__link { color: #aab7cf; }
+html[data-theme='dark'] .table-of-contents__link--active { color: var(--brand-300); }
+
+/* Картинки без “приглушення” */
+html[data-theme='dark'] img { opacity: 1; filter: none; }

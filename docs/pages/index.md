@@ -4,26 +4,14 @@ title: sSeo for Evolution CMS
 slug: /
 ---
 
-<img src="https://github.com/user-attachments/assets/2d0eb57e-109f-4ea4-82e0-3c73b95b97e4" alt="sSeo-with-Tailwind4" className="badge" />
-<a href="https://packagist.org/packages/seiger/sseo" className="badge">
-  <img src="https://img.shields.io/packagist/v/seiger/sSeo?label=version" alt="Latest Stable Version" />
-</a>
-<a href="https://github.com/evolution-cms/evolution" className="badge">
-  <img src="https://img.shields.io/badge/CMS-Evolution-brightgreen.svg" alt="CMS Evolution" />
-</a>
-<img src="https://img.shields.io/packagist/php-v/seiger/sseo" alt="PHP version" className="badge" />
-<a href="https://packagist.org/packages/seiger/sseo" className="badge">
-  <img src="https://img.shields.io/packagist/l/seiger/sseo" alt="License" />
-</a>
-<a href="https://github.com/Seiger/sseo/issues" className="badge">
-  <img src="https://img.shields.io/github/issues/Seiger/sseo" alt="Issues" />
-</a>
-<a href="https://packagist.org/packages/seiger/sseo" className="badge">
-  <img src="https://img.shields.io/packagist/stars/Seiger/sseo" alt="Stars" />
-</a>
-<a href="https://packagist.org/packages/seiger/sseo" className="badge">
-  <img src="https://img.shields.io/packagist/dt/seiger/sseo" alt="Total Downloads" />
-</a>
+![sSeo-with-Tailwind4](https://github.com/user-attachments/assets/2d0eb57e-109f-4ea4-82e0-3c73b95b97e4)
+[![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo)
+[![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution)
+![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo)
+[![License](https://img.shields.io/packagist/l/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
+[![Issues](https://img.shields.io/github/issues/Seiger/sseo)](https://github.com/Seiger/sseo/issues)
+[![Stars](https://img.shields.io/packagist/stars/Seiger/sseo)](https://packagist.org/packages/seiger/sseo)
+[![Total Downloads](https://img.shields.io/packagist/dt/seiger/sseo)](https://packagist.org/packages/seiger/sseo)
 
 ## Welcome to sSeo!
 
@@ -36,9 +24,7 @@ Unleash the full potential of your website's SEO strategy with **sSeo**.
 Whether you are fine-tuning existing content or embarking on new web projects,
 this plugin provides the tools you need for a competitive edge in the digital landscape.
 
-import Link from '@docusaurus/Link';
-
-<Link className="button button--primary" to="/getting-started">Getting Started</Link>
+<a class="button button--primary" href="/getting-started">Getting Started</a>
 
 ## Features
 
