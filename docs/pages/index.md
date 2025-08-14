@@ -24,7 +24,7 @@ Unleash the full potential of your website's SEO strategy with **sSeo**.
 Whether you are fine-tuning existing content or embarking on new web projects,
 this plugin provides the tools you need for a competitive edge in the digital landscape.
 
-<a class="button button--primary" href="/getting-started">Getting Started</a>
+👉 Start with **[Getting Started](./getting-started.md)**.
 
 ## Features
 
@@ -54,16 +54,6 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [ ] Rich Snippets (Schema Markup) Support
 - [ ] Performance Optimization Recommendations
 - [ ] Real-time SEO Analytics
-
-## Minimum requirements
-
-- Evolution CMS 3.2.0
-- PHP 8.2.0
-- Composer 2.2.0
-- PostgreSQL 10.23.0
-- MySQL 8.0.3
-- MariaDB 10.5.2
-- SQLite 3.25.0
 
 ## Support
 
