@@ -252,7 +252,7 @@ html[data-theme='dark'] .markdown img[src*="img.shields.io"]{ opacity:1; filter:
 .markdown ul.contains-task-list,
 .markdown ol.contains-task-list{ list-style:none; padding-left:0; }
 .markdown li:has(> input[type="checkbox"]){ list-style:none; display:flex; align-items:flex-start; gap:.5rem; }
-.markdown li ul{margin-left:1.25rem;}
+.markdown li ul {margin-left:.75rem; padding-left:.75rem;}
 
 html[data-theme="dark"]{
     --cb-bg:#0b1a2f;

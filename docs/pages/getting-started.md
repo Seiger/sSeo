@@ -36,16 +36,10 @@ Check if the `OnHeadWebDocumentRender` event is registered in the `<head></head>
 
 ```html
 <!DOCTYPE html>
-<html lang="{{evo()->getConfig('lang', 'en')}}">
+<html lang="@evoConfig('lang', 'en')">
 <head>
-    <base href="{{evo()->getConfig('site_url', '/')}}"/>
-    @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender')))
-        {!!implode('', $evtHead)!!}
-    @endif
+    <base href="@evoConfig('site_url', '/')"/>
+    @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender'))){!!implode('', $evtHead)!!}@endif
     ...
 </head>
 ```
-
-## Configure sitemap template
-
-Configure the output template for `sitemap.xml` by path `assets/plugins/sseo/sitemapTemplate.blade.php`
