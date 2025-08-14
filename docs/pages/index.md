@@ -57,4 +57,4 @@ this plugin provides the tools you need for a competitive edge in the digital la
 
 ## Support
 
-If you need help, please don't hesitate to <a href="https://github.com/Seiger/sSeo/issues">open an issue</a>.
+If you need help, please don't hesitate to **[open an issue](https://github.com/Seiger/sSeo/issues)**.
