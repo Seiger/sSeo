@@ -6,7 +6,7 @@ const config: Config = {
     tagline: 'Powerful modules for Evolution CMS',
     url: 'https://seiger.github.io',
     baseUrl: '/sSeo/',
-    favicon: 'img/favicon.ico',
+    favicon: 'img/logo.svg',
 
     // GitHub Pages
     organizationName: 'Seiger',
@@ -41,6 +41,11 @@ const config: Config = {
     themeConfig: {
         navbar: {
             title: 'sSeo Docs',
+            logo: {
+                alt: 'sSeo',
+                src: 'img/logo.svg',
+                width: 24, height: 24               // можна підкрутити
+            },
             items: [
                 {type: 'localeDropdown', position: 'right'}
             ]

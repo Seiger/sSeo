@@ -15,7 +15,7 @@
     /* Layout widths */
     --doc-sidebar-width:15rem;   /* 240px */
     --doc-toc-width:18.75rem;    /* 300px */
-    --ds-content-max:65rem;      /* 1040px */
+    --ds-content-max:90rem;      /* 1040px 65rem*/
 
     /* Sidebar (module style) */
     --sidebar-start:#0f2645;
@@ -446,3 +446,10 @@ html[data-theme='dark'] .markdown {
     color: var(--ifm-font-color-base);
 }
 
+.navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+.navbar__logo img { width: 1.25rem; height: 1.25rem; }
+.pagination-nav { display: none !important; }
