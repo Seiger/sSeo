@@ -213,3 +213,17 @@ body.darkness .navbar__title { color: #fff; }
 /* дрібний фікс: заголовок і контент не перекриваються */
 .navbar .navbar__inner { align-items: center; }
 
+/* Вирівнювання іконки та тексту мови */
+.navbar__item a.navbar__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* відстань між іконкою та текстом */
+}
+
+/* Іконка мови */
+.iconLanguage_nIXk {
+    margin: 0;
+    vertical-align: middle;
+}
+
+
