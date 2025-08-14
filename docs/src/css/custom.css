@@ -453,3 +453,19 @@ html[data-theme='dark'] .markdown {
 }
 .navbar__logo img { width: 1.25rem; height: 1.25rem; }
 .pagination-nav { display: none !important; }
+
+/* Бейджі GitHub/Shields: висота, відступи, вирівнювання */
+.markdown a > img[src*="img.shields.io"],
+.markdown img[src*="img.shields.io"] {
+    height: 1.25rem;          /* 20px — стандартний розмір бейджів на GitHub */
+    vertical-align: middle;
+    margin-right: .375rem;    /* 6px проміжок між бейджами */
+    display: inline-block;
+}
+
+/* Якщо рядок дуже довгий — нехай переноситься красиво */
+.markdown p:has(> img[src*="img.shields.io"], > a > img[src*="img.shields.io"]) {
+    line-height: 1;           /* щільніше як на GitHub */
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+}
