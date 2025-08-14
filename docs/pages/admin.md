@@ -1,3 +1,9 @@
+---
+title: Admin UI
+sidebar_label: Admin UI
+sidebar_position: 4
+---
+
 # Admin UI
 
 ## Dashboard

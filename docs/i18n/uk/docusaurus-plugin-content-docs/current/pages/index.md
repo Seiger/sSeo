@@ -2,6 +2,7 @@
 id: intro
 title: sSeo для Evolution CMS
 slug: /
+sidebar_position: 1
 ---
 
 ![sSeo-with-Tailwind4](https://github.com/user-attachments/assets/2d0eb57e-109f-4ea4-82e0-3c73b95b97e4)

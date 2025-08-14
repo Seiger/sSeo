@@ -1,4 +1,12 @@
+---
+title: PRO Features
+sidebar_label: PRO Features
+sidebar_position: 3
+---
+
 # PRO Features
+
+> Currently, the *(PRO)* version is only available if the website is developed by **[Seiger IT](https://seigerit.com/)**.
 
 > Marked items are available in **sSeo PRO** (or planned).
 

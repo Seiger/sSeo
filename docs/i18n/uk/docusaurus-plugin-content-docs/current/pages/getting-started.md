@@ -1,7 +1,7 @@
 ---
-id: getting-started
 title: Початок роботи
-slug: /getting-started/
+sidebar_label: Початок роботи
+sidebar_position: 2
 ---
 
 ## Вимоги
