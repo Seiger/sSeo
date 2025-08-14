@@ -327,5 +327,63 @@ body.darkness .navbar__title { color: #fff; }
         background: var(--sidebar-active-bg);
         box-shadow: inset 0.1875rem 0 0 0 var(--sidebar-active-border);
     }
+
+    /* Хедер має бути нижче за шторку */
+    .navbar { z-index: 200; }
+
+    /* Бекдроп на весь екран */
+    .navbar-sidebar__backdrop {
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(2, 6, 23, .5);
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        z-index: 9998;
+    }
+
+    /* Сама шторка — фулскрін поверх усього */
+    .navbar-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        z-index: 9999;
+        /* стилізація як раніше */
+        width: 18rem;
+        max-width: 85vw;
+        background: linear-gradient(180deg, var(--sidebar-start), var(--sidebar-end));
+        color: var(--sidebar-text);
+        box-shadow: 0 .25rem 1rem rgba(0,0,0,.25);
+        border-right: none;
+    }
+
+    /* Коли відкрито — забороняємо скрол фону */
+    html.navbar-sidebar--show,
+    body.navbar-sidebar--show { overflow: hidden; }
+
+    /* Бренд-рядок шторки */
+    .navbar-sidebar__brand {
+        height: 3rem;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 1rem;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .navbar-sidebar__brand .navbar__title { color: #fff; font-size: 1.125rem; font-weight: 600; }
+
+    /* Меню в шторці — edge-to-edge */
+    .navbar-sidebar__items .menu { padding: 0 !important; }
+    .navbar-sidebar__items .menu__list,
+    .navbar-sidebar__items .menu__list-item { margin: 0 !important; }
+    .navbar-sidebar__items .menu__link {
+        display: block; width: 100%; border-radius: 0;
+        padding: .75rem 1rem; color: var(--sidebar-text);
+    }
+    .navbar-sidebar__items .menu__link:hover { background: rgba(255,255,255,.10); }
+    .navbar-sidebar__items .menu__link--active {
+        color: #fff; background: var(--sidebar-active-bg);
+        box-shadow: inset .1875rem 0 0 0 var(--sidebar-active-border);
+    }
 }
 
