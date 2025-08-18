@@ -16,6 +16,10 @@
     --text-base-size: 1rem;
     --leading-base: 1.55;
     --leading-head: 1.25;
+
+    --ds-content-max: 90rem;
+    --doc-sidebar-width:15rem;
+    --doc-toc-width:18.75rem;
 }
 
 [data-theme="dark"] {
@@ -51,10 +55,6 @@
 
 
     /**---**/
-    --doc-sidebar-width:15rem;
-    --doc-toc-width:18.75rem;
-    --ds-content-max:90rem;
-
     --sidebar-start:#0f2645;
     --sidebar-end:#113c6E;
     --sidebar-text:#E7F0FF;
