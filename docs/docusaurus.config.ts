@@ -38,7 +38,10 @@ const config: Config = {
                 },
                 blog: false,
                 theme: {
-                    customCss: [require.resolve('./src/css/custom.css')]
+                    customCss: [
+                        require.resolve('./src/css/theme.css'),
+                        require.resolve('./src/css/tailwind.css'),
+                    ]
                 }
             }
         ]

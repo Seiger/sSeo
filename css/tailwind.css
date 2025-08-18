@@ -1,11 +1,33 @@
 @import "tailwindcss";
+@import "./theme.css";
 @config "./tailwind.config.js";
 @custom-variant darkness (&:where(.darkness, .darkness *));
 
+@layer base {
+    html {
+        font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto);
+    }
+    body {
+        font-size: var(--text-base-size);
+        line-height: var(--leading-base);
+        background: var(--bg-color);
+        color: var(--text-color);
+    }
+    h1, h2, h3, h4 {
+        line-height: var(--leading-head);
+        color: var(--heading-color);
+    }
+    .muted, .text-muted {
+        color: var(--text-muted);
+    }
+}
+
 @layer components {
     .s-document {
-        @apply flex min-h-screen bg-slate-100 text-slate-900 font-sans;
-        @apply darkness:bg-[#0b1a2f] darkness:text-slate-100;
+        @apply flex min-h-screen font-sans;
+        background-color: var(--bg-color, #f1f5f9);
+        color: var(--text-color, #1d293d);
+        transition: var(--theme-transition);
     }
     .s-tooltip {
         @apply max-w-xs bg-white text-sm text-slate-800 p-3 rounded-xl shadow-xl border border-slate-200;
