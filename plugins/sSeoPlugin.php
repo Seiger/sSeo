@@ -140,23 +140,12 @@ Event::listen('evolution.OnPageNotFound', function () {
     }
 });
 
-Event::listen('evolution.OnHeadWebDocumentRender', function($params) {
-    // Meta Canonical
-    $canonical = sSeo::checkCanonical();
-
-    // Meta Title
-    $title = sSeo::checkMetaTitle();
-
-    // Meta Description
-    $description = sSeo::checkMetaDescription();
-
-    // Meta Keywords
-    $keywords = sSeo::checkMetaKeywords();
-
-    // SEO robots
-    $robots = sSeo::checkRobots();
-
-    return view('sSeo::partials.headWebDocument', compact('canonical', 'robots', 'title', 'description', 'keywords'))->render();
+/**
+ * Render SEO tags
+ */
+Event::listen('evolution.OnHeadWebDocumentRender', function() {return '';});
+Event::listen('evolution.OnWebPagePrerender', function() {
+    sSeo::headInjection();
 });
 
 /**

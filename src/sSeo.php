@@ -9,6 +9,7 @@ use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Controllers\sSeoController;
 use Seiger\sSeo\Models\sSeoModel;
+use Seiger\sSeo\Support\MetaBuilder;
 use View;
 
 /**
@@ -26,26 +27,26 @@ class sSeo
      *
      * @return array Returns an array with keys "show" (boolean) and "value" (string)
      */
-    public function checkCanonical(): array
+    public function checkCanonical(): string
     {
         $document = $this->getDocument();
-        $canonical = ['show' => false, 'value' => ''];
+        $canonical = trim($document['canonical_url']);
 
         // canonical
-        if (isset(evo()->documentObject['canonical'])) {
-            if (is_scalar(evo()->documentObject['canonical']) && evo()->documentObject['canonical'] != 'default') {
-                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['canonical'])];
+        if (isset(evo()->documentObject['canonical']) && empty($canonical)) {
+            if (is_scalar(evo()->documentObject['canonical']) && evo()->documentObject['canonical'] != '') {
+                $canonical = strtolower(evo()->documentObject['canonical']);
             } elseif (is_array(evo()->documentObject['canonical']) && isset(evo()->documentObject['canonical'][1]) && evo()->documentObject['canonical'][1] != 'default') {
-                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['canonical'][1])];
+                $canonical = strtolower(evo()->documentObject['canonical'][1]);
             }
         }
 
         // tv_canonical
-        if (isset(evo()->documentObject['tv_canonical'])) {
-            if (is_scalar(evo()->documentObject['tv_canonical']) && evo()->documentObject['tv_canonical'] != 'default') {
-                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_canonical'])];
+        if (isset(evo()->documentObject['tv_canonical']) && empty($canonical)) {
+            if (is_scalar(evo()->documentObject['tv_canonical']) && evo()->documentObject['tv_canonical'] != '') {
+                $canonical = strtolower(evo()->documentObject['tv_canonical']);
             } elseif (is_array(evo()->documentObject['tv_canonical']) && isset(evo()->documentObject['tv_canonical'][1]) && evo()->documentObject['tv_canonical'][1] != 'default') {
-                $canonical = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_canonical'][1])];
+                $canonical = strtolower(evo()->documentObject['tv_canonical'][1]);
             }
         }
 
@@ -55,7 +56,7 @@ class sSeo
             in_array($paginates_get, request()->segments()) ||
             in_array($paginates_get, array_keys(request()->except('q')))
         ) {
-            $canonical = ['show' => true, 'value' => url($document['id'], '', '', 'full')];
+            $canonical = url($document['id'], '', '', 'full');
         }
 
         return $canonical;
@@ -114,6 +115,9 @@ class sSeo
         } else {
             $description = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_keywords_{$document['resource_type']}_base", '[*pagetitle*], [*longtitle*]'));;
         }
+
+        $description = trim($description);
+        $description = trim($description, ',');
         return trim($description);
     }
 
@@ -122,9 +126,15 @@ class sSeo
      *
      * @return array Returns an array with keys "show" (boolean) and "value" (string)
      */
-    public function checkRobots(): array
+    public function checkRobots(): string
     {
+        $document = $this->getDocument();
         $robots = ['show' => false, 'value' => 'index,follow'];
+
+        // robots
+        if (isset($document['robots']) && !empty($document['robots'])) {
+            $robots = ['show' => true, 'value' => strtolower($document['robots'])];
+        }
 
         // Paginate
         $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
@@ -137,27 +147,27 @@ class sSeo
 
         // seorobots
         if (isset(evo()->documentObject['seorobots'])) {
-            if (is_scalar(evo()->documentObject['seorobots']) && evo()->documentObject['seorobots'] != 'default') {
+            if (is_scalar(evo()->documentObject['seorobots']) && evo()->documentObject['seorobots'] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['seorobots'])];
-            } elseif (is_array(evo()->documentObject['seorobots']) && isset(evo()->documentObject['seorobots'][1]) && evo()->documentObject['seorobots'][1] != 'default') {
+            } elseif (is_array(evo()->documentObject['seorobots']) && isset(evo()->documentObject['seorobots'][1]) && evo()->documentObject['seorobots'][1] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['seorobots'][1])];
             }
         }
 
         // seo_robots
         if (isset(evo()->documentObject['seo_robots'])) {
-            if (is_scalar(evo()->documentObject['seo_robots']) && evo()->documentObject['seo_robots'] != 'default') {
+            if (is_scalar(evo()->documentObject['seo_robots']) && evo()->documentObject['seo_robots'] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['seo_robots'])];
-            } elseif (is_array(evo()->documentObject['seo_robots']) && isset(evo()->documentObject['seo_robots'][1]) && evo()->documentObject['seo_robots'][1] != 'default') {
+            } elseif (is_array(evo()->documentObject['seo_robots']) && isset(evo()->documentObject['seo_robots'][1]) && evo()->documentObject['seo_robots'][1] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['seo_robots'][1])];
             }
         }
 
         // tv_robots
         if (isset(evo()->documentObject['tv_robots'])) {
-            if (is_scalar(evo()->documentObject['tv_robots']) && evo()->documentObject['tv_robots'] != 'default') {
+            if (is_scalar(evo()->documentObject['tv_robots']) && evo()->documentObject['tv_robots'] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_robots'])];
-            } elseif (is_array(evo()->documentObject['tv_robots']) && isset(evo()->documentObject['tv_robots'][1]) && evo()->documentObject['tv_robots'][1] != 'default') {
+            } elseif (is_array(evo()->documentObject['tv_robots']) && isset(evo()->documentObject['tv_robots'][1]) && evo()->documentObject['tv_robots'][1] != '') {
                 $robots = ['show' => true, 'value' => strtolower(evo()->documentObject['tv_robots'][1])];
             }
         }
@@ -173,7 +183,69 @@ class sSeo
             }
         }
 
-        return $robots;
+        return $robots['show'] ? $robots['value'] : '';
+    }
+
+    /**
+     * Event handler for 'OnWebPagePrerender'.
+     *
+     * - Skips manager area
+     * - Skips non-HTML outputs and empty buffers
+     * - Injects meta fragment before the last </head>
+     *
+     * @return void
+     */
+    public function headInjection(): void
+    {
+        // Front-end only
+        if (!evo()->isFrontend()) {
+            return;
+        }
+
+        // Current output snapshot
+        $out = evo()->documentOutput ?? '';
+        if ($out === '' || stripos($out, '<head') === false || stripos($out, '</head>') === false) {
+            return;
+        }
+
+        // Cheap JSON guard
+        $trim = ltrim($out);
+        if (($trim !== '' && ($trim[0] === '{' || $trim[0] === '['))
+            && stripos($trim, '<!doctype') === false
+            && stripos($trim, '<html') === false) {
+            return;
+        }
+
+        // Avoid double injection if somehow called twice
+        if (strpos($out, 'Meta Tags') !== false) {
+            return;
+        }
+
+        // Build once per request
+        static $built = false, $headHtml = '';
+        if (!$built) {
+            $meta['title'] = $this->checkMetaTitle();
+            $meta['description'] = $this->checkMetaDescription();
+            $meta['keywords'] = $this->checkMetaKeywords();
+            $meta['robots'] = $this->checkRobots();
+            $meta['canonical'] = $this->checkCanonical();
+
+            $headHtml = MetaBuilder::buildHeadHtml($meta, $out);
+            $built = true;
+        }
+        if ($headHtml === '') {
+            return;
+        }
+
+        // Inject before the last </head>
+        $pos = strripos($out, '</head>');
+        if ($pos !== false) {
+            evo()->documentOutput =
+                substr($out, 0, $pos)
+                . "<!-- Meta Tags -->\n"
+                . $headHtml
+                . substr($out, $pos);
+        }
     }
 
     /**

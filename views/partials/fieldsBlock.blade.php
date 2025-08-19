@@ -1,5 +1,19 @@
 <div class="form-block">
-    <h3>@lang('sSeo::global.meta_tags')</h3>
+    <h3><b>@lang('sSeo::global.meta_tags')</b></h3>
+    <div class="row form-row form-element-input d-flex flex-column flex-md-row">
+        <label class="control-label col-12 col-md-2 col-xl-1">
+            <span>@lang('sSeo::global.robots')</span>
+            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.robots_help')"></i>
+        </label>
+        <div class="col-12 col-md-10 col-xl-11">
+            <select id="robots" name="sseo[robots]" class="form-control" onchange="documentDirty=true;">
+                <option value="" @if(($robots ?? '') == '') selected @endif></option>
+                <option value="index,follow" @if(($robots ?? '') == 'index,follow') selected @endif>index,follow</option>
+                <option value="index,nofollow" @if(($robots ?? '') == 'index,nofollow') selected @endif>index,nofollow</option>
+                <option value="noindex,nofollow" @if(($robots ?? '') == 'noindex,nofollow') selected @endif>noindex,nofollow</option>
+            </select>
+        </div>
+    </div>
     <div class="row form-row form-element-input d-flex flex-column flex-md-row">
         <label class="control-label col-12 col-md-2 col-xl-1">
             <span>@lang('sSeo::global.meta_title')</span>
@@ -28,9 +42,18 @@
         <input id="meta_keywords" name="sseo[meta_keywords]" value="{{$meta_keywords ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaKeywords()}}" onchange="documentDirty=true;">
     </div>
 </div>
+<div class="row form-row form-element-input d-flex flex-column flex-md-row">
+    <label class="control-label col-12 col-md-2 col-xl-1">
+        <span>@lang('sSeo::global.canonical')</span>
+        <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.canonical_help')"></i>
+    </label>
+    <div class="col-12 col-md-10 col-xl-11">
+        <input id="meta_keywords" name="sseo[canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="" onchange="documentDirty=true;">
+    </div>
+</div>
 <div class="split my-3"></div>
 <div class="form-block">
-    <h3>@lang('sSeo::global.sitemap_settings')</h3>
+    <h3><b>@lang('sSeo::global.sitemap_settings')</b></h3>
     <div class="row form-row form-element-input d-flex flex-column flex-md-row align-items-center">
         <label class="control-label col-12 col-md-3 col-lg-2">
             <span>@lang('sSeo::global.exclude_from_sitemap')</span>
@@ -45,7 +68,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.priority_help')"></i>
         </label>
         <div class="col-12 col-md-3 col-lg-2 col-xl-1">
-            <select name="sseo[priority]" id="priority" class="form-control" onchange="documentDirty=true;">
+            <select id="priority" name="sseo[priority]" class="form-control" onchange="documentDirty=true;">
                 <option value="1.0" @if(($priority ?? '') == 1.0) selected @endif>1.0</option>
                 <option value="0.9" @if(($priority ?? '') == 0.9) selected @endif>0.9</option>
                 <option value="0.8" @if(($priority ?? '') == 0.8) selected @endif>0.8</option>

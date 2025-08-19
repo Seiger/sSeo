@@ -21,13 +21,13 @@ return new class extends Migration
             $table->string('meta_title', 255)->default('')->comment('Page Meta title');
             $table->mediumText('meta_description')->default('')->comment('Page Meta description');
             $table->mediumText('meta_keywords')->default('')->comment('Page Meta keywords');
+            $table->enum('robots', ['', 'index,follow', 'index,nofollow', 'noindex,nofollow'])->default('')->comment('Robots Meta tag');
             $table->string('canonical_url', 255)->default('')->comment('Canonical URL');
             $table->string('og_title', 255)->default('')->comment('Open Graph title');
             $table->mediumText('og_description')->default('')->comment('Open Graph description');
             $table->string('og_image', 255)->default('')->comment('URL to image');
             $table->string('og_type', 50)->default('website')->comment('Type OG (article, product etc.)');
             $table->string('twitter_card', 50)->default('summary')->comment('Type Twitter Card');
-            $table->enum('robots', ['', 'index,follow', 'index,nofollow', 'noindex,nofollow'])->default('');
             $table->longText('structured_data')->default('')->comment('JSON-LD for structured data');
             $table->jsonb('extra_meta')->default(new Expression('(JSON_ARRAY())'))->comment('Additional meta tags (key=value format)');
             $table->boolean('exclude_from_sitemap')->default(false)->comment('Indicates whether the resource should be excluded from the sitemap');

@@ -40,7 +40,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.
 - [x] Include or exclude documents from xml sitemap.
-- [ ] On page Robots index/follow settings.
+- [x] On page Robots index/follow settings.
 - [x] Noindex for Pagination and Custom $_GET Parameters.
 - [x] 30x Redirects for Resolving 404 Errors.
 - [x] HTTP(S) and WWW Redirects.
@@ -55,6 +55,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [ ] Rich Snippets (Schema Markup) Support
 - [ ] Performance Optimization Recommendations
 - [ ] Real-time SEO Analytics
+- [ ] Floating frontend SEO panel for managers/admins only
 
 ## Support
 

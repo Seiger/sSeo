@@ -372,6 +372,7 @@ class sSeoController
     {
         $string = '<?php return [' . "\n";
 
+        $string .= "\t" . '"meta_tags_mode" => "' . request()->get('meta_tags_mode', 'replace') . '",' . "\n";
         $string .= "\t" . '"manage_www" => ' . request()->integer('manage_www') . ',' . "\n";
         $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
 
