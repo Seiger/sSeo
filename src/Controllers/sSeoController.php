@@ -60,7 +60,7 @@ class sSeoController
             }
         } else {
             $file = MODX_BASE_PATH . 'sitemap.xml';
-            $site = evo()->setConfig('site_name', __('sSeo::global.pages_in_sitemap'));
+            $site = evo()->getConfig('site_name', __('sSeo::global.pages_in_sitemap')) . ' Sitemap';
             $pages = 0;
             $time = 0;
 
