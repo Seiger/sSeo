@@ -48,7 +48,7 @@
         <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.canonical_help')"></i>
     </label>
     <div class="col-12 col-md-10 col-xl-11">
-        <input id="meta_keywords" name="sseo[canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="" onchange="documentDirty=true;">
+        <input id="meta_keywords" name="sseo[canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkCanonical()}}" onchange="documentDirty=true;">
     </div>
 </div>
 <div class="split my-3"></div>
@@ -99,3 +99,4 @@
     </div>
 </div>
 <div class="split my-3"></div>
+<input type="hidden" name="sseo[domain_key]" value="{{evo()->getConfig('site_key', 'default')}}">

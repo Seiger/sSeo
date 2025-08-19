@@ -22,24 +22,26 @@
             <div class="text-4xl font-semibold text-slate-800 darkness:text-white">2 340</div>
         </div>--}}
         {{-- Pages in Sitemap --}}
-        @if(config('seiger.settings.sSeo.redirects_enabled', 0) == 1)
-            <div class="s-widget">
-                <div class="flex items-center gap-2 mb-3">
-                    <i data-lucide="list" class="w-5 h-5 text-slate-600 darkness:text-white/80"></i>
-                    <h2 class="s-widget-name">@lang('sSeo::global.pages_in_sitemap')</h2>
-                </div>
-                <div class="text-3xl font-semibold text-slate-800 mb-1 darkness:text-white">
-                    {{number_format(intval($pagesInSitemap['pages'] ?? 0), 0, '.', ' ')}}
-                </div>
-                <span class="text-xs text-slate-500 darkness:text-white/90">
-                    @lang('sSeo::global.last_generated'):
-                    <b>{{
-                            trim($pagesInSitemap['time'] ?? '') ?
-                            Carbon\Carbon::parse($pagesInSitemap['time'])->locale(ManagerTheme::getLang())->isoFormat('D MMM Y') :
+        @if(config('seiger.settings.sSeo.generate_sitemap', 0) == 1 && count($sitemaps ?? []))
+            @foreach($sitemaps as $sitemap)
+                <div class="s-widget">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i data-lucide="list" class="w-5 h-5 text-slate-600 darkness:text-white/80"></i>
+                        <h2 class="s-widget-name">{{$sitemap['site'] ?? __('sSeo::global.pages_in_sitemap')}}</h2>
+                    </div>
+                    <div class="text-3xl font-semibold text-slate-800 mb-1 darkness:text-white">
+                        {{number_format(intval($sitemap['pages'] ?? 0), 0, '.', ' ')}}
+                    </div>
+                    <span class="text-xs text-slate-500 darkness:text-white/90">
+                        @lang('sSeo::global.last_generated'):
+                        <b>{{
+                            intval($sitemap['time']) > 0 ?
+                            Carbon\Carbon::parse($sitemap['time'])->locale(ManagerTheme::getLang())->isoFormat('D MMM Y') :
                             __('sSeo::global.unknown')
-                    }}</b>
-                </span>
-            </div>
+                        }}</b>
+                    </span>
+                </div>
+            @endforeach
         @endif
         {{-- Crawled Today --}}
         {{--<div class="s-widget">

@@ -46,7 +46,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [x] HTTP(S) and WWW Redirects.
 - [x] Manage robots.txt file via Admin Panel.
 - [ ] Open Graph Protocol Integration.
-- [ ] SEO Dashboard and Reporting.
+- [x] Dashboard and Reporting.
 - [ ] Social Media Integration Metrics.
 - [ ] AI-Powered SEO Recommendations.
 - [ ] Featured Snippets Optimization.

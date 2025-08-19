@@ -53,10 +53,15 @@ class sSeo
         // Paginate
         $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
         if (
+            empty($canonical) ||
             in_array($paginates_get, request()->segments()) ||
             in_array($paginates_get, array_keys(request()->except('q')))
         ) {
-            $canonical = url($document['id'], '', '', 'full');
+            $canonical = url($document['id']);
+        }
+
+        if (str_starts_with($canonical, '/')) {
+            $canonical = evo()->getConfig('site_url', '') . ltrim($canonical, '/');
         }
 
         return $canonical;
@@ -360,6 +365,11 @@ class sSeo
                         }
                     }
                 }
+            }
+
+            if (evo()->getConfig('check_sMultisite', false) && evo()->isBackend() && intval(evo()->documentObject['id'])) {
+                $config = array_merge(evo()->config, ['setHost' => parse_url(url(evo()->documentObject['id']), PHP_URL_HOST)]);
+                evo()->invokeEvent('OnLoadSettings', ['config' => &$config]);
             }
         }
 

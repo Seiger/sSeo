@@ -32,13 +32,13 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [x] Automatic META Tags Generation.
 - [x] XML Sitemap Generation.
 - [x] Include or exclude documents from xml sitemap.
-- [х] On page Robots index/follow settings.
+- [x] On page Robots index/follow settings.
 - [x] Noindex for Pagination and Custom $_GET Parameters.
 - [x] 30x Redirects for Resolving 404 Errors.
 - [x] HTTP(S) and WWW Redirects.
 - [x] Manage robots.txt file via Admin Panel.
 - [ ] Open Graph Protocol Integration.
-- [ ] SEO Dashboard and Reporting.
+- [x] Dashboard and Reporting.
 - [ ] Social Media Integration Metrics.
 - [ ] AI-Powered SEO Recommendations.
 - [ ] Featured Snippets Optimization.

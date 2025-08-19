@@ -16,6 +16,7 @@ use Seiger\sCommerce\Models\sProduct;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
+use Seiger\sSeo\Support\Sitemaper;
 use View;
 
 /**
@@ -37,14 +38,44 @@ class sSeoController
             'tabName' => __('sSeo::global.dashboard'),
         ];
 
-        $data['pagesInSitemap'] = Cache::rememberForever('pagesInSitemap', function () {
-            return json_decode(
-                EventLog::whereEventid(1509)
-                    ->whereSource('sSeo Sitemap Generated')
-                    ->orderByDesc('createdon')
-                    ->first()?->description ?? '',
-                true);
-        });
+        $data['sitemaps'] = [];
+        if (evo()->getConfig('check_sMultisite', false)) {
+            foreach (sMultisite::all() as $domain) {
+                $file = EVO_STORAGE_PATH . $domain->key . DIRECTORY_SEPARATOR . 'sitemap.xml';
+                $site = trim($domain->site_name) ? $domain->site_name . ' Sitemap' : __('sSeo::global.pages_in_sitemap');
+                $pages = 0;
+                $time = 0;
+
+                clearstatcache(false, $file);
+                if (file_exists($file)) {
+                    $time = filemtime($file) ?? 0;
+                    $pages = Sitemaper::count($file) ?? 0;
+                }
+
+                $data['sitemaps'][] = [
+                    'site' => $site,
+                    'pages' => $pages,
+                    'time' => $time,
+                ];
+            }
+        } else {
+            $file = MODX_BASE_PATH . 'sitemap.xml';
+            $site = evo()->setConfig('site_name', __('sSeo::global.pages_in_sitemap'));
+            $pages = 0;
+            $time = 0;
+
+            clearstatcache(false, $file);
+            if (file_exists($file)) {
+                $time = filemtime($file) ?? 0;
+                $pages = Sitemaper::count($file) ?? 0;
+            }
+
+            $data['sitemaps'][] = [
+                'site' => $site,
+                'pages' => $pages,
+                'time' => $time,
+            ];
+        }
 
         return $this->view('dashboardTab', $data);
     }
@@ -651,11 +682,6 @@ class sSeoController
 
         // Write the XML file
         file_put_contents($file, $sitemap);
-
-        // Write log
-        $log = ['pages' => count($urls), 'time' => evo()->now()->toDateTimeString()];
-        Cache::forever('pagesInSitemap', $log);
-        evo()->logEvent(1509, 1, json_encode($log), 'sSeo Sitemap Generated');
     }
 
     /**
