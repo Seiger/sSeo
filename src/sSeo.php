@@ -297,9 +297,11 @@ class sSeo
 
             $fields = sSeoModel::describe();
 
-            $items = sSeoModel::where('resource_id', $data['resource_id'])
-                ->where('resource_type', $data['resource_type'])
-                ->get();
+            $query = sSeoModel::query();
+            $query->where('resource_id', (int)$data['resource_id']);
+            $query->where('resource_type', ($data['resource_type'] ?? 'document'));
+            if (trim($data['domain_key'] ?? '')) $query->where('domain_key', $data['domain_key']);
+            $items = $query->get();
 
             foreach ($langs as $lang) {
                 $request = $data[$lang] ?? null;
@@ -309,15 +311,21 @@ class sSeo
                     $request['lang'] = $lang;
 
                     if ($lang == $langDefault) {
-                        $item = $items->whereIn('lang', [$lang, 'base'])->sort(function ($a, $b) {
-                            $la = $a->lang ?? '';
-                            $lb = $b->lang ?? '';
-                            $wa = ($la === 'base') ? 1 : 0;
-                            $wb = ($lb === 'base') ? 1 : 0;
-                            return $wa <=> $wb ?: strcmp($la, $lb);
-                        })->first();
+                        $item = $items
+                            ->whereIn('lang', [$lang, 'base'])->sort(function ($a, $b) {
+                                $la = $a->lang ?? '';
+                                $lb = $b->lang ?? '';
+                                $wa = ($la === 'base') ? 1 : 0;
+                                $wb = ($lb === 'base') ? 1 : 0;
+                                return $wa <=> $wb ?: strcmp($la, $lb);
+                            })
+                            ->where('domain_key', $request['domain_key'])
+                            ->first();
                     } else {
-                        $item = $items->where('lang', $lang)->first();
+                        $item = $items
+                            ->where('lang', $lang)
+                            ->where('domain_key', $request['domain_key'])
+                            ->first();
                     }
 
                     if (!$item) {

@@ -614,15 +614,19 @@ class sSeoController
         if (!empty($resources)) {
             foreach ($resources as $resource) {
                 if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                    $siteUrl = $baseUrl . '/' . trim($resource->lang ?? '');
+                    $siteUrl = trim($baseUrl . '/' . trim($resource->lang ?? ''), '/');
                 } else {
                     $siteUrl = $baseUrl;
                 }
 
                 if ($resource->id == $domain->site_start) {
-                    $loc = $siteUrl;
+                    if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $loc = $siteUrl . '/';
+                    } else {
+                        $loc = $siteUrl;
+                    }
                 } else {
-                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', url($resource->id));
+                    $loc = $siteUrl . str_replace($baseUrl, '', url($resource->id));
                 }
 
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
@@ -634,14 +638,15 @@ class sSeoController
 
         // sCommerce Products
         if (evo()->getConfig('check_sCommerce', false)) {
-            $products = sProduct::leftJoin('s_seo', function($join) {
-                $join->on('s_products.id', '=', 's_seo.resource_id');
-                $join->where('s_seo.resource_type', '=', 'product');
-            })
-                ->where(function($q) {
+            $products = sProduct::select('*', 's_seo.lang as lang')
+                ->leftJoin('s_seo', function($join) {
+                    $join->on('s_products.id', '=', 's_seo.resource_id');
+                    $join->where('s_seo.resource_type', '=', 'product');
+                })->where(function($q) {
                     $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
-                })
-                ->whereHas('categories', function ($q) use ($domainIds) {
+                })->where(function($q) use($domain) {
+                    $q->where('domain_key', $domain->key)->orWhereNull('domain_key');
+                })->whereHas('categories', function ($q) use ($domainIds) {
                     $q->whereIn('category', $domainIds);
                 })
                 ->active()
@@ -650,12 +655,12 @@ class sSeoController
             if (!empty($products)) {
                 foreach ($products as $product) {
                     if ($isLang && $product->lang != 'base' && ($product->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                        $siteUrl = trim($baseUrl . '/' . trim($product->lang), '/');
                     } else {
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $product->link);
+                    $loc = $siteUrl . str_replace($baseUrl, '', $product->link);
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';

@@ -208,8 +208,18 @@ Event::listen('evolution.OnDocFormSave', function($params) {
 });
 Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
     if (isset($params['product']) && $params['product']->id) {
+        $lang = $params['content']?->lang ?? 'base';
         $data = array_merge(['resource_id' => $params['product']->id, 'resource_type' => 'product'], request()->input('sseo', []));
-        sSeo::updateSeoFields($data);
+        $scopes = DB::table('s_product_category')->where('product', $params['product']->id)->whereLike('scope', 'primary_%')->get()?->pluck('scope')?->toArray();
+
+        if ($scopes && is_array($scopes)&& count($scopes)) {
+            foreach ($scopes as $scope) {
+                $data['domain_key'] = $data[$lang]['domain_key'] = str_replace('primary_', '', $scope);
+                sSeo::updateSeoFields($data);
+            }
+        } else {
+            sSeo::updateSeoFields($data);
+        }
     }
 });
 
