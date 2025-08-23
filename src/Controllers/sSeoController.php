@@ -498,11 +498,11 @@ class sSeoController
 
         // sCommerce Products
         if (evo()->getConfig('check_sCommerce', false)) {
-            $products = sProduct::leftJoin('s_seo', function($join) {
-                $join->on('s_products.id', '=', 's_seo.resource_id');
-                $join->where('s_seo.resource_type', '=', 'product');
-            })
-                ->where(function($query) {
+            $products = sProduct::select('*', 's_seo.lang as lang')
+                ->leftJoin('s_seo', function($join) {
+                    $join->on('s_products.id', '=', 's_seo.resource_id');
+                    $join->where('s_seo.resource_type', '=', 'product');
+                })->where(function($query) {
                     $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
                 ->active()
