@@ -474,22 +474,25 @@ class sSeoController
         if (!empty($resources)) {
             foreach ($resources as $resource) {
                 if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                    $siteUrl = $baseUrl . '/' . trim($resource->lang);
+                    $siteUrl = trim($baseUrl . '/' . trim($resource->lang ?? ''), '/');
                 } else {
                     $siteUrl = $baseUrl;
                 }
 
                 if ($resource->id == evo()->getConfig('site_start', 1)) {
-                    $loc = $siteUrl;
+                    if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $loc = $siteUrl . '/';
+                    } else {
+                        $loc = $siteUrl;
+                    }
                 } else {
-                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', url($resource->id));
+                    $loc = $siteUrl . str_replace($baseUrl, '', url($resource->id));
                 }
 
-                $loc = $siteUrl . trim(url($resource->id), '.');
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
                 $changefreq = $resource->changefreq ?? 'always';
                 $priority = $resource->priority ?? '0.5';
-                $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
             }
         }
 
@@ -517,7 +520,7 @@ class sSeoController
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
-                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                    $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
                 }
             }
         }
@@ -545,12 +548,12 @@ class sSeoController
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';
-                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                    $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
                 }
             }
         }
 
-        $this->writeSitemap(MODX_BASE_PATH . 'sitemap.xml', $urls);
+        $this->writeSitemap(MODX_BASE_PATH . 'sitemap.xml', array_values($urls));
     }
 
     /**
@@ -632,7 +635,7 @@ class sSeoController
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
                 $changefreq = $resource->changefreq ?? 'always';
                 $priority = $resource->priority ?? '0.5';
-                $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
             }
         }
 
@@ -664,7 +667,7 @@ class sSeoController
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
-                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                    $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
                 }
             }
         }
@@ -692,7 +695,7 @@ class sSeoController
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';
-                    $urls[] = compact('loc', 'lastmod', 'changefreq', 'priority');
+                    $urls[$loc] = compact('loc', 'lastmod', 'changefreq', 'priority');
                 }
             }
         }
@@ -702,7 +705,7 @@ class sSeoController
             chmod(EVO_STORAGE_PATH . $domain->key, octdec(evo()->getConfig('new_folder_permissions', '0777')));
         }
 
-        $this->writeSitemap(EVO_STORAGE_PATH . $domain->key . DIRECTORY_SEPARATOR . 'sitemap.xml', $urls);
+        $this->writeSitemap(EVO_STORAGE_PATH . $domain->key . DIRECTORY_SEPARATOR . 'sitemap.xml', array_values($urls));
     }
 
     /**
