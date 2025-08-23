@@ -1,14 +1,17 @@
 <?php namespace Seiger\sSeo;
 
 use Carbon\Carbon;
+use EvolutionCMS\Facades\UrlProcessor;
 use EvolutionCMS\Models\SiteContent;
 use Illuminate\Support\Str;
 use Seiger\sArticles\Models\sArticle;
 use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sCommerce\Models\sProduct;
+use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Controllers\sSeoController;
 use Seiger\sSeo\Models\sSeoModel;
+use Seiger\sSeo\Support\FastTagParser;
 use Seiger\sSeo\Support\MetaBuilder;
 use View;
 
@@ -30,7 +33,7 @@ class sSeo
     public function checkCanonical(): string
     {
         $document = $this->getDocument();
-        $canonical = trim($document['canonical_url']);
+        $canonical = trim($document['canonical_url'] ?? '');
 
         // canonical
         if (isset(evo()->documentObject['canonical']) && empty($canonical)) {
@@ -50,6 +53,11 @@ class sSeo
             }
         }
 
+        // For Product or any custom type document
+        if (isset(evo()->documentObject['link']) && empty($canonical)) {
+            $canonical = evo()->documentObject['link'];
+        }
+
         // Paginate
         $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
         if (
@@ -57,7 +65,26 @@ class sSeo
             in_array($paginates_get, request()->segments()) ||
             in_array($paginates_get, array_keys(request()->except('q')))
         ) {
-            $canonical = url($document['id']);
+            $canonical = UrlProcessor::makeUrl((int)$document['id']);
+        }
+
+        if (evo()->isBackend() && str_starts_with($canonical, 'http')) {
+            $canonical = explode('/', $canonical);
+
+            evo()->setConfig('site_url', implode('/', [$canonical[0], $canonical[1], $canonical[2]]) . '/');
+
+            unset($canonical[0], $canonical[1], $canonical[2]);
+            $canonical = '/' . implode('/', $canonical);
+        }
+
+        if (evo()->getConfig('check_sLang', false)) {
+            if (
+                evo()->getConfig('lang') != 'base' &&
+                (evo()->getConfig('lang') != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)
+            ) {
+                $canonical = str_replace('/' . evo()->getConfig('lang', '') . '/', '/', $canonical);
+                $canonical = '/' . evo()->getConfig('lang', '') . '/' . ltrim($canonical, '/');
+            }
         }
 
         if (str_starts_with($canonical, '/')) {
@@ -79,8 +106,9 @@ class sSeo
         if (isset($document['meta_title']) && !empty($document['meta_title'])) {
             $title = $document['meta_title'];
         } else {
-            $title = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_title_{$document['resource_type']}_base", '[*pagetitle*] - [(site_name)]'));
+            $title = $this->parseSource(evo()->getConfig("sseo_meta_title_{$document['resource_type']}_{$document['lang']}", '[*pagetitle*] - [(site_name)]'));
         }
+
         return trim($title);
     }
 
@@ -96,8 +124,9 @@ class sSeo
         if (isset($document['meta_description']) && !empty($document['meta_description'])) {
             $description = $document['meta_description'];
         } else {
-            $description = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_description_{$document['resource_type']}_base", '[*pagetitle*] - [(site_name)]'));
+            $description = $this->parseSource(evo()->getConfig("sseo_meta_description_{$document['resource_type']}_{$document['lang']}", '[*pagetitle*] - [(site_name)]'));
         }
+
         return trim($description);
     }
 
@@ -118,7 +147,7 @@ class sSeo
         if (isset($document['meta_keywords']) && !empty($document['meta_keywords'])) {
             $description = $document['meta_keywords'];
         } else {
-            $description = evo()->parseDocumentSource(evo()->getConfig("sseo_meta_keywords_{$document['resource_type']}_base", '[*pagetitle*], [*longtitle*]'));;
+            $description = $this->parseSource(evo()->getConfig("sseo_meta_keywords_{$document['resource_type']}_{$document['lang']}", '[*pagetitle*], [*longtitle*]'));;
         }
 
         $description = trim($description);
@@ -245,11 +274,7 @@ class sSeo
         // Inject before the last </head>
         $pos = strripos($out, '</head>');
         if ($pos !== false) {
-            evo()->documentOutput =
-                substr($out, 0, $pos)
-                . "<!-- Meta Tags -->\n"
-                . $headHtml
-                . substr($out, $pos);
+            evo()->documentOutput = substr($out, 0, $pos) . "<!-- Meta Tags -->\n" . $headHtml . substr($out, $pos);
         }
     }
 
@@ -262,15 +287,62 @@ class sSeo
     public function updateSeoFields($data)
     {
         if (is_array($data) && isset($data['resource_id']) && (int)$data['resource_id']) {
-            $fields = sSeoModel::where('resource_id', $data['resource_id'])
-                ->where('resource_type', $data['resource_type'])
-                ->firstOrNew();
+            $langs = ['base'];
+            $langDefault = 'base';
 
-            foreach ($data as $key => $value) {
-                $fields->{$key} = $value;
+            if (evo()->getConfig('check_sLang', false)) {
+                $langs = sLang::langConfig();
+                $langDefault = sLang::langDefault();
             }
 
-            $fields->save();
+            $fields = sSeoModel::describe();
+
+            $items = sSeoModel::where('resource_id', $data['resource_id'])
+                ->where('resource_type', $data['resource_type'])
+                ->get();
+
+            foreach ($langs as $lang) {
+                $request = $data[$lang] ?? null;
+                if ($request) {
+                    $request['resource_id'] = $data['resource_id'];
+                    $request['resource_type'] = $data['resource_type'];
+                    $request['lang'] = $lang;
+
+                    if ($lang == $langDefault) {
+                        $item = $items->whereIn('lang', [$lang, 'base'])->sort(function ($a, $b) {
+                            $la = $a->lang ?? '';
+                            $lb = $b->lang ?? '';
+                            $wa = ($la === 'base') ? 1 : 0;
+                            $wb = ($lb === 'base') ? 1 : 0;
+                            return $wa <=> $wb ?: strcmp($la, $lb);
+                        })->first();
+                    } else {
+                        $item = $items->where('lang', $lang)->first();
+                    }
+
+                    if (!$item) {
+                        $item = new sSeoModel();
+                    }
+
+                    foreach ($fields as $field) {
+                        if (in_array($field['name'], ['seoid'])) {
+                            continue;
+                        }
+                        if (isset($request[$field['name']])) {
+                            switch ($field['type']) {
+                                case 'int':
+                                    $item->{$field['name']} = (int)$request[$field['name']];
+                                    break;
+                                default:
+                                    $item->{$field['name']} = (string)$request[$field['name']];
+                                    break;
+                            }
+                        }
+                    }
+
+                    $item->save();
+                }
+            }
         }
     }
 
@@ -340,9 +412,11 @@ class sSeo
      */
     private function getDocument()
     {
-        if ($this->document === null) {
-            $document = sSeoModel::where('resource_id', evo()->documentObject['id'])
+        $lang = evo()->getConfig('lang', 'base');
+        if ($this->document === null || !isset($this->document['lang']) || $this->document['lang'] !== $lang) {
+            $document = sSeoModel::where('resource_id', (int)evo()->documentObject['id'])
                 ->where('resource_type', evo()->documentObject['type'])
+                ->where('lang', $lang)
                 ->first()?->toArray();
 
             if (is_array($document) && count($document)) {
@@ -350,6 +424,8 @@ class sSeo
             } else {
                 $this->document = evo()->documentObject;
             }
+
+            $this->document['lang'] = $lang;
 
             if (empty($this->document['resource_type'])) {
                 $this->document['resource_type'] = evo()->documentObject['type'];
@@ -367,12 +443,50 @@ class sSeo
                 }
             }
 
-            if (evo()->getConfig('check_sMultisite', false) && evo()->isBackend() && intval(evo()->documentObject['id'])) {
-                $config = array_merge(evo()->config, ['setHost' => parse_url(url(evo()->documentObject['id']), PHP_URL_HOST)]);
-                evo()->invokeEvent('OnLoadSettings', ['config' => &$config]);
+            foreach ($this->document as $k => $v) {
+                if (str_starts_with($k, $lang . '_')) {
+                    unset($this->document[$k]);
+                    $this->document[ltrim($k, $lang . '_')] = $v;
+                }
             }
         }
 
         return $this->document;
+    }
+
+    /**
+     * Parse document source using FastTagParser.
+     *
+     * This method provides a lightweight alternative to evo()->parseDocumentSource().
+     * It builds a context array from the current document and global configuration,
+     * wires FastTagParser resolvers to EvoCMS internals (snippets, chunks, links, placeholders),
+     * and executes the parser with static caching for improved performance.
+     *
+     * Key points:
+     * - Context is built once per call (documentObject + config).
+     * - Resolvers are initialized only once per request (static flag).
+     * - Uses FastTagParser::parse() with a limited number of passes (default: 6).
+     * - Designed specifically for rendering meta tags faster than the core parser.
+     *
+     * @param string $source Raw document source containing EVO-like tags.
+     * @return string Parsed output string with all tags resolved.
+     */
+    private function parseSource(string $source): string
+    {
+        $ctx = array_merge(evo()->allConfig(), $this->document);
+
+        static $wired = false;
+        if (!$wired) {
+            FastTagParser::setResolvers(
+                fn(string $name, array $ctx): ?string => $ctx[$name] ?? null,                  // [+x+] / [(x)]
+                fn(string $name, array $ctx): ?string => $ctx[$name] ?? null,                  // [*x*]
+                fn(string $name, array $ctx): ?string => evo()->getChunk($name) ?? null,       // {{chunk}}
+                fn(string $name, array $params, array $ctx): string => (string)(evo()->runSnippet($name, $params) ?? ''), // [[Snippet]]
+                fn(string $ref, array $ctx): string => (string)(\EvolutionCMS\Facades\UrlProcessor::makeUrl($ref) ?? '#'.$ref) // [~id~]
+            );
+            $wired = true;
+        }
+
+        return FastTagParser::parse($source, $ctx, 6);
     }
 }

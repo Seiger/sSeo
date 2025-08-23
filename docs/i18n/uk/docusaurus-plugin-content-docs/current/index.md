@@ -30,6 +30,7 @@ sidebar_position: 1
 
 - [x] Інтеграція з:
   - [x] Ресурсами Evolution CMS.
+  - [x] Сео поля в кожній мовній вкладці **[sLang](https://github.com/Seiger/sLang)**.
   - [x] Продуктами **[sCommerce](https://github.com/Seiger/sCommerce)**.
   - [x] Публікаціями **[sArticles](https://github.com/Seiger/sArticles)**.
   - [x] **[sMultitisite](https://github.com/Seiger/sMultitisite)** robots.txt та sitemap.xml.

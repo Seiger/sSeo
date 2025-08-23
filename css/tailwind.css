@@ -82,7 +82,7 @@
 
     /* Header */
     .s-header {
-        @apply sticky top-0 h-12 bg-white/80 backdrop-blur flex items-center justify-between gap-3 px-6 shadow;
+        @apply sticky top-0 h-12 bg-white/80 backdrop-blur flex items-center justify-between gap-3 px-6 shadow z-5;
         @apply darkness:bg-black/80;
     }
     .s-header-title {

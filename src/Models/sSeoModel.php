@@ -1,9 +1,12 @@
 <?php namespace Seiger\sSeo\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Seiger\sSeo\Support\DescribesTable;
 
 class sSeoModel extends Model
 {
+    use DescribesTable;
+
     /**
      * The table associated with the model.
      *

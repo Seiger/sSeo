@@ -6,7 +6,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.robots_help')"></i>
         </label>
         <div class="col-12 col-md-10 col-xl-11">
-            <select id="robots" name="sseo[robots]" class="form-control" onchange="documentDirty=true;">
+            <select id="robots" name="sseo[{{$lang??'base'}}][robots]" class="form-control" onchange="documentDirty=true;">
                 <option value="" @if(($robots ?? '') == '') selected @endif></option>
                 <option value="index,follow" @if(($robots ?? '') == 'index,follow') selected @endif>index,follow</option>
                 <option value="index,nofollow" @if(($robots ?? '') == 'index,nofollow') selected @endif>index,nofollow</option>
@@ -20,7 +20,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_title_help')"></i>
         </label>
         <div class="col-12 col-md-10 col-xl-11">
-            <input id="meta_title" name="sseo[meta_title]" value="{{$meta_title ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaTitle()}}" onchange="documentDirty=true;">
+            <input id="meta_title" name="sseo[{{$lang??'base'}}][meta_title]" value="{{$meta_title ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaTitle()}}" onchange="documentDirty=true;">
         </div>
     </div>
     <div class="row form-row form-element-input d-flex flex-column flex-md-row">
@@ -29,7 +29,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_description_help')"></i>
         </label>
         <div class="col-12 col-md-10 col-xl-11">
-            <textarea id="meta_description" name="sseo[meta_description]" rows="2" class="form-control" placeholder="{{sSeo::checkMetaDescription()}}" onchange="documentDirty=true;">{{$meta_description ?? ''}}</textarea>
+            <textarea id="meta_description" name="sseo[{{$lang??'base'}}][meta_description]" rows="2" class="form-control" placeholder="{{sSeo::checkMetaDescription()}}" onchange="documentDirty=true;">{{$meta_description ?? ''}}</textarea>
         </div>
     </div>
 </div>
@@ -39,7 +39,7 @@
         <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_keywords_help')"></i>
     </label>
     <div class="col-12 col-md-10 col-xl-11">
-        <input id="meta_keywords" name="sseo[meta_keywords]" value="{{$meta_keywords ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaKeywords()}}" onchange="documentDirty=true;">
+        <input id="meta_keywords" name="sseo[{{$lang??'base'}}][meta_keywords]" value="{{$meta_keywords ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaKeywords()}}" onchange="documentDirty=true;">
     </div>
 </div>
 <div class="row form-row form-element-input d-flex flex-column flex-md-row">
@@ -48,7 +48,7 @@
         <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.canonical_help')"></i>
     </label>
     <div class="col-12 col-md-10 col-xl-11">
-        <input id="meta_keywords" name="sseo[canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkCanonical()}}" onchange="documentDirty=true;">
+        <input id="meta_keywords" name="sseo[{{$lang??'base'}}][canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkCanonical()}}" onchange="documentDirty=true;">
     </div>
 </div>
 <div class="split my-3"></div>
@@ -60,15 +60,15 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.exclude_from_sitemap_help')"></i>
         </label>
         <div class="col-12 col-md-3 col-lg-2">
-            <input type="hidden" name="sseo[exclude_from_sitemap]" value="0">
-            <input type="checkbox" name="sseo[exclude_from_sitemap]" id="exclude_from_sitemap" value="1" @if($exclude_from_sitemap ?? false) checked @endif onchange="documentDirty=true;">
+            <input type="hidden" name="sseo[{{$lang??'base'}}][exclude_from_sitemap]" value="0">
+            <input type="checkbox" name="sseo[{{$lang??'base'}}][exclude_from_sitemap]" id="exclude_from_sitemap" value="1" @if($exclude_from_sitemap ?? false) checked @endif onchange="documentDirty=true;">
         </div>
         <label class="control-label col-12 col-md-3 col-lg-2">
             <span>@lang('sSeo::global.priority')</span>
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.priority_help')"></i>
         </label>
         <div class="col-12 col-md-3 col-lg-2 col-xl-1">
-            <select id="priority" name="sseo[priority]" class="form-control" onchange="documentDirty=true;">
+            <select id="priority" name="sseo[{{$lang??'base'}}][priority]" class="form-control" onchange="documentDirty=true;">
                 <option value="1.0" @if(($priority ?? '') == 1.0) selected @endif>1.0</option>
                 <option value="0.9" @if(($priority ?? '') == 0.9) selected @endif>0.9</option>
                 <option value="0.8" @if(($priority ?? '') == 0.8) selected @endif>0.8</option>
@@ -86,7 +86,7 @@
             <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.change_frequency_help')"></i>
         </label>
         <div class="col-12 col-md-3 col-lg-2 col-xl-1">
-            <select name="sseo[changefreq]" id="changefreq" class="form-control" onchange="documentDirty=true;">
+            <select name="sseo[{{$lang??'base'}}][changefreq]" id="changefreq" class="form-control" onchange="documentDirty=true;">
                 <option value="always" @if(($change_frequency ?? '') == 'always') selected @endif>always</option>
                 <option value="hourly" @if(($change_frequency ?? '') == 'hourly') selected @endif>hourly</option>
                 <option value="daily" @if(($change_frequency ?? '') == 'daily') selected @endif>daily</option>
@@ -98,5 +98,4 @@
         </div>
     </div>
 </div>
-<div class="split my-3"></div>
-<input type="hidden" name="sseo[domain_key]" value="{{evo()->getConfig('site_key', 'default')}}">
+<input type="hidden" name="sseo[{{$lang??'base'}}][domain_key]" value="{{evo()->getConfig('site_key', 'default')}}">

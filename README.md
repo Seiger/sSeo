@@ -23,6 +23,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
 
 - [x] Integration with:
   - [x] Evolution CMS Resources.
+  - [x] **[sLang](https://github.com/Seiger/sLang)** Seo fields in each lang tab.
   - [x] **[sCommerce](https://github.com/Seiger/sCommerce)** Products.
   - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
   - [x] **[sMultisite](https://github.com/Seiger/sMultisite)** robots.txt and sitemap.xml.

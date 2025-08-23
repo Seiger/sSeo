@@ -149,46 +149,51 @@ Event::listen('evolution.OnWebPagePrerender', function() {
 });
 
 /**
- * Add Menu item
+ * Render SEO Fields
  */
-Event::listen('evolution.OnManagerMenuPrerender', function($params) {
-    $menu['sseo'] = [
-        'sseo',
-        'tools',
-        '<i class="'.__('sSeo::global.icon').'"></i>'.__('sSeo::global.title'),
-        sSeo::route('sSeo.dashboard'),
-        __('sSeo::global.title'),
-        "",
-        "",
-        "main",
-        0,
-        7,
-    ];
+Event::listen('evolution.OnRenderSeoFields', function($params) {
+    $id = intval($params['id'] ?? 0);
+    $type = $params['type'] ?? 'document';
+    $lang = $params['lang'] ?? 'base';
+    evo()->setConfig('lang', $lang);
 
-    return serialize(array_merge($params['menu'], $menu));
+    if ($id > 0) {
+        $fields = sSeoModel::where('resource_id', $id)
+            ->where('resource_type', $type)
+            ->where('lang', $lang)
+            ->first()?->toArray() ?? [];
+
+        $fields['lang'] = $lang;
+        return view('sSeo::partials.fieldsBlock', $fields)->render();
+    }
 });
 
 /**
- * Add SEO Tab or Block
+ * Render SEO Tab
  */
 Event::listen('evolution.OnDocFormRender', function($params) {
-    if (isset($params['id']) && !empty($params['id'])) {
+    if (isset($params['id']) && !empty($params['id']) && !evo()->getConfig('check_sLang', false)) {
+        $lang = $params['lang'] ?? 'base';
         $fields = sSeoModel::where('resource_id', $params['id'])
             ->where('resource_type', 'document')
-            ->first()?->toArray();
-        return view('sSeo::resourceTab', $fields ?? [])->render();
+            ->where('lang', $lang)
+            ->first()?->toArray() ?? [];
+        $fields['lang'] = $lang;
+        return view('sSeo::resourceTab', $fields)->render();
     }
 });
 Event::listen('evolution.sCommerceManagerAddTabEvent', function($params) {
-    $reflector = new \ReflectionClass('sSeo');
-    $result['handler'] = str_replace('Facades/sSeo.php', 'Controllers/modulesSeoTabHandler.php', $reflector->getFileName());
-    $result['view'] = '';
+    if (!evo()->getConfig('check_sLang', false)) {
+        $reflector = new \ReflectionClass('sSeo');
+        $result['handler'] = str_replace('Facades/sSeo.php', 'Controllers/modulesSeoTabHandler.php', $reflector->getFileName());
+        $result['view'] = '';
 
-    if (isset($params['currentTab']) && $params['currentTab'] == 'content') {
-        $result['view'] = sCommerce::tabRender('sseoproduct', 'sSeo::moduleTab', $params['dataInput'] ?? [], __('sSeo::global.title'), __('sSeo::global.icon'), ' ');
+        if (isset($params['currentTab']) && $params['currentTab'] == 'content') {
+            $result['view'] = sCommerce::tabRender('sseoproduct', 'sSeo::moduleTab', $params['dataInput'] ?? [], __('sSeo::global.title'), __('sSeo::global.icon'), ' ');
+        }
+
+        return $result;
     }
-
-    return $result;
 });
 
 /**
@@ -206,4 +211,24 @@ Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
         $data = array_merge(['resource_id' => $params['product']->id, 'resource_type' => 'product'], request()->input('sseo', []));
         sSeo::updateSeoFields($data);
     }
+});
+
+/**
+ * Add Menu item
+ */
+Event::listen('evolution.OnManagerMenuPrerender', function($params) {
+    $menu['sseo'] = [
+        'sseo',
+        'tools',
+        '<i class="'.__('sSeo::global.icon').'"></i>'.__('sSeo::global.title'),
+        sSeo::route('sSeo.dashboard'),
+        __('sSeo::global.title'),
+        "",
+        "",
+        "main",
+        0,
+        7,
+    ];
+
+    return serialize(array_merge($params['menu'], $menu));
 });

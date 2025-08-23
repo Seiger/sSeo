@@ -13,6 +13,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Seiger\sArticles\Models\sArticle;
 use Seiger\sCommerce\Models\sProduct;
+use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
@@ -219,23 +220,33 @@ class sSeoController
             'tabName' => __('sSeo::global.templates'),
         ];
 
-        $editor = [];
-        $editor[] = 'sseo_meta_title_document_base';
-        $editor[] = 'sseo_meta_description_document_base';
-        $editor[] = 'sseo_meta_keywords_document_base';
+        if(evo()->getConfig('sseo_pro', false)) {
+            $langs = ['base'];
+            $registereds = ['sseo_meta_title_document', 'sseo_meta_description_document', 'sseo_meta_keywords_document'];
 
-        if (evo()->getConfig('check_sCommerce', false)) {
-            $editor[] = 'sseo_meta_title_prodcat_base';
-            $editor[] = 'sseo_meta_description_prodcat_base';
-            $editor[] = 'sseo_meta_keywords_prodcat_base';
-            $editor[] = 'sseo_meta_title_product_base';
-            $editor[] = 'sseo_meta_description_product_base';
-            $editor[] = 'sseo_meta_keywords_product_base';
+            if (evo()->getConfig('check_sCommerce', false)) {
+                $regCommPCat = ['sseo_meta_title_prodcat', 'sseo_meta_description_prodcat', 'sseo_meta_keywords_prodcat'];
+                $regCommProd = ['sseo_meta_title_product', 'sseo_meta_description_product', 'sseo_meta_keywords_product'];
+                $registereds = array_merge($registereds, $regCommPCat, $regCommProd);
+            }
+
+            if (evo()->getConfig('check_sLang', false)) {
+                $langs = sLang::langConfig();
+            }
+
+            $editor = [];
+            foreach ($langs as $lang) {
+                foreach ($registereds as $registered) {
+                    $editor[] = $registered . '_' . $lang;
+                }
+            }
+
+            $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
+
+            return $this->view('templatesTab', array_merge($data, compact('data', 'langs', 'editor', 'codeEditor')));
+        } else {
+            return $this->view('templatesTab', $data);
         }
-
-        $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
-
-        return $this->view('templatesTab', array_merge($data, compact('data', 'editor', 'codeEditor')));
     }
 
     /**
@@ -446,15 +457,15 @@ class sSeoController
     public function generateSitemap()
     {
         $urls = [];
-        $siteUrl = trim(evo()->getConfig('site_url', '/'), '/');
+        $isLang = evo()->getConfig('check_sLang', false);
+        $baseUrl = trim(evo()->getConfig('site_url', '/'), '/');
 
         // Evolution CMS Resources
         $resources = SiteContent::leftJoin('s_seo', function($join) {
             $join->on('site_content.id', '=', 's_seo.resource_id');
             $join->where('s_seo.resource_type', '=', 'document');
         })->where(function($query) {
-            $query->whereNot('exclude_from_sitemap', true)
-                ->orWhereNull('exclude_from_sitemap');
+            $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
         })
             ->wherePublished(1)
             ->whereDeleted(0)
@@ -462,6 +473,18 @@ class sSeoController
 
         if (!empty($resources)) {
             foreach ($resources as $resource) {
+                if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                    $siteUrl = $baseUrl . '/' . trim($resource->lang);
+                } else {
+                    $siteUrl = $baseUrl;
+                }
+
+                if ($resource->id == evo()->getConfig('site_start', 1)) {
+                    $loc = $siteUrl;
+                } else {
+                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', url($resource->id));
+                }
+
                 $loc = $siteUrl . trim(url($resource->id), '.');
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
                 $changefreq = $resource->changefreq ?? 'always';
@@ -477,14 +500,19 @@ class sSeoController
                 $join->where('s_seo.resource_type', '=', 'product');
             })
                 ->where(function($query) {
-                    $query->whereNot('exclude_from_sitemap', true)
-                        ->orWhereNull('exclude_from_sitemap');
+                    $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
                 ->active()
                 ->get();
 
             if (!empty($products)) {
                 foreach ($products as $product) {
+                    if ($isLang && $product->lang != 'base' && ($product->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                    } else {
+                        $siteUrl = $baseUrl;
+                    }
+
                     $loc = $siteUrl . trim($product->link, '.');
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
@@ -501,13 +529,18 @@ class sSeoController
                 $join->where('s_seo.resource_type', '=', 'publication');
             })
                 ->where(function($q) {
-                    $q->whereNot('exclude_from_sitemap', true)
-                        ->orWhereNull('exclude_from_sitemap');
+                    $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
                 ->get();
 
             if (!empty($publications)) {
                 foreach ($publications as $publication) {
+                    if ($isLang && $publication->lang != 'base' && ($publication->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                    } else {
+                        $siteUrl = $baseUrl;
+                    }
+
                     $loc = $siteUrl . trim($publication->link, '.');
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
@@ -539,13 +572,14 @@ class sSeoController
     public function generateMultisiteSitemap(int $root = 0)
     {
         $urls = [];
+        $isLang = evo()->getConfig('check_sLang', false);
 
         $domain = sMultisite::whereResource($root)->whereActive(1)->first();
         if (empty($domain)) {
             $domain = sMultisite::whereResource(0)->whereActive(1)->first();
         }
 
-        $siteUrl = trim(\Seiger\sMultisite\Facades\sMultisite::scheme(evo()->getConfig('server_protocol', 'https') . '://' . $domain->domain), '/');
+        $baseUrl = trim(\Seiger\sMultisite\Facades\sMultisite::scheme(evo()->getConfig('server_protocol', 'https') . '://' . $domain->domain), '/');
 
         if ($domain->resource == 0) {
             $domainBaseIds = evo()->getChildIds(0, 1);
@@ -570,8 +604,7 @@ class sSeoController
             $join->on('site_content.id', '=', 's_seo.resource_id');
             $join->where('s_seo.resource_type', '=', 'document');
         })->where(function($query) {
-            $query->whereNot('exclude_from_sitemap', true)
-                ->orWhereNull('exclude_from_sitemap');
+            $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
         })
             ->whereIn('id', $domainIds)
             ->wherePublished(1)
@@ -580,11 +613,18 @@ class sSeoController
 
         if (!empty($resources)) {
             foreach ($resources as $resource) {
+                if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                    $siteUrl = $baseUrl . '/' . trim($resource->lang ?? '');
+                } else {
+                    $siteUrl = $baseUrl;
+                }
+
                 if ($resource->id == $domain->site_start) {
                     $loc = $siteUrl;
                 } else {
                     $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', url($resource->id));
                 }
+
                 $lastmod = $resource->last_modified ? Carbon::parse($resource->last_modified)->toAtomString() : Carbon::parse($resource->editedon)->toAtomString();
                 $changefreq = $resource->changefreq ?? 'always';
                 $priority = $resource->priority ?? '0.5';
@@ -599,8 +639,7 @@ class sSeoController
                 $join->where('s_seo.resource_type', '=', 'product');
             })
                 ->where(function($q) {
-                    $q->whereNot('exclude_from_sitemap', true)
-                        ->orWhereNull('exclude_from_sitemap');
+                    $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
                 ->whereHas('categories', function ($q) use ($domainIds) {
                     $q->whereIn('category', $domainIds);
@@ -610,6 +649,12 @@ class sSeoController
 
             if (!empty($products)) {
                 foreach ($products as $product) {
+                    if ($isLang && $product->lang != 'base' && ($product->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                    } else {
+                        $siteUrl = $baseUrl;
+                    }
+
                     $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $product->link);
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
@@ -625,14 +670,19 @@ class sSeoController
                 $join->where('s_seo.resource_type', '=', 'publication');
             })
                 ->where(function($q) {
-                    $q->whereNot('exclude_from_sitemap', true)
-                        ->orWhereNull('exclude_from_sitemap');
+                    $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
                 ->whereIn('parent', $domainIds)
                 ->get();
 
             if (!empty($publications)) {
                 foreach ($publications as $publication) {
+                    if ($isLang && $publication->lang != 'base' && ($publication->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                    } else {
+                        $siteUrl = $baseUrl;
+                    }
+
                     $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $publication->link);
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';

@@ -49,6 +49,12 @@ class MetaBuilder
         $esc = static fn ($v): string => htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         $lines = [];
 
+        // Robots
+        if ($mode === 'replace' || !$has('/<meta\b[^>]*name=["\']robots["\'][^>]*>/i')) {
+            if ($meta['robots'] !== '') {
+                $lines[] = '<meta name="robots" content="'.$esc($meta['robots']).'">';
+            }
+        }
         // Title
         if ($mode === 'replace' || !$has('/<title\b[^>]*>.*?<\/title>/is')) {
             if ($meta['title'] !== '') {
@@ -65,12 +71,6 @@ class MetaBuilder
         if ($mode === 'replace' || !$has('/<meta\b[^>]*name=["\']keywords["\'][^>]*>/i')) {
             if ($meta['keywords'] !== '') {
                 $lines[] = '<meta name="keywords" content="'.$esc($meta['keywords']).'">';
-            }
-        }
-        // Robots
-        if ($mode === 'replace' || !$has('/<meta\b[^>]*name=["\']robots["\'][^>]*>/i')) {
-            if ($meta['robots'] !== '') {
-                $lines[] = '<meta name="robots" content="'.$esc($meta['robots']).'">';
             }
         }
         // Canonical
