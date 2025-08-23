@@ -66,7 +66,7 @@ Event::listen('evolution.OnLoadSettings', function($params) {
         }
 
         // Check request end
-        if (evo()->getConfig('friendly_urls', false) && trim(evo()->getConfig('friendly_url_suffix', ''))) {
+        if ($requestUri != '/' && evo()->getConfig('friendly_urls', false) && trim(evo()->getConfig('friendly_url_suffix', ''))) {
             $requestUriArr = explode('?', $requestUri);
             if (!str_ends_with($requestUriArr[0], evo()->getConfig('friendly_url_suffix', ''))) {
                 $requestUriArr[0] = $requestUriArr[0] . evo()->getConfig('friendly_url_suffix', '');
