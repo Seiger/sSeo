@@ -375,7 +375,7 @@ class sSeo
             if (evo()->getConfig('check_sMultisite', false)) {
                 if ($id > 0) {
                     $parents = evo()->getParentIds($id);
-                    $root = (int)array_shift($parents);
+                    $root = (int)array_pop($parents);
                     (new sSeoController())->generateMultisiteSitemap($root);
                 }
             } else {
@@ -422,8 +422,15 @@ class sSeo
     {
         $lang = evo()->getConfig('lang', 'base');
         if ($this->document === null || !isset($this->document['lang']) || $this->document['lang'] !== $lang) {
+            $domainKey = evo()->getConfig('site_key', 'default');
+
+            if (in_array(evo()->documentObject['type'], ['product'])) {
+                $domainKey = 'default';
+            }
+
             $document = sSeoModel::where('resource_id', (int)evo()->documentObject['id'])
                 ->where('resource_type', evo()->documentObject['type'])
+                ->where('domain_key', $domainKey)
                 ->where('lang', $lang)
                 ->first()?->toArray();
 

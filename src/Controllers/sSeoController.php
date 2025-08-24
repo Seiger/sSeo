@@ -604,12 +604,13 @@ class sSeoController
 
         // Evolution CMS Resources
         $resources = SiteContent::leftJoin('s_seo', function($join) {
-            $join->on('site_content.id', '=', 's_seo.resource_id');
-            $join->where('s_seo.resource_type', '=', 'document');
-        })->where(function($query) {
-            $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
-        })
-            ->whereIn('id', $domainIds)
+                $join->on('site_content.id', '=', 's_seo.resource_id');
+                $join->where('s_seo.resource_type', '=', 'document');
+            })->where(function($query) {
+                $query->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
+            })->where(function($q) use($domain) {
+                $q->where('domain_key', $domain->key)->orWhereNull('domain_key');
+            })->whereIn('id', $domainIds)
             ->wherePublished(1)
             ->whereDeleted(0)
             ->get();
@@ -647,12 +648,11 @@ class sSeoController
                     $join->where('s_seo.resource_type', '=', 'product');
                 })->where(function($q) {
                     $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
-                })->where(function($q) use($domain) {
-                    $q->where('domain_key', $domain->key)->orWhereNull('domain_key');
+                //})->where(function($q) use($domain) {
+                //    $q->where('domain_key', $domain->key)->orWhereNull('domain_key');
                 })->whereHas('categories', function ($q) use ($domainIds) {
                     $q->whereIn('category', $domainIds);
-                })
-                ->active()
+                })->active()
                 ->get();
 
             if (!empty($products)) {
@@ -672,15 +672,15 @@ class sSeoController
             }
         }
 
+        // sArticles Publications
         if (evo()->getConfig('check_sArticles', false)) {
-            $publications = sArticle::leftJoin('s_seo', function($join) {
-                $join->on('s_articles.id', '=', 's_seo.resource_id');
-                $join->where('s_seo.resource_type', '=', 'publication');
-            })
-                ->where(function($q) {
+            $publications = sArticle::select('*', 's_seo.lang as lang')
+                ->leftJoin('s_seo', function($join) {
+                    $join->on('s_articles.id', '=', 's_seo.resource_id');
+                    $join->where('s_seo.resource_type', '=', 'publication');
+                })->where(function($q) {
                     $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
-                })
-                ->whereIn('parent', $domainIds)
+                })->whereIn('parent', $domainIds)
                 ->get();
 
             if (!empty($publications)) {
