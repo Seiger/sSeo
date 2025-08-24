@@ -38,21 +38,19 @@ php artisan migrate
 
 > The package automatically listens to Evolution CMS events (manager & frontend) and integrates with sCommerce/sArticles when available.
 
-## Add SEO meta to your theme
-
-Place this in your Blade layout `<head>`:
-
-```html
-<!DOCTYPE html>
-<html lang="@evoConfig('lang', 'en')">
-<head>
-    <base href="@evoConfig('site_url', '/')"/>
-    @if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender'))){!!implode('', $evtHead)!!}@endif
-    ...
-</head>
-```
-
 That's it — the title, description, keywords, canonical content, and works will be calculated for each page according to the established rules.
 
 ## Where to find the module
 Manager → **Tools → sSeo**. You’ll see tabs for Dashboard, Redirects, Meta Templates _(PRO)_, Robots and Configure.
+
+## Extra
+
+If you write your own code that can integrate with the sSeo plugin, you can check the presence of this module in the system through a configuration variable.
+
+```php
+if (evo()->getConfig('check_sSeo', false)) {
+    // You code
+}
+```
+
+If the plugin is installed, the result of ```evo()->getConfig('check_sSeo', false)``` will always be ```true```. Otherwise, you will get an ```false```.

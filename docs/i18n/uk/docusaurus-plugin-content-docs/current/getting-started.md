@@ -38,20 +38,6 @@ php artisan migrate
 
 > Пакет автоматично прослуховує події Evolution CMS (менеджер та фронтенд) та інтегрується з sCommerce/sArticles, коли вони доступні.
 
-## Додайте SEO-мета до вашої теми
-
-Розмістіть це у вашому шаблоні Blade `<head>`:
-
-```html
-<!DOCTYPE html>
-<html lang="@evoConfig('lang', 'uk')">
-<head>
-<base href="@evoConfig('site_url', '/')"/>
-@if(is_array($evtHead = evo()->invokeEvent('OnHeadWebDocumentRender'))){!!implode('', $evtHead)!!}@endif
-...
-</head>
-```
-
 Ось і все — заголовок, опис, ключові слова, канонічний контент та роботи будуть обчислюватися для кожної сторінки за встановленими правилами.
 
 ## Де знайти модуль
