@@ -73,9 +73,9 @@ class sSeoServiceProvider extends ServiceProvider
             dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
             dirname(__DIR__) . '/images/seigerit.svg' => public_path('assets/site/seigerit.svg'),
             dirname(__DIR__) . '/images/logo.svg' => public_path('assets/site/sseo.svg'),
-            dirname(__DIR__) . '/css/tailwind.min.css' => public_path('assets/site/sseo.style.min.css'),
-            dirname(__DIR__) . '/js/main.js' => public_path('assets/site/sseo.js.main.js'),
-            dirname(__DIR__) . '/js/tooltip.js' => public_path('assets/site/sseo.js.tooltip.js'),
+            dirname(__DIR__) . '/css/tailwind.min.css' => public_path('assets/site/sseo.min.css'),
+            dirname(__DIR__) . '/js/main.js' => public_path('assets/site/sseo.js'),
+            dirname(__DIR__) . '/js/tooltip.js' => public_path('assets/site/seigerit.tooltip.js'),
         ]);
     }
 

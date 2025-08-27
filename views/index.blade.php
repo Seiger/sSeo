@@ -7,9 +7,9 @@
     <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"/>
     <meta name="theme-color" content="#0b1a2f"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <link rel="icon" type="image/svg+xml" href="{{evo()->getConfig('site_url', '/')}}assets/site/sseo.svg" />
+    <link rel="icon" type="image/svg+xml" href="{{asset('site/sseo.svg')}}" />
     <style>[x-cloak]{display:none!important}</style>
-    <link rel="stylesheet" href="{{evo()->getConfig('site_url', '/')}}assets/site/sseo.style.min.css">
+    <link rel="stylesheet" href="{{asset('site/sseo.min.css')}}?{{evo()->getConfig('sSeoVer')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@latest/build/css/alertify.min.css"/>
     @if(class_exists(Tracy\Debugger::class) && config('tracy.active')){!!Tracy\Debugger::renderLoader()!!}@endif
     {!!ManagerTheme::getMainFrameHeaderHTMLBlock()!!}
@@ -32,7 +32,7 @@
         evo.config.which_browser = '{{evo()->getConfig('which_browser')}}';
     </script>
     <script src="media/script/main.js"></script>
-    <script src="{{evo()->getConfig('site_url', '/')}}assets/site/sseo.js.main.js"></script>
+    <script src="{{asset('site/sseo.js')}}?{{evo()->getConfig('sSeoVer')}}"></script>
     @stack('scripts.top')
     {!!EvolutionCMS()->getRegisteredClientStartupScripts()!!}
 </head>
@@ -50,7 +50,7 @@
 </div>
 <div x-data="{open:false}" @mouseenter="open=true" @mouseleave="open=false" :class="open ? 's-brand s-brand--open' : 's-brand'">
     <div class="s-brand-logo">
-        <img src="{{evo()->getConfig('site_url', '/')}}assets/site/seigerit.svg" alt="Seiger IT">
+        <img src="{{asset('site/seigerit.svg')}}" alt="Seiger IT">
     </div>
     <template x-if="open">
         <div x-transition.opacity class="s-brand-text">
@@ -60,7 +60,7 @@
         </div>
     </template>
 </div>
-<script src="{{evo()->getConfig('site_url', '/')}}assets/site/sseo.js.tooltip.js" defer></script>
+<script src="{{asset('site/seigerit.tooltip.js')}}" defer></script>
 @push('scripts.bot')
     <script>
         document.addEventListener("DOMContentLoaded", function () {

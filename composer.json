@@ -48,6 +48,12 @@
     ]
   },
   "scripts": {
-    "post-autoload-dump": []
+    "post-autoload-dump": [],
+    "post-install-cmd": [
+      "@php artisan sseo:publish"
+    ],
+    "post-update-cmd": [
+      "@php artisan sseo:publish"
+    ]
   }
 }

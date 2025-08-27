@@ -7,7 +7,7 @@
     --surface-color: #ffffff;
     --border-color: #e2e6ee;
     --focus-ring: 0 0 0 3px rgba(59,130,246,.35);
-    --brand-color: #3b82f6;
+    --brand-color: #0057c7;
     --brand-fore: #ffffff;
 
     --theme-transition: background-color .2s ease, color .2s ease, border-color .2s ease;
@@ -29,6 +29,6 @@ body.darkness {
     --surface-color: #111318;
     --border-color: #2a2f3a;
     --focus-ring: 0 0 0 3px rgba(59,130,246,.45);
-    --brand-color: #60a5fa;
+    --brand-color: #0057c7;
     --brand-fore: #0b1a2f;
 }

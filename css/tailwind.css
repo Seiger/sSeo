@@ -73,7 +73,7 @@
         @apply bg-[#0051c7]/50 border-l-[3px] border-[#3b82f6] hover:bg-[#0051c7]/50;
     }
     .s-pro-badge {
-        @apply px-2 py-0.5 text-[10px] leading-none uppercase bg-violet-600 text-white rounded-full;
+        @apply px-2 py-0.5 text-[10px] font-bold leading-none uppercase bg-[var(--brand-color)] text-white rounded-full;
     }
     .s-pin-btn {
         @apply fixed bottom-4 z-50 flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10
@@ -166,6 +166,10 @@
     }
 
     /* Meta Templates */
+    .s-meta-block-head {
+        @apply bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden;
+        @apply darkness:bg-[#122739] darkness:border-slate-700;
+    }
     .s-meta-block-btn {
         @apply w-full flex items-center justify-between px-6 py-4 bg-sky-100 hover:bg-sky-200 transition-all
             cursor-pointer select-none;

@@ -111,7 +111,6 @@ window.sSeo.sPinner = function sPinner(key) {
             this.open = this.pinned;
             this.skipLeave = true;
             setTimeout(() => this.skipLeave = false, 50);
-            console.log(key, this.pinned);
             localStorage.setItem(key, this.pinned);
             window.sSeo.queueLucide();
         },
