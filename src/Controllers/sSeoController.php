@@ -579,7 +579,7 @@ class sSeoController
 
         $domain = sMultisite::whereResource($root)->whereActive(1)->first();
         if (empty($domain)) {
-            $domain = sMultisite::whereResource(0)->whereActive(1)->first();
+            $domain = sMultisite::where('key', 'default')->first();
         }
 
         $baseUrl = trim(\Seiger\sMultisite\Facades\sMultisite::scheme(evo()->getConfig('server_protocol', 'https') . '://' . $domain->domain), '/');
