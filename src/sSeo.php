@@ -310,6 +310,10 @@ class sSeo
                     $request['resource_type'] = $data['resource_type'];
                     $request['lang'] = $lang;
 
+                    if (in_array($request['resource_type'], ['product'])) {
+                        $request['domain_key'] = 'default';
+                    }
+
                     if ($lang == $langDefault) {
                         $item = $items
                             ->whereIn('lang', [$lang, 'base'])->sort(function ($a, $b) {
