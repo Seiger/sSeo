@@ -658,7 +658,7 @@ class sSeoController
             if (!empty($products)) {
                 foreach ($products as $product) {
                     if ($isLang && $product->lang != 'base' && ($product->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                        $siteUrl = trim($baseUrl . '/' . trim($product->lang), '/');
+                        $siteUrl = trim($baseUrl . '/' . trim($product->lang ?? ''), '/');
                     } else {
                         $siteUrl = $baseUrl;
                     }
