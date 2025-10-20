@@ -1,7 +1,7 @@
 {
   "name": "seiger/sseo",
   "license": "GPL-3.0",
-  "type": "evolutioncms-plugin",
+  "type": "evolutioncms-tool",
   "description": "Evocms package for collection of SEO Tools for Evolution CMS.",
   "keywords": [
     "evocms",
