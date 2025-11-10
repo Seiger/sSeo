@@ -51,8 +51,8 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - [ ] Floating frontend SEO panel for managers/admins only
 
 ## Requirements
-- Evolution CMS **3.2.0+**
-- PHP **8.2+**
+- Evolution CMS **3.2.7+**
+- PHP **8.3+**
 - Composer **2.2+**
 - One of: **MySQL 8.0+** / **MariaDB 10.5+** / **PostgreSQL 10+** / **SQLite 3.25+**
 

@@ -510,13 +510,15 @@ class sSeoController
 
             if (!empty($products)) {
                 foreach ($products as $product) {
-                    if ($isLang && $product->lang != 'base' && ($product->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                        $siteUrl = $baseUrl . '/' . trim($product?->lang ?? '');
+                    $productLang = (string)($product->lang ?? '');
+                    if ($isLang && $productLang !== '' && $productLang !== 'base' && ($productLang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($productLang);
                     } else {
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . trim($product->link, '.');
+                    $productLink = (string)($product->link ?? '');
+                    $loc = $siteUrl . trim($productLink, '.');
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
@@ -538,13 +540,15 @@ class sSeoController
 
             if (!empty($publications)) {
                 foreach ($publications as $publication) {
-                    if ($isLang && $publication->lang != 'base' && ($publication->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                    $publicationLang = (string)($publication->lang ?? '');
+                    if ($isLang && $publicationLang !== '' && $publicationLang !== 'base' && ($publicationLang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
+                        $siteUrl = $baseUrl . '/' . trim($publicationLang);
                     } else {
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . trim($publication->link, '.');
+                    $publicationLink = (string)($publication->link ?? '');
+                    $loc = $siteUrl . trim($publicationLink, '.');
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';

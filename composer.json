@@ -19,7 +19,8 @@
     }
   ],
   "require": {
-    "php": "^8.2"
+    "php": "^8.3",
+    "evolutioncms/evolution": "^3.2.7"
   },
   "autoload": {
     "psr-4": {
