@@ -118,8 +118,8 @@ Event::listen('evolution.OnPageNotFound', function () {
             $file = null;
             if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'robots.txt')) {
                 $file = EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'robots.txt';
-            } elseif (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                $file = MODX_BASE_PATH . 'robots.txt';
+            } elseif (file_exists(EVO_BASE_PATH . 'robots.txt')) {
+                $file = EVO_BASE_PATH . 'robots.txt';
             }
 
             if ($file) {
@@ -133,8 +133,8 @@ Event::listen('evolution.OnPageNotFound', function () {
             $file = null;
             if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'sitemap.xml')) {
                 $file = EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'sitemap.xml';
-            } elseif (file_exists(MODX_BASE_PATH . 'sitemap.xml')) {
-                $file = MODX_BASE_PATH . 'sitemap.xml';
+            } elseif (file_exists(EVO_BASE_PATH . 'sitemap.xml')) {
+                $file = EVO_BASE_PATH . 'sitemap.xml';
             }
 
             if ($file) {

@@ -60,7 +60,7 @@ class sSeoController
                 ];
             }
         } else {
-            $file = MODX_BASE_PATH . 'sitemap.xml';
+            $file = EVO_BASE_PATH . 'sitemap.xml';
             $site = evo()->getConfig('site_name', __('sSeo::global.pages_in_sitemap')) . ' Sitemap';
             $pages = 0;
             $time = 0;
@@ -308,8 +308,8 @@ class sSeoController
         if (evo()->getConfig('check_sMultisite', false)) {
             $sMultisite = sMultisite::all();
             if ($sMultisite->isEmpty()) {
-                if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                    $file = MODX_BASE_PATH . 'robots.txt';
+                if (file_exists(EVO_BASE_PATH . 'robots.txt')) {
+                    $file = EVO_BASE_PATH . 'robots.txt';
                 } else {
                     $file = '';
                 }
@@ -319,8 +319,8 @@ class sSeoController
                 foreach ($sMultisite as $site) {
                     if (file_exists(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt')) {
                         $file = EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt';
-                    } elseif (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                        $file = MODX_BASE_PATH . 'robots.txt';
+                    } elseif (file_exists(EVO_BASE_PATH . 'robots.txt')) {
+                        $file = EVO_BASE_PATH . 'robots.txt';
                     } else {
                         $file = '';
                     }
@@ -330,8 +330,8 @@ class sSeoController
                 }
             }
         } else {
-            if (file_exists(MODX_BASE_PATH . 'robots.txt')) {
-                $file = MODX_BASE_PATH . 'robots.txt';
+            if (file_exists(EVO_BASE_PATH . 'robots.txt')) {
+                $file = EVO_BASE_PATH . 'robots.txt';
             } else {
                 $file = '';
             }
@@ -366,7 +366,7 @@ class sSeoController
                     return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
                 }
 
-                file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
+                file_put_contents(EVO_BASE_PATH . 'robots.txt', $robots);
             } else {
                 foreach ($sites as $site) {
                     if (!is_dir(EVO_STORAGE_PATH . $site->key)) {
@@ -385,7 +385,7 @@ class sSeoController
                 return redirect()->back()->with('error', trans('sSeo::global.robots_text_empty'));
             }
 
-            file_put_contents(MODX_BASE_PATH . 'robots.txt', $robots);
+            file_put_contents(EVO_BASE_PATH . 'robots.txt', $robots);
         }
 
         return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
@@ -557,7 +557,7 @@ class sSeoController
             }
         }
 
-        $this->writeSitemap(MODX_BASE_PATH . 'sitemap.xml', array_values($urls));
+        $this->writeSitemap(EVO_BASE_PATH . 'sitemap.xml', array_values($urls));
     }
 
     /**
@@ -695,7 +695,7 @@ class sSeoController
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . str_replace(MODX_SITE_URL, '/', $publication->link);
+                    $loc = $siteUrl . str_replace(EVO_SITE_URL, '/', $publication->link);
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';

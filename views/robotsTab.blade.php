@@ -7,7 +7,7 @@
 @section('content')
     <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.urobots')}}" onsubmit="documentDirty=false;">
         @foreach ($robots as $key => $robot)
-            @if(!is_writable(trim($robot ?? '') ?: MODX_BASE_PATH))
+            @if(!is_writable(trim($robot ?? '') ?: EVO_BASE_PATH))
                 <div class="s-alert s-alert--danger">
                     <i data-lucide="alert-triangle" class="s-alert--icon-danger"></i>
                     <div>
@@ -27,7 +27,7 @@
                     </span>
                     <div x-ref="content" x-bind:style="open ? 'min-height:' + $refs.content.scrollHeight + 'px' : 'max-height: 0px'" class="s-meta-block-content">
                         <div class="p-6 space-y-6">
-                            <textarea name="{{$key}}" id="{{$key}}" onchange="documentDirty=true;">{!!trim($robot ?? '') ? file_get_contents($robot) : (file_exists(MODX_BASE_PATH . 'sample-robots.txt') ? file_get_contents(MODX_BASE_PATH . 'sample-robots.txt') : '')!!}</textarea>
+                            <textarea name="{{$key}}" id="{{$key}}" onchange="documentDirty=true;">{!!trim($robot ?? '') ? file_get_contents($robot) : (file_exists(EVO_BASE_PATH . 'sample-robots.txt') ? file_get_contents(EVO_BASE_PATH . 'sample-robots.txt') : '')!!}</textarea>
                         </div>
                     </div>
                 </div>
