@@ -428,12 +428,12 @@ class sSeo
         if ($this->document === null || !isset($this->document['lang']) || $this->document['lang'] !== $lang) {
             $domainKey = evo()->getConfig('site_key', 'default');
 
-            if (in_array(evo()->documentObject['type'], ['product'])) {
+            if (in_array(evo()->documentObject['type'] ?? '', ['product'])) {
                 $domainKey = 'default';
             }
 
-            $document = sSeoModel::where('resource_id', (int)evo()->documentObject['id'])
-                ->where('resource_type', evo()->documentObject['type'])
+            $document = sSeoModel::where('resource_id', intval(evo()->documentObject['id'] ?? 0))
+                ->where('resource_type', evo()->documentObject['type'] ?? '')
                 ->where('domain_key', $domainKey)
                 ->where('lang', $lang)
                 ->first()?->toArray();
@@ -446,12 +446,12 @@ class sSeo
 
             $this->document['lang'] = $lang;
 
-            if (empty($this->document['resource_type'])) {
-                $this->document['resource_type'] = evo()->documentObject['type'];
+            if (empty($this->document['resource_type'] ?? '')) {
+                $this->document['resource_type'] = evo()->documentObject['type'] ?? 'custom';
             }
 
             if (evo()->getConfig('check_sCommerce', false)) {
-                if ($this->document['type'] == 'document') {
+                if ($this->document['type'] ?? '' == 'document') {
                     $catalogRoot = (int)sCommerce::config('basic.catalog_root', 0);
                     if ($catalogRoot > 0) {
                         $catPages = array_merge([$catalogRoot], evo()->getChildIds($catalogRoot));

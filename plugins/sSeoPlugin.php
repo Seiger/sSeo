@@ -230,6 +230,18 @@ Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
         //}
     }
 });
+Event::listen('evolution.sArticlesAfterContentSave', function($params) {
+    $article = $params['article'] ?? null;
+    $content = $params['content'] ?? null;
+    $articleId = is_object($article) ? ($article->id ?? 0) : (int)$article;
+
+    if ($articleId > 0) {
+        $lang = $content?->lang ?? 'base';
+        $data = array_merge(['resource_id' => $articleId, 'resource_type' => 'article'], request()->input('sseo', []));
+        $data['domain_key'] = $data[$lang]['domain_key'] = 'default';
+        sSeo::updateSeoFields($data);
+    }
+});
 
 /**
  * Add Menu item
