@@ -27,6 +27,7 @@ this plugin provides the tools you need for a competitive edge in the digital la
   - [x] **[sCommerce](https://github.com/Seiger/sCommerce)** Products.
   - [x] **[sArticles](https://github.com/Seiger/sArticles)** Publications.
   - [x] **[sMultisite](https://github.com/Seiger/sMultisite)** robots.txt and sitemap.xml.
+  - [x] **[sApi](https://github.com/Seiger/sApi)** Exclude API routes.
 - [x] Custom SEO Title, Description and Keywords.
 - [x] SEO Meta Templates Title, Description and Keywords **(pro)**.
 - [x] Canonical URL Implementation.
