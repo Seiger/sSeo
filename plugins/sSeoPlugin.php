@@ -15,18 +15,20 @@ use Seiger\sSeo\Models\sSeoModel;
  */
 Event::listen('evolution.OnLoadSettings', function($params) {
     if (!IN_MANAGER_MODE) {
-        // Skip SEO redirects for sApi endpoints (e.g. /api/*, /rest/*).
-        $sApiEnabled = (bool)evo()->getConfig('check_sApi', false) || (bool)config('cms.settings.check_sApi', false);
-        if ($sApiEnabled) {
-            $apiBasePath = trim((string)config('seiger.settings.sApi.base_path', ''), '/');
-            if ($apiBasePath !== '') {
-                $requestPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-                if ($requestPath !== '' && EVO_BASE_URL !== '' && EVO_BASE_URL !== '/' && str_starts_with($requestPath, EVO_BASE_URL)) {
-                    $requestPath = trim($requestPath, EVO_BASE_URL);
-                }
-                $requestPath = trim($requestPath, '/');
+        // Skip SEO redirects for API endpoints (we don't want 301/302 canonicalization for APIs).
+        // - `SAPI_BASE_PATH` controls sApi base prefix (e.g. "rest")
+        // - also exclude the conventional "/api/*" prefix used by other integrations
+        $apiBasePath = trim((string)env('SAPI_BASE_PATH', 'api'), '/');
+        $skipPrefixes = array_values(array_unique(array_filter([$apiBasePath, 'api'])));
+        if ($skipPrefixes !== []) {
+            $requestPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+            if ($requestPath !== '' && EVO_BASE_URL !== '' && EVO_BASE_URL !== '/' && str_starts_with($requestPath, EVO_BASE_URL)) {
+                $requestPath = trim($requestPath, EVO_BASE_URL);
+            }
+            $requestPath = trim($requestPath, '/');
 
-                if ($requestPath === $apiBasePath || str_starts_with($requestPath, $apiBasePath . '/')) {
+            foreach ($skipPrefixes as $prefix) {
+                if ($requestPath === $prefix || str_starts_with($requestPath, $prefix . '/')) {
                     return;
                 }
             }
