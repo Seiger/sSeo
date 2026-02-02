@@ -11,6 +11,7 @@ use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Controllers\sSeoController;
 use Seiger\sSeo\Models\sSeoModel;
+use Seiger\sSeo\Support\AnalyticsIdParser;
 use Seiger\sSeo\Support\FastTagParser;
 use Seiger\sSeo\Support\MetaBuilder;
 use View;
@@ -238,7 +239,7 @@ class sSeo
 
         // Current output snapshot
         $out = evo()->documentOutput ?? '';
-        if ($out === '' || stripos($out, '<head') === false || stripos($out, '</head>') === false) {
+        if ($out === '') {
             return;
         }
 
@@ -256,26 +257,168 @@ class sSeo
         }
 
         // Build once per request
-        static $built = false, $headHtml = '';
+        static $built = false, $headInject = '', $bodyInject = '';
         if (!$built) {
-            $meta['title'] = $this->checkMetaTitle();
-            $meta['description'] = $this->checkMetaDescription();
-            $meta['keywords'] = $this->checkMetaKeywords();
-            $meta['robots'] = $this->checkRobots();
-            $meta['canonical'] = $this->checkCanonical();
+            // Analytics snippets (deduplicated against existing output)
+            $headParts = [];
+            $ga4Head = $this->buildGa4HeadSnippets($out);
+            if ($ga4Head !== '') {
+                $headParts[] = $ga4Head;
+            }
+            $gtmHead = $this->buildGtmHeadSnippets($out);
+            if ($gtmHead !== '') {
+                $headParts[] = $gtmHead;
+            }
 
-            $headHtml = MetaBuilder::buildHeadHtml($meta, $out);
+            // Meta tags (existing behavior)
+            $metaHtml = '';
+            if (stripos($out, '<head') !== false && stripos($out, '</head>') !== false) {
+                $meta = [];
+                $meta['title'] = $this->checkMetaTitle();
+                $meta['description'] = $this->checkMetaDescription();
+                $meta['keywords'] = $this->checkMetaKeywords();
+                $meta['robots'] = $this->checkRobots();
+                $meta['canonical'] = $this->checkCanonical();
+                $metaHtml = MetaBuilder::buildHeadHtml($meta, $out);
+            }
+            if ($metaHtml !== '') {
+                $headParts[] = "<!-- Meta Tags -->\n" . $metaHtml;
+            }
+
+            $headInject = trim(implode("\n", array_filter($headParts, static fn($v) => trim((string)$v) !== '')));
+            $bodyInject = $this->buildGtmBodyNoscript($out);
             $built = true;
         }
-        if ($headHtml === '') {
+        if ($headInject === '' && $bodyInject === '') {
             return;
         }
 
-        // Inject before the last </head>
-        $pos = strripos($out, '</head>');
-        if ($pos !== false) {
-            evo()->documentOutput = substr($out, 0, $pos) . "<!-- Meta Tags -->\n" . $headHtml . substr($out, $pos);
+        $newOut = $out;
+
+        // Head injection: only when we have </head> (quiet otherwise)
+        if ($headInject !== '' && stripos($newOut, '<head') !== false && stripos($newOut, '</head>') !== false) {
+            $pos = strripos($newOut, '</head>');
+            if ($pos !== false) {
+                $newOut = substr($newOut, 0, $pos) . $headInject . "\n" . substr($newOut, $pos);
+            }
         }
+
+        // Body injection: insert GTM noscript right after the first <body ...>
+        if ($bodyInject !== '' && preg_match('/<body\\b[^>]*>/i', $newOut, $m, PREG_OFFSET_CAPTURE)) {
+            $tag = $m[0][0] ?? '';
+            $start = $m[0][1] ?? null;
+            if ($tag !== '' && is_int($start)) {
+                $pos = $start + strlen($tag);
+                $newOut = substr($newOut, 0, $pos) . "\n" . $bodyInject . substr($newOut, $pos);
+            }
+        }
+
+        if ($newOut !== $out) {
+            evo()->documentOutput = $newOut;
+        }
+    }
+
+    protected function buildGtmHeadSnippets(string $html): string
+    {
+        $ids = AnalyticsIdParser::parseGtmIds((string)$this->setting('gtm_container_id', ''));
+        if (empty($ids)) {
+            return '';
+        }
+
+        $snippets = [];
+        foreach ($ids as $id) {
+            $re = '/<script\\b[^>]*\\bsrc\\s*=\\s*["\']https?:\\/\\/www\\.googletagmanager\\.com\\/gtm\\.js\\?id='
+                . preg_quote($id, '/')
+                . '(?:[^"\']*)["\'][^>]*>/i';
+            if (preg_match($re, $html)) {
+                continue;
+            }
+            $snippets[] = "<script>(function(w,d,s,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id={$id}'+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer');</script>";
+        }
+
+        return implode("\n", $snippets);
+    }
+
+    protected function buildGtmBodyNoscript(string $html): string
+    {
+        $ids = AnalyticsIdParser::parseGtmIds((string)$this->setting('gtm_container_id', ''));
+        if (empty($ids)) {
+            return '';
+        }
+
+        $snippets = [];
+        foreach ($ids as $id) {
+            $re = '/<iframe\\b[^>]*\\bsrc\\s*=\\s*["\']https?:\\/\\/www\\.googletagmanager\\.com\\/ns\\.html\\?id='
+                . preg_quote($id, '/')
+                . '(?:[^"\']*)["\'][^>]*>/i';
+            if (preg_match($re, $html)) {
+                continue;
+            }
+            $snippets[] = '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+        }
+
+        return implode("\n", $snippets);
+    }
+
+    protected function buildGa4HeadSnippets(string $html): string
+    {
+        $ids = AnalyticsIdParser::parseGa4Ids((string)$this->setting('ga4_measurement_id', ''));
+        if (empty($ids)) {
+            return '';
+        }
+
+        $scripts = [];
+        $configs = [];
+        foreach ($ids as $id) {
+            $reSrc = '/<script\\b[^>]*\\bsrc\\s*=\\s*["\']https?:\\/\\/www\\.googletagmanager\\.com\\/gtag\\/js\\?id='
+                . preg_quote($id, '/')
+                . '(?:[^"\']*)["\'][^>]*>/i';
+            if (!preg_match($reSrc, $html)) {
+                $scripts[] = '<script async src="https://www.googletagmanager.com/gtag/js?id=' . $id . '"></script>';
+            }
+
+            $re = '/gtag\\(\\s*[\'"]config[\'"]\\s*,\\s*[\'"]' . preg_quote($id, '/') . '[\'"]\\s*\\)/i';
+            if (!preg_match($re, $html)) {
+                $configs[] = "gtag('config', '{$id}');";
+            }
+        }
+
+        if (empty($scripts) && empty($configs)) {
+            return '';
+        }
+
+        $out = [];
+        if (!empty($scripts)) {
+            $out[] = implode("\n", $scripts);
+        }
+        if (!empty($configs)) {
+            $block = [];
+            $block[] = 'window.dataLayer = window.dataLayer || [];';
+            $block[] = 'function gtag(){dataLayer.push(arguments);}';
+            $block[] = "gtag('js', new Date());";
+            $block = array_merge($block, $configs);
+            $out[] = "<script>\n" . implode("\n", $block) . "\n</script>";
+        }
+
+        return implode("\n", $out);
+    }
+
+    protected function setting(string $key, mixed $default = null): mixed
+    {
+        if (!evo()->getConfig('check_sMultisite', false)) {
+            return config('seiger.settings.sSeo.' . $key, $default);
+        }
+
+        // In multisite mode, analytics IDs are site-specific (no global fallback).
+        if (in_array($key, ['gtm_container_id', 'ga4_measurement_id'], true)) {
+            $siteKey = (string)evo()->getConfig('site_key', 'default');
+            if ($siteKey === '') {
+                return $default;
+            }
+            return config('seiger.settings.sSeo.' . $siteKey . '_' . $key, $default);
+        }
+
+        return config('seiger.settings.sSeo.' . $key, $default);
     }
 
     /**

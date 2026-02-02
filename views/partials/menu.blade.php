@@ -26,6 +26,10 @@
             @svg('tabler-brand-tabler', 'w-6 h-6')
             <span x-show="open">@lang('sSeo::global.robots')</span>
         </a>
+        <a href="{{sSeo::route('sSeo.analytics')}}" @class(['s-nav-menu-item', 's-nav-menu-item--active' => 'sSeo.analytics' == Route::currentRouteName()])>
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            <span x-show="open">@lang('sSeo::global.analytics')</span>
+        </a>
         {{--<a href="#" class="s-nav-menu-item"><i data-lucide="network" class="w-5 h-5"></i><span x-show="open">Sitemap</span></a>
         <a href="#" class="s-nav-menu-item"><i data-lucide="bar-chart-3" class="w-5 h-5"></i><span x-show="open">Insights</span></a>--}}
         <a href="{{sSeo::route('sSeo.configure')}}" @class(['s-nav-menu-item', 's-nav-menu-item--active' => 'sSeo.configure' == Route::currentRouteName()])>

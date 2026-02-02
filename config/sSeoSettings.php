@@ -7,4 +7,6 @@
     ],
     "redirects_enabled" => 1,
     "generate_sitemap" => 1,
+    "gtm_container_id" => "",
+    "ga4_measurement_id" => "",
 ];

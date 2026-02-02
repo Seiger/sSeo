@@ -17,6 +17,7 @@ use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
+use Seiger\sSeo\Support\AnalyticsIdParser;
 use Seiger\sSeo\Support\Sitemaper;
 use View;
 
@@ -27,6 +28,8 @@ use View;
  */
 class sSeoController
 {
+    protected const SETTINGS_FILE = 'custom/config/seiger/settings/sSeo.php';
+
     /**
      * Returns the view for the dashboard page.
      *
@@ -406,37 +409,279 @@ class sSeoController
     }
 
     /**
+     * Returns the view for the analytics page.
+     */
+    public function analytics()
+    {
+        $data = [
+            'tabIcon' => '<i data-lucide="bar-chart-3" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.analytics'),
+        ];
+
+        $sites = [];
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sites = sMultisite::all();
+        }
+        $data['sites'] = $sites;
+
+        $gtmBySite = [];
+        $ga4BySite = [];
+        $gtmActiveBySite = [];
+        $ga4ActiveBySite = [];
+
+        if (evo()->getConfig('check_sMultisite', false) && !$sites->isEmpty()) {
+            foreach ($sites as $site) {
+                $siteKey = (string)$site->key;
+                if ($siteKey === '') continue;
+
+                $gtmRaw = (string)config('seiger.settings.sSeo.' . $siteKey . '_gtm_container_id', '');
+                $ga4Raw = (string)config('seiger.settings.sSeo.' . $siteKey . '_ga4_measurement_id', '');
+
+                $gtmBySite[$siteKey] = $gtmRaw;
+                $ga4BySite[$siteKey] = $ga4Raw;
+                $gtmActiveBySite[$siteKey] = AnalyticsIdParser::parseGtmIds($gtmRaw);
+                $ga4ActiveBySite[$siteKey] = AnalyticsIdParser::parseGa4Ids($ga4Raw);
+            }
+        } else {
+            $gtmRaw = (string)config('seiger.settings.sSeo.gtm_container_id', '');
+            $ga4Raw = (string)config('seiger.settings.sSeo.ga4_measurement_id', '');
+            $gtmBySite['single'] = $gtmRaw;
+            $ga4BySite['single'] = $ga4Raw;
+            $gtmActiveBySite['single'] = AnalyticsIdParser::parseGtmIds($gtmRaw);
+            $ga4ActiveBySite['single'] = AnalyticsIdParser::parseGa4Ids($ga4Raw);
+        }
+
+        $data['gtmBySite'] = $gtmBySite;
+        $data['ga4BySite'] = $ga4BySite;
+        $data['gtmActiveBySite'] = $gtmActiveBySite;
+        $data['ga4ActiveBySite'] = $ga4ActiveBySite;
+
+        return $this->view('analyticsTab', $data);
+    }
+
+    /**
      * Updates the configure file with the new values.
      *
      * @return \Illuminate\Http\RedirectResponse The redirect response to the previous page.
      */
     public function updateConfigure()
     {
-        $string = '<?php return [' . "\n";
+        $noindexGet = array_map('trim', explode(',', (string)request()->get('noindex_get', '')));
 
-        $string .= "\t" . '"meta_tags_mode" => "' . request()->get('meta_tags_mode', 'replace') . '",' . "\n";
-        $string .= "\t" . '"manage_www" => ' . request()->integer('manage_www') . ',' . "\n";
-        $string .= "\t" . '"paginates_get" => "' . request()->get('paginates_get', 'page') . '",' . "\n";
+        $updates = [
+            'meta_tags_mode' => (string)request()->get('meta_tags_mode', 'replace'),
+            'manage_www' => (int)request()->integer('manage_www'),
+            'paginates_get' => (string)request()->get('paginates_get', 'page'),
+            'noindex_get' => $noindexGet,
+            'redirects_enabled' => (int)request()->integer('redirects_enabled'),
+            'generate_sitemap' => (int)request()->integer('generate_sitemap'),
+        ];
 
-        $noindex_get = explode(',', request()->get('noindex_get', ''));
-        $string .= "\t" . '"noindex_get" => [' . "\n";
-        foreach ($noindex_get as $item) {
-            $string .= "\t\t" . '"' . trim($item) . '",' . "\n";
+        return $this->saveSettings($updates);
+    }
+
+    /**
+     * Update analytics settings (GTM + GA4) with strict validation.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateAnalytics()
+    {
+        $updates = [];
+        $invalidTokens = [];
+
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sites = sMultisite::all();
+            if ($sites->isEmpty()) {
+                $rawGtm = (string)request()->get('gtm_container_id', '');
+                $rawGa4 = (string)request()->get('ga4_measurement_id', '');
+
+                $gtm = AnalyticsIdParser::parseGtmStrict($rawGtm);
+                $ga4 = AnalyticsIdParser::parseGa4Strict($rawGa4);
+
+                $invalidTokens = array_merge($invalidTokens, $gtm['invalid'], $ga4['invalid']);
+                $updates['gtm_container_id'] = implode(', ', $gtm['valid']);
+                $updates['ga4_measurement_id'] = implode(', ', $ga4['valid']);
+            } else {
+                foreach ($sites as $site) {
+                    $siteKey = (string)$site->key;
+                    if ($siteKey === '') continue;
+
+                    $rawGtm = (string)request()->get($siteKey . '_gtm_container_id', '');
+                    $rawGa4 = (string)request()->get($siteKey . '_ga4_measurement_id', '');
+
+                    $gtm = AnalyticsIdParser::parseGtmStrict($rawGtm);
+                    $ga4 = AnalyticsIdParser::parseGa4Strict($rawGa4);
+
+                    foreach ($gtm['invalid'] as $tok) {
+                        $invalidTokens[] = $siteKey . ': ' . $tok;
+                    }
+                    foreach ($ga4['invalid'] as $tok) {
+                        $invalidTokens[] = $siteKey . ': ' . $tok;
+                    }
+
+                    $updates[$siteKey . '_gtm_container_id'] = implode(', ', $gtm['valid']);
+                    $updates[$siteKey . '_ga4_measurement_id'] = implode(', ', $ga4['valid']);
+                }
+            }
+        } else {
+            $rawGtm = (string)request()->get('gtm_container_id', '');
+            $rawGa4 = (string)request()->get('ga4_measurement_id', '');
+
+            $gtm = AnalyticsIdParser::parseGtmStrict($rawGtm);
+            $ga4 = AnalyticsIdParser::parseGa4Strict($rawGa4);
+
+            $invalidTokens = array_merge($invalidTokens, $gtm['invalid'], $ga4['invalid']);
+            $updates['gtm_container_id'] = implode(', ', $gtm['valid']);
+            $updates['ga4_measurement_id'] = implode(', ', $ga4['valid']);
         }
-        $string .= "\t" . '],' . "\n";
 
-        $string .= "\t" . '"redirects_enabled" => ' . request()->integer('redirects_enabled') . ',' . "\n";
-        $string .= "\t" . '"generate_sitemap" => ' . request()->integer('generate_sitemap') . ',' . "\n";
+        $invalidTokens = array_values(array_unique(array_filter(array_map('trim', $invalidTokens))));
+        if (!empty($invalidTokens)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', __('sSeo::global.analytics_invalid_ids', ['ids' => implode(', ', $invalidTokens)]));
+        }
 
-        $string .= '];';
+        return $this->saveSettings($updates);
+    }
 
-        // Save config
-        $handle = fopen(EVO_CORE_PATH . 'custom/config/seiger/settings/sSeo.php', "w");
-        fwrite($handle, $string);
-        fclose($handle);
+    /**
+     * Persist sSeo settings into the config file (keeps existing keys).
+     *
+     * @param array<string, mixed> $updates
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function saveSettings(array $updates)
+    {
+        $path = EVO_CORE_PATH . self::SETTINGS_FILE;
+
+        if (!$this->ensureSettingsDir($path) || !$this->canWriteSettingsFile($path)) {
+            return redirect()->back()->with('error', __('sSeo::global.not_writable', ['file' => $path]));
+        }
+
+        $current = $this->loadSettingsArray($path);
+
+        $settings = array_merge($current, $updates);
+
+        $preferred = [
+            'meta_tags_mode',
+            'manage_www',
+            'paginates_get',
+            'noindex_get',
+            'redirects_enabled',
+            'generate_sitemap',
+            'gtm_container_id',
+            'ga4_measurement_id',
+        ];
+
+        $ordered = [];
+        foreach ($preferred as $key) {
+            if (array_key_exists($key, $settings)) {
+                $ordered[$key] = $settings[$key];
+                unset($settings[$key]);
+            }
+        }
+        if (!empty($settings)) {
+            ksort($settings);
+            foreach ($settings as $k => $v) {
+                $ordered[$k] = $v;
+            }
+        }
+
+        file_put_contents($path, $this->dumpSettingsPhp($ordered));
 
         evo()->clearCache('full');
-        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+        return redirect()->back()->with('success', __('sSeo::global.success_updated'));
+    }
+
+    protected function ensureSettingsDir(string $path): bool
+    {
+        $dir = dirname($path);
+        if (is_dir($dir)) {
+            return true;
+        }
+        return @mkdir($dir, octdec(evo()->getConfig('new_folder_permissions', '0777')), true) || is_dir($dir);
+    }
+
+    protected function canWriteSettingsFile(string $path): bool
+    {
+        if (is_file($path)) {
+            return is_writable($path);
+        }
+
+        return is_writable(dirname($path));
+    }
+
+    protected function loadSettingsArray(string $path): array
+    {
+        if (is_file($path)) {
+            $arr = require $path;
+            return is_array($arr) ? $arr : [];
+        }
+        return [];
+    }
+
+    /**
+     * @param array<string, mixed> $settings
+     */
+    protected function dumpSettingsPhp(array $settings): string
+    {
+        $out = "<?php return [\n";
+        foreach ($settings as $key => $value) {
+            $out .= "\t" . $this->dumpString((string)$key) . ' => ' . $this->dumpValue($value, 1) . ",\n";
+        }
+        $out .= "];\n";
+        return $out;
+    }
+
+    protected function dumpValue(mixed $value, int $indent): string
+    {
+        if (is_array($value)) {
+            return $this->dumpArray($value, $indent);
+        }
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+        if (is_int($value) || is_float($value)) {
+            return (string)$value;
+        }
+        if ($value === null) {
+            return 'null';
+        }
+        return $this->dumpString((string)$value);
+    }
+
+    protected function dumpArray(array $value, int $indent): string
+    {
+        $pad = str_repeat("\t", $indent);
+        $padInner = str_repeat("\t", $indent + 1);
+
+        if ($value === []) {
+            return '[]';
+        }
+
+        $isAssoc = array_keys($value) !== range(0, count($value) - 1);
+        $out = "[\n";
+        foreach ($value as $k => $v) {
+            $out .= $padInner;
+            if ($isAssoc) {
+                $out .= $this->dumpString((string)$k) . ' => ';
+            }
+            $out .= $this->dumpValue($v, $indent + 1) . ",\n";
+        }
+        $out .= $pad . ']';
+        return $out;
+    }
+
+    protected function dumpString(string $value): string
+    {
+        $value = str_replace(
+            ["\\", "\"", "\r", "\n", "\t"],
+            ["\\\\", "\\\"", "\\r", "\\n", "\\t"],
+            $value
+        );
+        return '"' . $value . '"';
     }
 
     /**
