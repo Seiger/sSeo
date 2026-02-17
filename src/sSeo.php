@@ -488,6 +488,24 @@ class sSeo
                                 case 'int':
                                     $item->{$field['name']} = (int)$request[$field['name']];
                                     break;
+                                case 'bool':
+                                    $item->{$field['name']} = (int)(bool)$request[$field['name']];
+                                    break;
+                                case 'float':
+                                    $item->{$field['name']} = (float)$request[$field['name']];
+                                    break;
+                                case 'json':
+                                    // Store arrays as-is; Eloquent casts will handle JSON encoding.
+                                    $val = $request[$field['name']];
+                                    if (!is_array($val)) {
+                                        // Allow string JSON or empty input
+                                        $val = is_string($val) && trim($val) !== '' ? json_decode($val, true) : [];
+                                        $val = is_array($val) ? $val : [];
+                                    }
+                                    // Optional: remove empty values produced by hidden inputs
+                                    $val = array_values(array_filter($val, fn($v) => trim((string)$v) !== ''));
+                                    $item->{$field['name']} = $val;
+                                    break;
                                 default:
                                     $item->{$field['name']} = (string)$request[$field['name']];
                                     break;
