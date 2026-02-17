@@ -23,7 +23,7 @@
                 @if($key === '') @continue @endif
                 <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('analytics_{{$key}}')">
                     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                        <span @click="togglePin" class="s-meta-block-btn">
+                        <span @click="toggle()" class="s-meta-block-btn">
                             <div class="flex items-center gap-2">
                                 <svg data-lucide="bar-chart-3" class="w-5 h-5 text-sky-500"></svg>
                                 <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">{{($site->site_name ?? $key)}} ({{$key}})</span>
@@ -65,7 +65,7 @@
         @else
             <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('analytics_single')">
                 <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                    <span @click="togglePin" class="s-meta-block-btn">
+                    <span @click="toggle()" class="s-meta-block-btn">
                         <div class="flex items-center gap-2">
                             <svg data-lucide="bar-chart-3" class="w-5 h-5 text-sky-500"></svg>
                             <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.analytics')</span>

@@ -17,7 +17,7 @@
         @endif
         <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('indexing')">
             <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                <span @click="togglePin" class="s-meta-block-btn">
+                <span @click="toggle()" class="s-meta-block-btn">
                     <div class="flex items-center gap-2">
                         <svg data-lucide="compass" class="w-5 h-5 text-sky-500"></svg>
                         <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.indexing')</span>
@@ -50,7 +50,7 @@
         </div>
         <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('functionality')">
             <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                <span @click="togglePin" class="s-meta-block-btn">
+                <span @click="toggle()" class="s-meta-block-btn">
                     <div class="flex items-center gap-2">
                         <svg data-lucide="zap" class="w-5 h-5 text-sky-500"></svg>
                         <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.functionality')</span>
@@ -107,7 +107,7 @@
         </div>
         <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('config_server')">
             <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                <span @click="togglePin" class="s-meta-block-btn">
+                <span @click="toggle()" class="s-meta-block-btn">
                     <div class="flex items-center gap-2">
                         <svg data-lucide="server" class="w-5 h-5 text-sky-500"></svg>
                         <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.server')</span>

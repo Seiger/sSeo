@@ -9,7 +9,7 @@
         <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.utemplates')}}" onsubmit="documentDirty=false;">
             <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('document_base')">
                 <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                    <span @click="togglePin" class="s-meta-block-btn">
+                    <span @click="toggle()" class="s-meta-block-btn">
                         <div class="flex items-center gap-2">
                             <svg data-lucide="file-text" class="w-5 h-5 text-sky-500"></svg>
                             <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.type_a_document')</span>
@@ -81,7 +81,7 @@
             @if (evo()->getConfig('check_sCommerce', false))
                 <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('prodcat')">
                     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                        <span @click="togglePin" class="s-meta-block-btn">
+                        <span @click="toggle()" class="s-meta-block-btn">
                             <div class="flex items-center gap-2">
                                 <svg data-lucide="store" class="w-5 h-5 text-sky-500"></svg>
                                 <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.type_a_prodcat')</span>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('product')">
                     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
-                        <span @click="togglePin" class="s-meta-block-btn">
+                        <span @click="toggle()" class="s-meta-block-btn">
                             <div class="flex items-center gap-2">
                                 <svg data-lucide="store" class="w-5 h-5 text-sky-500"></svg>
                                 <span class="font-semibold text-base text-slate-700 darkness:text-slate-200">@lang('sSeo::global.type_a_product')</span>
