@@ -1,4 +1,4 @@
-<aside :class="open ? 'w-60' : 'w-16'" class="s-nav" @mouseenter="handleEnter" @mouseleave="handleLeave">
+<aside :class="open ? 'w-60' : 'w-16'" class="s-nav">
     <div class="s-nav-header">
         <a href="{{sSeo::route('sSeo.dashboard')}}" class="flex items-center gap-1 text-xl font-bold" x-show="open" x-cloak>sSeo
             @if(evo()->getConfig('sseo_pro', false))<span class="s-pro-badge">Pro</span>@endif

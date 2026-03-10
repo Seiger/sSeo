@@ -212,7 +212,7 @@ class sSeo
         if (count($request_get)) {
             $noindex_get = config('seiger.settings.sSeo.noindex_get', []);
             foreach ($request_get as $key => $item) {
-                if (in_array($key, $noindex_get) || strpos($item, ',') !== false) {
+                if (in_array($key, $noindex_get) || (is_scalar($item) && strpos((string)$item, ',') !== false)) {
                     $robots = ['show' => true, 'value' => 'noindex,nofollow'];
                 }
             }
