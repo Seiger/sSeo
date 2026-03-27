@@ -286,7 +286,7 @@ class sSeo
             }
 
             $headInject = trim(implode("\n", array_filter($headParts, static fn($v) => trim((string)$v) !== '')));
-            $bodyInject = $this->buildGtmBodyNoscript($out);
+            $bodyInject = $this->buildGtmBodySnippets($out);
             $built = true;
         }
         if ($headInject === '' && $bodyInject === '') {
@@ -318,6 +318,16 @@ class sSeo
         }
     }
 
+    /**
+     * Build GTM snippets for insertion before the closing </head> tag.
+     *
+     * The generated script intentionally matches the current frontend layout
+     * implementation and is deduplicated against already rendered HTML.
+     *
+     * @since 1.0.11
+     * @param string $html
+     * @return string
+     */
     protected function buildGtmHeadSnippets(string $html): string
     {
         $ids = AnalyticsIdParser::parseGtmIds((string)$this->setting('gtm_container_id', ''));
@@ -327,19 +337,29 @@ class sSeo
 
         $snippets = [];
         foreach ($ids as $id) {
-            $re = '/<script\\b[^>]*\\bsrc\\s*=\\s*["\']https?:\\/\\/www\\.googletagmanager\\.com\\/gtm\\.js\\?id='
+            $re = '/<script\\b[^>]*>.*?googletagmanager\\.com\\/gtm\\.js\\?id=.*?'
                 . preg_quote($id, '/')
-                . '(?:[^"\']*)["\'][^>]*>/i';
+                . '.*?<\\/script>/is';
             if (preg_match($re, $html)) {
                 continue;
             }
-            $snippets[] = "<script>(function(w,d,s,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id={$id}'+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer');</script>";
+            $snippets[] = "<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','{$id}');</script>";
         }
 
         return implode("\n", $snippets);
     }
 
-    protected function buildGtmBodyNoscript(string $html): string
+    /**
+     * Build GTM snippets for insertion right after the opening <body> tag.
+     *
+     * The generated script intentionally matches the current frontend layout
+     * implementation and is deduplicated against already rendered HTML.
+     *
+     * @since 1.0.11
+     * @param string $html
+     * @return string
+     */
+    protected function buildGtmBodySnippets(string $html): string
     {
         $ids = AnalyticsIdParser::parseGtmIds((string)$this->setting('gtm_container_id', ''));
         if (empty($ids)) {
@@ -348,13 +368,13 @@ class sSeo
 
         $snippets = [];
         foreach ($ids as $id) {
-            $re = '/<iframe\\b[^>]*\\bsrc\\s*=\\s*["\']https?:\\/\\/www\\.googletagmanager\\.com\\/ns\\.html\\?id='
+            $re = '/<script\\b[^>]*>.*?googletagmanager\\.com\\/gtm\\.js\\?id='
                 . preg_quote($id, '/')
-                . '(?:[^"\']*)["\'][^>]*>/i';
+                . '.*?<\\/script>/is';
             if (preg_match($re, $html)) {
                 continue;
             }
-            $snippets[] = '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=' . $id . '" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>';
+            $snippets[] = "<script>(function(w,d,s,l){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id={$id}'+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer');</script>";
         }
 
         return implode("\n", $snippets);
