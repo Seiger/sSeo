@@ -15,6 +15,13 @@ use Seiger\sSeo\Models\sSeoModel;
  */
 Event::listen('evolution.OnLoadSettings', function($params) {
     if (!IN_MANAGER_MODE) {
+        if (
+            (defined('EVO_API_MODE') && EVO_API_MODE)
+            || (defined('MODX_API_MODE') && MODX_API_MODE)
+        ) {
+            return;
+        }
+
         // Skip SEO redirects for API endpoints (we don't want 301/302 canonicalization for APIs).
         // - `SAPI_BASE_PATH` controls sApi base prefix (e.g. "rest")
         // - also exclude the conventional "/api/*" prefix used by other integrations
