@@ -43,7 +43,16 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 
         $redirect = false;
         // Check protocol
-        $url = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? $_SERVER['REQUEST_SCHEME'];
+        $requestProtocol = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? $_SERVER['REQUEST_SCHEME'] ?? '';
+        $requestProtocol = trim(explode(',', (string)$requestProtocol)[0] ?? '');
+        if ($requestProtocol === '') {
+            $requestProtocol = (
+                (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+                (string)($_SERVER['SERVER_PORT'] ?? '') === '443'
+            ) ? 'https' : 'http';
+        }
+
+        $url = $requestProtocol;
         if ($url != evo()->getConfig('server_protocol')) {
             $redirect = true;
             $url = evo()->getConfig('server_protocol', 'http');
