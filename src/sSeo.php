@@ -434,13 +434,19 @@ class sSeo
     protected function buildHreflangMap(): array
     {
         $alternates = [];
-        $defaultUrl = evo()->getConfig('s_lang_default_show', 0) == 1
-            ? EVO_SITE_URL . sLang::langDefault() . '/'
-            : EVO_SITE_URL;
+        $langSwitcher = sLang::langSwitcher();
+        $defaultLang = strtolower((string)sLang::langDefault());
+        $defaultUrl = trim((string)($langSwitcher[$defaultLang]['link'] ?? ''));
+
+        if ($defaultUrl === '') {
+            $defaultUrl = evo()->getConfig('s_lang_default_show', 0) == 1
+                ? EVO_SITE_URL . $defaultLang . '/'
+                : EVO_SITE_URL;
+        }
 
         $alternates['x-default'] = $defaultUrl;
 
-        foreach (sLang::langSwitcher() as $lang => $item) {
+        foreach ($langSwitcher as $lang => $item) {
             $url = trim((string)($item['link'] ?? ''));
             if ($url === '') {
                 continue;
