@@ -279,6 +279,9 @@ class sSeo
                 $meta['keywords'] = $this->checkMetaKeywords();
                 $meta['robots'] = $this->checkRobots();
                 $meta['canonical'] = $this->checkCanonical();
+                if (evo()->getConfig('sseo_pro', false) == true && evo()->getConfig('check_sLang', false)) {
+                    $meta['hreflang'] = $this->buildHreflangMap();
+                }
                 $metaHtml = MetaBuilder::buildHeadHtml($meta, $out);
             }
             if ($metaHtml !== '') {
@@ -421,6 +424,32 @@ class sSeo
         }
 
         return implode("\n", $out);
+    }
+
+    /**
+     * Build hreflang URLs from sLang frontend languages for SEO head injection.
+     *
+     * @return array<string, string>
+     */
+    protected function buildHreflangMap(): array
+    {
+        $alternates = [];
+        $defaultUrl = evo()->getConfig('s_lang_default_show', 0) == 1
+            ? EVO_SITE_URL . sLang::langDefault() . '/'
+            : EVO_SITE_URL;
+
+        $alternates['x-default'] = $defaultUrl;
+
+        foreach (sLang::langSwitcher() as $lang => $item) {
+            $url = trim((string)($item['link'] ?? ''));
+            if ($url === '') {
+                continue;
+            }
+
+            $alternates[strtolower((string)$lang)] = $url;
+        }
+
+        return $alternates;
     }
 
     protected function setting(string $key, mixed $default = null): mixed

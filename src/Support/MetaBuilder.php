@@ -100,7 +100,7 @@ class MetaBuilder
         }*/
 
         // hreflang (if provided)
-        /*if (!empty($meta['hreflang']) && \is_array($meta['hreflang'])) {
+        if (!empty($meta['hreflang']) && \is_array($meta['hreflang'])) {
             foreach ($meta['hreflang'] as $lang => $url) {
                 $re = '/<link\b[^>]*rel=["\']alternate["\'][^>]*hreflang=["\']'
                     . \preg_quote((string)$lang, '/')
@@ -109,7 +109,7 @@ class MetaBuilder
                     $lines[] = '<link rel="alternate" hreflang="' . $esc($lang) . '" href="' . $esc($url) . '">';
                 }
             }
-        }*/
+        }
 
         return implode("\n", $lines);
     }
