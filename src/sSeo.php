@@ -668,7 +668,7 @@ class sSeo
 
             if (evo()->getConfig('check_sCommerce', false)) {
                 if ($this->document['type'] ?? '' == 'document') {
-                    $catalogRoot = (int)sCommerce::config('basic.catalog_root', 0);
+                    $catalogRoot = (int)sCommerce::config('basic.catalog_root' . $domainKey, sCommerce::config('basic.catalog_root', 0));
                     if ($catalogRoot > 0) {
                         $catPages = array_merge([$catalogRoot], evo()->getChildIds($catalogRoot));
                         if (in_array($this->document['id'], $catPages)) {
