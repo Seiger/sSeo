@@ -216,7 +216,7 @@
                                     @endforeach
                                 </div>
                                 <hr class="my-4 border-t darkness:border-slate-700">
-                                <div class="text-sm text-slate-500 italic placeholders">{{trim(__('sSeo::global.meta_placeholders', ['more' => ', [*sku*], [*rating*], [*price*]']))}}.</div>
+                                <div class="text-sm text-slate-500 italic placeholders">{{trim(__('sSeo::global.meta_placeholders', ['more' => $productPlaceholderMore ?? ', [*sku*], [*rating*], [*price*]']))}}.</div>
                             </div>
                         </div>
                     </div>

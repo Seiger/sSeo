@@ -676,6 +676,25 @@ class sSeo
                         }
                     }
                 }
+
+                if (
+                    evo()->getConfig('sseo_pro', false) == true && ($this->document['type'] ?? '') === 'product' && !empty($this->document['id'])) {
+                    $aliases = $this->setting('product_attribute_aliases', []);
+                    if (is_string($aliases)) {
+                        $aliases = array_map('trim', explode(',', $aliases));
+                    }
+                    $aliases = array_values(array_filter(array_map('strval', (array)$aliases), static fn(string $v): bool => trim($v) !== ''));
+
+                    if (!empty($aliases)) {
+                        $product = sProduct::query()->find((int)$this->document['id']);
+                        if ($product && method_exists($product, 'seoAttributePlaceholders')) {
+                            $this->document = array_merge(
+                                $this->document,
+                                $product->seoAttributePlaceholders($aliases)
+                            );
+                        }
+                    }
+                }
             }
 
             foreach ($this->document as $k => $v) {

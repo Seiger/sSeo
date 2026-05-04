@@ -20,6 +20,8 @@
     'general' => 'General',
     'generate_sitemap' => 'Automatic sitemap.xml generation',
     'generate_sitemap_help' => 'Enabling this option will automatically generate a sitemap.xml file for your site. Enable this option if you want your site to automatically add resources to the sitemap for search engines.',
+    'product_attribute_aliases' => 'Product attribute keys',
+    'product_attribute_aliases_help' => 'Pro + sCommerce only. Enter comma-separated product attribute keys to expose them in SEO templates as placeholders like [*skus*], [*manufacturer*].',
     'icon' => 'fa fas fa-chart-line',
     'ignore' => 'Ignore',
     'indexing' => 'Indexing',

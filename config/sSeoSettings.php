@@ -7,6 +7,7 @@
     ],
     "redirects_enabled" => 1,
     "generate_sitemap" => 1,
+    "product_attribute_aliases" => [],
     "gtm_container_id" => "",
     "ga4_measurement_id" => "",
 ];

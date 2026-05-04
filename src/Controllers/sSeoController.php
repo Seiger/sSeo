@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Seiger\sArticles\Models\sArticle;
+use Seiger\sCommerce\Models\sAttribute;
 use Seiger\sCommerce\Models\sProduct;
 use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
@@ -226,11 +227,34 @@ class sSeoController
         if(evo()->getConfig('sseo_pro', false)) {
             $langs = ['base'];
             $registereds = ['sseo_meta_title_document', 'sseo_meta_description_document', 'sseo_meta_keywords_document'];
+            $productPlaceholderMore = ', [*sku*], [*rating*], [*price*]';
 
             if (evo()->getConfig('check_sCommerce', false)) {
                 $regCommPCat = ['sseo_meta_title_prodcat', 'sseo_meta_description_prodcat', 'sseo_meta_keywords_prodcat'];
                 $regCommProd = ['sseo_meta_title_product', 'sseo_meta_description_product', 'sseo_meta_keywords_product'];
                 $registereds = array_merge($registereds, $regCommPCat, $regCommProd);
+
+                $configuredAliases = config('seiger.settings.sSeo.product_attribute_aliases', []);
+                if (is_string($configuredAliases)) {
+                    $configuredAliases = array_map('trim', explode(',', $configuredAliases));
+                }
+
+                $configuredAliases = array_values(array_filter(array_map('strval', (array)$configuredAliases), static fn(string $v): bool => trim($v) !== ''));
+                if (!empty($configuredAliases)) {
+                    $realAliases = sAttribute::query()
+                        ->active()
+                        ->whereIn('alias', $configuredAliases)
+                        ->pluck('alias')
+                        ->map(static fn($alias) => trim((string)$alias))
+                        ->filter()
+                        ->unique()
+                        ->values()
+                        ->all();
+
+                    if (!empty($realAliases)) {
+                        $productPlaceholderMore .= ', ' . implode(', ', array_map(static fn(string $alias): string => '[*' . $alias . '*]', $realAliases));
+                    }
+                }
             }
 
             if (evo()->getConfig('check_sLang', false)) {
@@ -246,7 +270,7 @@ class sSeoController
 
             $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
 
-            return $this->view('templatesTab', array_merge($data, compact('data', 'langs', 'editor', 'codeEditor')));
+            return $this->view('templatesTab', array_merge($data, compact('data', 'langs', 'editor', 'codeEditor', 'productPlaceholderMore')));
         } else {
             return $this->view('templatesTab', $data);
         }
@@ -475,6 +499,7 @@ class sSeoController
             'noindex_get' => $noindexGet,
             'redirects_enabled' => (int)request()->integer('redirects_enabled'),
             'generate_sitemap' => (int)request()->integer('generate_sitemap'),
+            'product_attribute_aliases' => array_values(array_filter(array_map('trim', explode(',', (string)request()->get('product_attribute_aliases', ''))))),
         ];
 
         return $this->saveSettings($updates);
@@ -571,6 +596,7 @@ class sSeoController
             'noindex_get',
             'redirects_enabled',
             'generate_sitemap',
+            'product_attribute_aliases',
             'gtm_container_id',
             'ga4_measurement_id',
         ];

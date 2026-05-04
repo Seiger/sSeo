@@ -101,6 +101,17 @@
                                 </p>
                             </div>
                         </div>
+                        @if(evo()->getConfig('sseo_pro', false) && evo()->getConfig('check_sCommerce', false))
+                            <div class="grid grid-cols-12 gap-x-2 gap-y-4 items-start">
+                                <label for="product_attribute_aliases" class="col-span-12 sm:col-span-2 text-sm font-medium text-slate-700 darkness:text-slate-300 pt-2 pr-2">
+                                    @lang('sSeo::global.product_attribute_aliases')
+                                </label>
+                                <div class="col-span-12 sm:col-span-10">
+                                    <input type="text" id="product_attribute_aliases" name="product_attribute_aliases" value="{{implode(', ', config('seiger.settings.sSeo.product_attribute_aliases', []))}}" class="w-full rounded-md border border-slate-300 darkness:border-slate-600 bg-white darkness:bg-slate-800 text-slate-800 darkness:text-white px-3 py-2 focus:ring-2 focus:ring-blue-500" onchange="documentDirty=true;">
+                                    <p class="text-xs text-slate-500 darkness:text-slate-400 mt-1">@lang('sSeo::global.product_attribute_aliases_help')</p>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
