@@ -1,49 +1,49 @@
 <?php namespace Seiger\sSeo;
 
 use EvolutionCMS\ServiceProvider;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
+use Livewire\Livewire;
+use Seiger\sSeo\Console\PublishAssets;
 
 /**
  * Class sSeoServiceProvider
  *
  * Service provider for sSeo package. Handles registration,
- * publishing resources, and managing subscriptions for PRO features.
+ * publishing resources, and registering manager evo-ui surfaces.
  */
 class sSeoServiceProvider extends ServiceProvider
 {
+    protected string $root;
+
+    public function __construct($app)
+    {
+        parent::__construct($app);
+
+        $this->root = dirname(__DIR__);
+    }
+
     /**
-     * Bootstrap the application services.
+     * Boot the application services.
      *
      * Loads migrations, translations, views, and custom routes.
-     * Optional checks for PRO subscription to enable additional features.
      *
      * @return void
      */
     public function boot()
     {
-        // Check subscription status when loading the module
-        // $subscription = $this->checkSubscription();
+        $this->mergeConfigFrom($this->root . '/config/sSeoSettings.php', 'seiger.settings.sSeo');
 
-        // If the subscription is PRO - load additional functionality
-        /* if ($subscription['plan'] === 'pro' || $subscription['plan'] === 'enterprise') {
-            $this->loadProFeatures();
-        } */
+        $this->app->singleton(sSeo::class);
+        $this->app->alias(sSeo::class, 'sSeo');
 
-        // Add custom routes for package
-        $this->app->router->middlewareGroup('mgr', config('app.middleware.mgr', []));
-        include(__DIR__.'/Http/routes.php');
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PublishAssets::class,
+            ]);
+        }
 
-        // Load migrations, translations, views
-        $this->loadMigrationsFrom(dirname(__DIR__) . '/database/migrations');
-        $this->loadTranslationsFrom(dirname(__DIR__) . '/lang', 'sSeo');
-        $this->publishResources();
-        $this->loadViewsFrom(dirname(__DIR__) . '/views', 'sSeo');
-        $this->loadViewsFrom(evo()->resourcePath('plugins/sseo'), 'sSeoAssets');
-        $this->mergeConfigFrom(dirname(__DIR__) . '/config/sSeoCheck.php', 'cms.settings');
-
-        $this->app->singleton(\Seiger\sSeo\sSeo::class);
-        $this->app->alias(\Seiger\sSeo\sSeo::class, 'sSeo');
+        if (defined('IN_MANAGER_MODE') && IN_MANAGER_MODE) {
+            $this->bootManager();
+        }
     }
 
     /**
@@ -56,7 +56,33 @@ class sSeoServiceProvider extends ServiceProvider
     public function register()
     {
         // Add plugins to Evo
-        $this->loadPluginsFrom(dirname(__DIR__) . '/plugins/');
+        $this->loadPluginsFrom($this->root . '/plugins/');
+    }
+
+    protected function bootManager(): void
+    {
+        // Add custom routes for package
+        $this->app->router->middlewareGroup('mgr', config('app.middleware.mgr', []));
+        include($this->root . '/src/Http/routes.php');
+
+        // Load migrations, translations, views
+        $this->loadMigrationsFrom($this->root . '/database/migrations');
+        $this->loadTranslationsFrom($this->root . '/lang', 'sSeo');
+        $this->publishResources();
+        $this->loadViewsFrom($this->root . '/views', 'sSeo');
+        $this->loadViewsFrom(evo()->resourcePath('plugins/sseo'), 'sSeoAssets');
+        $this->mergeConfigFrom($this->root . '/config/sSeoCheck.php', 'cms.settings');
+        $this->mergeConfigFrom($this->root . '/config/module/tabs.php', 'sseo.module.tabs');
+        $this->mergeConfigFrom($this->root . '/config/redirects/table.php', 'sseo.redirects.table');
+        $this->mergeConfigFrom($this->root . '/config/activity/table.php', 'sseo.activity.table');
+        $this->mergeConfigFrom($this->root . '/config/settings/form.php', 'evo-ui.forms.sseo.settings');
+        $this->mergeConfigFrom($this->root . '/config/analytics/form.php', 'evo-ui.forms.sseo.analytics');
+        app(\EvoUI\EvoUI::class)->registerFormField('sseo-server-protocol', 'sSeo::components.form.server-protocol');
+        config()->set('evo-ui.forms.sseo.analytics', \Seiger\sSeo\Support\AnalyticsSettingsForm::make(config('evo-ui.forms.sseo.analytics', [])));
+
+        Livewire::component('sseo.module-panel', \Seiger\sSeo\Livewire\ModulePanel::class);
+        Livewire::component('sseo.meta-templates-editor', \Seiger\sSeo\Livewire\MetaTemplatesEditor::class);
+        Livewire::component('sseo.robots-editor', \Seiger\sSeo\Livewire\RobotsEditor::class);
     }
 
     /**
@@ -69,45 +95,11 @@ class sSeoServiceProvider extends ServiceProvider
     protected function publishResources()
     {
         $this->publishes([
-            dirname(__DIR__) . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
-            dirname(__DIR__) . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
-            dirname(__DIR__) . '/images/seigerit.svg' => public_path('assets/site/seigerit.svg'),
-            dirname(__DIR__) . '/images/logo.svg' => public_path('assets/site/sseo.svg'),
-            dirname(__DIR__) . '/css/tailwind.min.css' => public_path('assets/site/sseo.min.css'),
-            dirname(__DIR__) . '/js/main.js' => public_path('assets/site/sseo.js'),
-            dirname(__DIR__) . '/js/tooltip.js' => public_path('assets/site/seigerit.tooltip.js'),
+            $this->root . '/config/sSeoAlias.php' => config_path('app/aliases/sSeo.php', true),
+            $this->root . '/config/sSeoSettings.php' => config_path('seiger/settings/sSeo.php', true),
+            $this->root . '/images/seigerit.svg' => public_path('assets/site/seigerit.svg'),
+            $this->root . '/images/logo.svg' => public_path('assets/site/sseo.svg'),
         ]);
     }
 
-    /**
-     * Subscription verification via API.
-     *
-     * Checks if the user has an active PRO subscription and caches the result.
-     *
-     * @return array Subscription details including plan and status.
-     */
-    private function checkSubscription(): array
-    {
-        return Cache::remember('sseo_subscription', 3600, function () {
-            return Http::get('https://api.seigerit.com/verify', [
-                'domain' => evo()->getConfig('site_url')
-            ])->json();
-        });
-    }
-
-    /**
-     * Load PRO features for users with an active subscription.
-     *
-     * Includes additional routes, Blade templates, and plugins.
-     *
-     * @return void
-     */
-    private function loadProFeatures(): void
-    {
-        // Additional routes or PRO functionality
-        include(__DIR__ . '/Http/pro_routes.php');
-
-        // Load additional Blade templates or plugins
-        $this->loadViewsFrom(dirname(__DIR__) . '/views/pro', 'sSeoPro');
-    }
 }

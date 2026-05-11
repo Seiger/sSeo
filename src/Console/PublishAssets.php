@@ -1,4 +1,4 @@
-<?php namespace Seiger\sMultisite\Console;
+<?php namespace Seiger\sSeo\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
@@ -24,6 +24,8 @@ class PublishAssets extends Command
         $targets = [
             public_path('assets/site/sseo.min.css'),
             public_path('assets/site/sseo.js'),
+            public_path('assets/site/seigerit.tooltip.js'),
+            public_path('assets/modules/sseo/module.css'),
         ];
 
         if (!$this->option('no-prune')) {
@@ -36,19 +38,8 @@ class PublishAssets extends Command
         // 2) Publish (force overwrite)
         $this->call('vendor:publish', [
             '--provider' => 'Seiger\sSeo\sSeoServiceProvider',
+            '--force' => true,
         ]);
-
-        // 3) (Optional) drop VERSION file for debugging
-        try {
-            $ver = \Composer\InstalledVersions::getVersion('seiger/sseo');
-            $fs->ensureDirectoryExists(public_path('assets/site'));
-            $fs->put(
-                public_path('core/vendor/seiger/sseo/config/sSeoCheck.php'),
-                "<?php return ['check_sSeo' => true, 'sSeoVer' => '" . $ver . "'];"
-            );
-        } catch (\Throwable) {
-            // ignore if class not available
-        }
 
         $this->info('sSeo assets published.');
         return self::SUCCESS;

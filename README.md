@@ -1,5 +1,5 @@
 # sSeo for Evolution CMS
-![sSeo-with-Tailwind4](https://github.com/user-attachments/assets/2d0eb57e-109f-4ea4-82e0-3c73b95b97e4)
+![sSeo manager module](https://github.com/user-attachments/assets/2d0eb57e-109f-4ea4-82e0-3c73b95b97e4)
 [![Latest Stable Version](https://img.shields.io/packagist/v/seiger/sSeo?label=version)](https://packagist.org/packages/seiger/sseo)
 [![CMS Evolution](https://img.shields.io/badge/CMS-Evolution-brightgreen.svg)](https://github.com/evolution-cms/evolution)
 ![PHP version](https://img.shields.io/packagist/php-v/seiger/sseo)
@@ -56,6 +56,18 @@ this plugin provides the tools you need for a competitive edge in the digital la
 - PHP **8.3+**
 - Composer **2.2+**
 - One of: **MySQL 8.0+** / **MariaDB 10.5+** / **PostgreSQL 10+** / **SQLite 3.25+**
+
+## Documentation
+
+Localized documentation lives in `docs/`:
+
+- [English](docs/en/README.md)
+- [Ukrainian](docs/ua/README.md)
+- [Polish](docs/pl/README.md)
+- [German](docs/de/README.md)
+- [French](docs/fr/README.md)
+
+Each language contains a user guide and a developer guide for the evo-ui + Livewire manager module.
 
 ## Install by artisan package installer
 

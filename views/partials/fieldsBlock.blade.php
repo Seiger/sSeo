@@ -1,101 +1,140 @@
-<div class="form-block">
-    <h3><b>@lang('sSeo::global.meta_tags')</b></h3>
-    <div class="row form-row form-element-input d-flex flex-column flex-md-row">
-        <label class="control-label col-12 col-md-2 col-xl-1">
-            <span>@lang('sSeo::global.robots')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.robots_help')"></i>
-        </label>
-        <div class="col-12 col-md-10 col-xl-11">
-            <select id="robots" name="sseo[{{$lang??'base'}}][robots]" class="form-control" onchange="documentDirty=true;">
-                <option value="" @if(($robots ?? '') == '') selected @endif></option>
-                <option value="index,follow" @if(($robots ?? '') == 'index,follow') selected @endif>index,follow</option>
-                <option value="index,nofollow" @if(($robots ?? '') == 'index,nofollow') selected @endif>index,nofollow</option>
-                <option value="noindex,nofollow" @if(($robots ?? '') == 'noindex,nofollow') selected @endif>noindex,nofollow</option>
+@php
+    $fieldLang = $lang ?? 'base';
+    $selectedRobots = (string) ($robots ?? '');
+    $selectedPriority = (string) ($priority ?? '');
+    $selectedChangefreq = (string) ($changefreq ?? ($change_frequency ?? ''));
+    $priorityOptions = ['1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3', '0.2', '0.1'];
+    $changefreqOptions = ['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'];
+    $style = $_style ?? ($GLOBALS['_style'] ?? []);
+    $helpIcon = $style['icon_question_circle'] ?? 'fa fa-question-circle';
+@endphp
+
+<div class="row-col col-12" data-sseo-resource-fields>
+    <div class="row form-row">
+        <div class="col-12">
+            <h3>@lang('sSeo::global.meta_tags')</h3>
+            <p><em>@lang('sSeo::global.meta_placeholders', ['more' => ''])</em></p>
+        </div>
+    </div>
+
+    <div class="row form-row form-element-input">
+        <div class="col-auto col-title-11">
+            <label for="robots_{{ $fieldLang }}" class="warning">@lang('sSeo::global.robots')</label>
+            <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.robots_help')"></i>
+        </div>
+        <div class="col">
+            <select id="robots_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][robots]" class="form-control" onchange="documentDirty=true;">
+                <option value="" @if($selectedRobots === '') selected @endif></option>
+                <option value="index,follow" @if($selectedRobots === 'index,follow') selected @endif>index,follow</option>
+                <option value="index,nofollow" @if($selectedRobots === 'index,nofollow') selected @endif>index,nofollow</option>
+                <option value="noindex,nofollow" @if($selectedRobots === 'noindex,nofollow') selected @endif>noindex,nofollow</option>
             </select>
+            <small class="form-text text-muted"><em>@lang('sSeo::global.robots_hint')</em></small>
         </div>
     </div>
-    <div class="row form-row form-element-input d-flex flex-column flex-md-row">
-        <label class="control-label col-12 col-md-2 col-xl-1">
-            <span>@lang('sSeo::global.meta_title')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_title_help')"></i>
-        </label>
-        <div class="col-12 col-md-10 col-xl-11">
-            <input id="meta_title" name="sseo[{{$lang??'base'}}][meta_title]" value="{{$meta_title ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaTitle()}}" onchange="documentDirty=true;">
+
+    <div class="row form-row form-element-input">
+        <div class="col-auto col-title-11">
+            <label for="meta_title_{{ $fieldLang }}" class="warning">@lang('sSeo::global.meta_title')</label>
+            <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.meta_title_help')"></i>
+        </div>
+        <div class="col">
+            <input id="meta_title_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][meta_title]" value="{{ $meta_title ?? '' }}" type="text" class="form-control" placeholder="{{ sSeo::checkMetaTitle() }}" onchange="documentDirty=true;">
+            <small class="form-text text-muted"><em>@lang('sSeo::global.meta_title_hint')</em></small>
         </div>
     </div>
-    <div class="row form-row form-element-input d-flex flex-column flex-md-row">
-        <label class="control-label col-12 col-md-2 col-xl-1">
-            <span>@lang('sSeo::global.meta_description')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_description_help')"></i>
-        </label>
-        <div class="col-12 col-md-10 col-xl-11">
-            <textarea id="meta_description" name="sseo[{{$lang??'base'}}][meta_description]" rows="2" class="form-control" placeholder="{{sSeo::checkMetaDescription()}}" onchange="documentDirty=true;">{{$meta_description ?? ''}}</textarea>
+
+    <div class="row form-row form-element-input">
+        <div class="col-auto col-title-11">
+            <label for="meta_description_{{ $fieldLang }}" class="warning">@lang('sSeo::global.meta_description')</label>
+            <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.meta_description_help')"></i>
+        </div>
+        <div class="col">
+            <textarea id="meta_description_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][meta_description]" rows="3" class="form-control" placeholder="{{ sSeo::checkMetaDescription() }}" onchange="documentDirty=true;">{{ $meta_description ?? '' }}</textarea>
+            <small class="form-text text-muted"><em>@lang('sSeo::global.meta_description_hint')</em></small>
+        </div>
+    </div>
+
+    <div class="row form-row form-element-input">
+        <div class="col-auto col-title-11">
+            <label for="meta_keywords_{{ $fieldLang }}" class="warning">@lang('sSeo::global.meta_keywords')</label>
+            <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.meta_keywords_help')"></i>
+        </div>
+        <div class="col">
+            <input id="meta_keywords_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][meta_keywords]" value="{{ $meta_keywords ?? '' }}" type="text" class="form-control" placeholder="{{ sSeo::checkMetaKeywords() }}" onchange="documentDirty=true;">
+            <small class="form-text text-muted"><em>@lang('sSeo::global.meta_keywords_hint')</em></small>
+        </div>
+    </div>
+
+    <div class="row form-row form-element-input">
+        <div class="col-auto col-title-11">
+            <label for="canonical_url_{{ $fieldLang }}" class="warning">@lang('sSeo::global.canonical')</label>
+            <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.canonical_help')"></i>
+        </div>
+        <div class="col">
+            <input id="canonical_url_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][canonical_url]" value="{{ $canonical_url ?? '' }}" type="text" class="form-control" placeholder="{{ sSeo::checkCanonical() }}" onchange="documentDirty=true;">
+            <small class="form-text text-muted"><em>@lang('sSeo::global.canonical_hint')</em></small>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row form-row">
+        <div class="col-12">
+            <h3>@lang('sSeo::global.sitemap_settings')</h3>
+            <p><em>@lang('sSeo::global.generate_sitemap_help')</em></p>
+        </div>
+    </div>
+
+    <div class="row form-row">
+        <div class="col-12 col-lg-4">
+            <div class="row form-row form-element-input">
+                <div class="col-auto col-title-11">
+                    <label for="exclude_from_sitemap_{{ $fieldLang }}" class="warning">@lang('sSeo::global.exclude_from_sitemap')</label>
+                    <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.exclude_from_sitemap_help')"></i>
+                </div>
+                <div class="col">
+                    <input type="hidden" name="sseo[{{ $fieldLang }}][exclude_from_sitemap]" value="0">
+                    <input type="checkbox" name="sseo[{{ $fieldLang }}][exclude_from_sitemap]" id="exclude_from_sitemap_{{ $fieldLang }}" value="1" @if($exclude_from_sitemap ?? false) checked @endif onchange="documentDirty=true;">
+                    <small class="form-text text-muted"><em>@lang('sSeo::global.exclude_from_sitemap_hint')</em></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="row form-row form-element-input">
+                <div class="col-auto col-title-11">
+                    <label for="priority_{{ $fieldLang }}" class="warning">@lang('sSeo::global.priority')</label>
+                    <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.priority_help')"></i>
+                </div>
+                <div class="col">
+                    <select id="priority_{{ $fieldLang }}" name="sseo[{{ $fieldLang }}][priority]" class="form-control" onchange="documentDirty=true;">
+                        @foreach($priorityOptions as $option)
+                            <option value="{{ $option }}" @if($selectedPriority === $option || (string) ($priority ?? '') === (string) (float) $option) selected @endif>{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    <small class="form-text text-muted"><em>@lang('sSeo::global.priority_hint')</em></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="row form-row form-element-input">
+                <div class="col-auto col-title-11">
+                    <label for="changefreq_{{ $fieldLang }}" class="warning">@lang('sSeo::global.change_frequency')</label>
+                    <i class="{{ $helpIcon }}" data-tooltip="@lang('sSeo::global.change_frequency_help')"></i>
+                </div>
+                <div class="col">
+                    <select name="sseo[{{ $fieldLang }}][changefreq]" id="changefreq_{{ $fieldLang }}" class="form-control" onchange="documentDirty=true;">
+                        @foreach($changefreqOptions as $option)
+                            <option value="{{ $option }}" @if($selectedChangefreq === $option) selected @endif>{{ $option }}</option>
+                        @endforeach
+                    </select>
+                    <small class="form-text text-muted"><em>@lang('sSeo::global.change_frequency_hint')</em></small>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="row form-row form-element-input d-flex flex-column flex-md-row">
-    <label class="control-label col-12 col-md-2 col-xl-1">
-        <span>@lang('sSeo::global.meta_keywords')</span>
-        <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.meta_keywords_help')"></i>
-    </label>
-    <div class="col-12 col-md-10 col-xl-11">
-        <input id="meta_keywords" name="sseo[{{$lang??'base'}}][meta_keywords]" value="{{$meta_keywords ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkMetaKeywords()}}" onchange="documentDirty=true;">
-    </div>
-</div>
-<div class="row form-row form-element-input d-flex flex-column flex-md-row">
-    <label class="control-label col-12 col-md-2 col-xl-1">
-        <span>@lang('sSeo::global.canonical')</span>
-        <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.canonical_help')"></i>
-    </label>
-    <div class="col-12 col-md-10 col-xl-11">
-        <input id="meta_keywords" name="sseo[{{$lang??'base'}}][canonical_url]" value="{{$canonical_url ?? ''}}" type="text" class="form-control" placeholder="{{sSeo::checkCanonical()}}" onchange="documentDirty=true;">
-    </div>
-</div>
-<div class="split my-3"></div>
-<div class="form-block">
-    <h3><b>@lang('sSeo::global.sitemap_settings')</b></h3>
-    <div class="row form-row form-element-input d-flex flex-column flex-md-row align-items-center">
-        <label class="control-label col-12 col-md-3 col-lg-2">
-            <span>@lang('sSeo::global.exclude_from_sitemap')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.exclude_from_sitemap_help')"></i>
-        </label>
-        <div class="col-12 col-md-3 col-lg-2">
-            <input type="hidden" name="sseo[{{$lang??'base'}}][exclude_from_sitemap]" value="0">
-            <input type="checkbox" name="sseo[{{$lang??'base'}}][exclude_from_sitemap]" id="exclude_from_sitemap" value="1" @if($exclude_from_sitemap ?? false) checked @endif onchange="documentDirty=true;">
-        </div>
-        <label class="control-label col-12 col-md-3 col-lg-2">
-            <span>@lang('sSeo::global.priority')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.priority_help')"></i>
-        </label>
-        <div class="col-12 col-md-3 col-lg-2 col-xl-1">
-            <select id="priority" name="sseo[{{$lang??'base'}}][priority]" class="form-control" onchange="documentDirty=true;">
-                <option value="1.0" @if(($priority ?? '') == 1.0) selected @endif>1.0</option>
-                <option value="0.9" @if(($priority ?? '') == 0.9) selected @endif>0.9</option>
-                <option value="0.8" @if(($priority ?? '') == 0.8) selected @endif>0.8</option>
-                <option value="0.7" @if(($priority ?? '') == 0.7) selected @endif>0.7</option>
-                <option value="0.6" @if(($priority ?? '') == 0.6) selected @endif>0.6</option>
-                <option value="0.5" @if(($priority ?? '') == 0.5) selected @endif>0.5</option>
-                <option value="0.4" @if(($priority ?? '') == 0.4) selected @endif>0.4</option>
-                <option value="0.3" @if(($priority ?? '') == 0.3) selected @endif>0.3</option>
-                <option value="0.2" @if(($priority ?? '') == 0.2) selected @endif>0.2</option>
-                <option value="0.1" @if(($priority ?? '') == 0.1) selected @endif>0.1</option>
-            </select>
-        </div>
-        <label class="control-label col-12 col-md-3 col-lg-2">
-            <span>@lang('sSeo::global.change_frequency')</span>
-            <i class="fa fa-question-circle" data-tooltip="@lang('sSeo::global.change_frequency_help')"></i>
-        </label>
-        <div class="col-12 col-md-3 col-lg-2 col-xl-1">
-            <select name="sseo[{{$lang??'base'}}][changefreq]" id="changefreq" class="form-control" onchange="documentDirty=true;">
-                <option value="always" @if(($change_frequency ?? '') == 'always') selected @endif>always</option>
-                <option value="hourly" @if(($change_frequency ?? '') == 'hourly') selected @endif>hourly</option>
-                <option value="daily" @if(($change_frequency ?? '') == 'daily') selected @endif>daily</option>
-                <option value="weekly" @if(($change_frequency ?? '') == 'weekly') selected @endif>weekly</option>
-                <option value="monthly" @if(($change_frequency ?? '') == 'monthly') selected @endif>monthly</option>
-                <option value="yearly" @if(($change_frequency ?? '') == 'yearly') selected @endif>yearly</option>
-                <option value="never" @if(($change_frequency ?? '') == 'never') selected @endif>never</option>
-            </select>
-        </div>
-    </div>
-</div>
-<input type="hidden" name="sseo[{{$lang??'base'}}][domain_key]" value="{{evo()->getConfig('site_key', 'default')}}">
+
+<input type="hidden" name="sseo[{{ $fieldLang }}][domain_key]" value="{{ evo()->getConfig('site_key', 'default') }}">

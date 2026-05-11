@@ -1,23 +1,15 @@
 <?php namespace Seiger\sSeo\Controllers;
 
 use Carbon\Carbon;
-use EvolutionCMS\Models\EventLog;
 use EvolutionCMS\Models\SiteContent;
-use EvolutionCMS\Models\SystemSetting;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Seiger\sArticles\Models\sArticle;
-use Seiger\sCommerce\Models\sAttribute;
 use Seiger\sCommerce\Models\sProduct;
 use Seiger\sLang\Facades\sLang;
 use Seiger\sMultisite\Models\sMultisite;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
+use Seiger\sSeo\Models\sSeoModel;
 use Seiger\sSeo\Support\AnalyticsIdParser;
 use Seiger\sSeo\Support\Sitemaper;
 use View;
@@ -31,6 +23,41 @@ class sSeoController
 {
     protected const SETTINGS_FILE = 'custom/config/seiger/settings/sSeo.php';
 
+    public function module(?string $activeTab = null)
+    {
+        $tabs = collect(config('sseo.module.tabs', []))
+            ->filter(function (array $tab): bool {
+                $setting = (string) ($tab['setting'] ?? '');
+                $cmsSetting = (string) ($tab['cms_setting'] ?? '');
+
+                if ($setting !== '' && (int) config('seiger.settings.sSeo.' . $setting, 0) !== 1) {
+                    return false;
+                }
+
+                return $cmsSetting === '' || (bool) evo()->getConfig($cmsSetting, false);
+            })
+            ->map(function (array $tab): array {
+                $tab['label'] = __($tab['label'] ?? $tab['key']);
+
+                return $tab;
+            })
+            ->values()
+            ->all();
+
+        $activeTab = $activeTab ?: (string) request()->get('tab', 'dashboard');
+
+        return View::make('sSeo::module.shell', [
+            'tabs' => $tabs,
+            'activeTab' => $activeTab,
+            'moduleUrl' => sSeo::route('sSeo.module'),
+            'context' => [
+                'moduleUrl' => sSeo::route('sSeo.module'),
+                'sitemaps' => $sitemaps = $this->dashboardSitemaps(),
+                'activity' => $this->dashboardActivity($sitemaps),
+            ],
+        ]);
+    }
+
     /**
      * Returns the view for the dashboard page.
      *
@@ -38,51 +65,105 @@ class sSeoController
      */
     public function dashboard()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="layout-dashboard" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.dashboard'),
-        ];
+        return $this->moduleTabRedirect('dashboard');
+    }
 
-        $data['sitemaps'] = [];
+    protected function dashboardSitemaps(): array
+    {
+        $sitemaps = [];
+
         if (evo()->getConfig('check_sMultisite', false)) {
             foreach (sMultisite::all() as $domain) {
                 $file = EVO_STORAGE_PATH . $domain->key . DIRECTORY_SEPARATOR . 'sitemap.xml';
                 $site = trim($domain->site_name) ? $domain->site_name . ' Sitemap' : __('sSeo::global.pages_in_sitemap');
-                $pages = 0;
-                $time = 0;
-
-                clearstatcache(false, $file);
-                if (file_exists($file)) {
-                    $time = filemtime($file) ?? 0;
-                    $pages = Sitemaper::count($file) ?? 0;
-                }
-
-                $data['sitemaps'][] = [
-                    'site' => $site,
-                    'pages' => $pages,
-                    'time' => $time,
-                ];
+                $sitemaps[] = $this->sitemapSummary($file, $site);
             }
         } else {
             $file = EVO_BASE_PATH . 'sitemap.xml';
             $site = evo()->getConfig('site_name', __('sSeo::global.pages_in_sitemap')) . ' Sitemap';
-            $pages = 0;
-            $time = 0;
+            $sitemaps[] = $this->sitemapSummary($file, $site);
+        }
 
-            clearstatcache(false, $file);
-            if (file_exists($file)) {
-                $time = filemtime($file) ?? 0;
-                $pages = Sitemaper::count($file) ?? 0;
-            }
+        return $sitemaps;
+    }
 
-            $data['sitemaps'][] = [
-                'site' => $site,
-                'pages' => $pages,
-                'time' => $time,
+    protected function sitemapSummary(string $file, string $site): array
+    {
+        clearstatcache(false, $file);
+
+        $exists = file_exists($file);
+
+        return [
+            'site' => $site,
+            'file' => $file,
+            'exists' => $exists,
+            'status' => $exists ? 'ready' : 'missing',
+            'pages' => $exists ? (Sitemaper::count($file) ?? 0) : 0,
+            'time' => $exists ? (filemtime($file) ?? 0) : 0,
+        ];
+    }
+
+    protected function dashboardActivity(array $sitemaps): array
+    {
+        $activity = [];
+
+        foreach ($sitemaps as $sitemap) {
+            $exists = (bool) ($sitemap['exists'] ?? false);
+            $time = (int) ($sitemap['time'] ?? 0);
+
+            $activity[] = [
+                'icon' => $exists ? 'list-check' : 'alert-triangle',
+                'label' => $exists ? __('sSeo::global.activity_sitemap_ready') : __('sSeo::global.activity_sitemap_missing'),
+                'summary' => (string) ($sitemap['site'] ?? __('sSeo::global.pages_in_sitemap')),
+                'meta' => $exists && $time > 0 ? date('j M Y H:i', $time) : __('sSeo::global.none'),
+                'timestamp' => $time ?: 1,
             ];
         }
 
-        return $this->view('dashboardTab', $data);
+        try {
+            sRedirect::query()
+                ->latest('updated_at')
+                ->limit(12)
+                ->get()
+                ->each(function (sRedirect $redirect) use (&$activity): void {
+                    $updatedAt = optional($redirect->updated_at);
+
+                    $activity[] = [
+                        'icon' => 'refresh-cw',
+                        'label' => __('sSeo::global.activity_redirect_updated'),
+                        'summary' => trim((string) $redirect->old_url) . ' -> ' . trim((string) $redirect->new_url),
+                        'meta' => $updatedAt->format('j M Y H:i') ?: __('sSeo::global.none'),
+                        'timestamp' => $updatedAt->timestamp ?? 1,
+                    ];
+                });
+        } catch (\Throwable) {
+            // Dashboard must stay available while migrations are being installed.
+        }
+
+        try {
+            sSeoModel::query()
+                ->latest('updated_at')
+                ->limit(12)
+                ->get()
+                ->each(function (sSeoModel $seo) use (&$activity): void {
+                    $updatedAt = optional($seo->updated_at);
+                    $resource = trim((string) $seo->resource_type) . ' #' . (int) $seo->resource_id;
+
+                    $activity[] = [
+                        'icon' => 'tags',
+                        'label' => __('sSeo::global.activity_seo_updated'),
+                        'summary' => $resource,
+                        'meta' => $updatedAt->format('j M Y H:i') ?: __('sSeo::global.none'),
+                        'timestamp' => $updatedAt->timestamp ?? 1,
+                    ];
+                });
+        } catch (\Throwable) {
+            // Dashboard must stay available while migrations are being installed.
+        }
+
+        usort($activity, static fn (array $left, array $right): int => ($right['timestamp'] ?? 0) <=> ($left['timestamp'] ?? 0));
+
+        return array_slice($activity, 0, 50);
     }
 
     /**
@@ -92,119 +173,7 @@ class sSeoController
      */
     public function redirects()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="refresh-cw" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.redirects'),
-        ];
-        Paginator::defaultView('sSeo::partials.pagination');
-        $b = request()->get('b', 'old_url');
-        $d = request()->get('d', 'asc');
-        $s = request()->get('s', '');
-
-        $query = sRedirect::query();
-        if (trim($s)) {
-            $query->where('site_key', 'like', '%' . $s . '%')
-                ->orWhere('old_url', 'like', '%' . $s . '%')
-                ->orWhere('new_url', 'like', '%' . $s . '%')
-                ->orWhere('type', 'like', '%' . $s . '%');
-        }
-        $query->orderByNatural($b, $d);
-        $data['redirects'] = $query->paginate((int)Cookie::get('sSeoPerPage', 50));
-
-        $data['availableSites'] = collect([]);
-        if (evo()->getConfig('check_sMultisite', false)) {
-            $data['availableSites'] = sMultisite::all();
-        }
-
-        return $this->view('redirectsTab', $data);
-    }
-
-    /**
-     * Add a redirect to list with new data.
-     *
-     * This method:
-     * - Retrieves the submitted redirects from the request.
-     * - Validates the input and returns an error message if no redirects are provided.
-     * - Creates a backup of existing redirects if not already backed up for the current day.
-     * - Maintains a maximum of 5 recent backup files and removes backups older than 7 days.
-     * - Truncates the `sRedirect` table before inserting new redirects.
-     * - Prevents duplicate redirects by checking for existing `old_url` entries.
-     * - Inserts the validated redirects into the database.
-     * - Clears the site cache after updating redirects.
-     *
-     * @return \Illuminate\Http\RedirectResponse Redirects back with a success or error message.
-     */
-    public function addRedirect()
-    {
-        $redirect = request()->only(['old_url', 'new_url', 'redirect_type', 'site_key']);
-
-        if (empty($redirect)) {
-            return [
-                'success' => false,
-                'message' => __('sSeo::global.no_redirects_provided'),
-            ];
-        }
-
-        $item['site_key'] = $redirect['site_key'] ?? 'all';
-        $item['old_url'] = ltrim(trim($redirect['old_url'] ?? ''), '/');
-        $item['new_url'] = trim($redirect['new_url'] ?? '');
-        $item['type'] = intval($redirect['redirect_type'] ?? 302);
-
-        if (empty($item['old_url']) || empty($item['new_url']) || !in_array($item['type'], [301, 302, 307])) {
-            return [
-                'success' => false,
-                'message' => __('sSeo::global.error_empty_fields'),
-            ];
-        }
-
-        if (sRedirect::where('old_url', $item['old_url'])->whereIn('site_key', [$item['site_key'], 'all'])->exists()) {
-            return [
-                'success' => false,
-                'message' => __('sSeo::global.redirect_exists', ['uri' => $item['old_url']]),
-            ];
-        }
-
-        $itemDb = sRedirect::create($item);
-        evo()->clearCache('full');
-        return [
-            'success' => true,
-            'message' => __('sSeo::global.success_updated'),
-            'html' => view('sSeo::partials.redirects.tableRow', ['item' => $itemDb])->render(),
-        ];
-    }
-
-    /**
-     * Delete a redirect record by ID (AJAX).
-     *
-     * This method handles an incoming DELETE request and deletes a redirect entry from the database
-     * using the ID provided in the JSON request payload. It returns a success or error response
-     * depending on the request method and deletion outcome.
-     *
-     * Expected JSON payload:
-     * {
-     *     "id": int // ID of the redirect record to delete
-     * }
-     *
-     * @return array{
-     *     success: bool,
-     *     message: string
-     * }
-     */
-    public function delRedirect()
-    {
-        if (!request()->isMethod('DELETE')) {
-            return [
-                'success' => false,
-                'message' => __('global.cm_unknown_error'),
-            ];
-        }
-
-        sRedirect::find(request()->json()->getInt('id'))->delete();
-
-        return [
-            'success' => true,
-            'message' => __('sSeo::global.redirect_deleted'),
-        ];
+        return $this->moduleTabRedirect('redirects');
     }
 
     /**
@@ -219,61 +188,7 @@ class sSeoController
      */
     public function templates()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="file-text" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.templates'),
-        ];
-
-        if(evo()->getConfig('sseo_pro', false)) {
-            $langs = ['base'];
-            $registereds = ['sseo_meta_title_document', 'sseo_meta_description_document', 'sseo_meta_keywords_document'];
-            $productPlaceholderMore = ', [*sku*], [*rating*], [*price*]';
-
-            if (evo()->getConfig('check_sCommerce', false)) {
-                $regCommPCat = ['sseo_meta_title_prodcat', 'sseo_meta_description_prodcat', 'sseo_meta_keywords_prodcat'];
-                $regCommProd = ['sseo_meta_title_product', 'sseo_meta_description_product', 'sseo_meta_keywords_product'];
-                $registereds = array_merge($registereds, $regCommPCat, $regCommProd);
-
-                $configuredAliases = config('seiger.settings.sSeo.product_attribute_aliases', []);
-                if (is_string($configuredAliases)) {
-                    $configuredAliases = array_map('trim', explode(',', $configuredAliases));
-                }
-
-                $configuredAliases = array_values(array_filter(array_map('strval', (array)$configuredAliases), static fn(string $v): bool => trim($v) !== ''));
-                if (!empty($configuredAliases)) {
-                    $realAliases = sAttribute::query()
-                        ->active()
-                        ->whereIn('alias', $configuredAliases)
-                        ->pluck('alias')
-                        ->map(static fn($alias) => trim((string)$alias))
-                        ->filter()
-                        ->unique()
-                        ->values()
-                        ->all();
-
-                    if (!empty($realAliases)) {
-                        $productPlaceholderMore .= ', ' . implode(', ', array_map(static fn(string $alias): string => '[*' . $alias . '*]', $realAliases));
-                    }
-                }
-            }
-
-            if (evo()->getConfig('check_sLang', false)) {
-                $langs = sLang::langConfig();
-            }
-
-            $editor = [];
-            foreach ($langs as $lang) {
-                foreach ($registereds as $registered) {
-                    $editor[] = $registered . '_' . $lang;
-                }
-            }
-
-            $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
-
-            return $this->view('templatesTab', array_merge($data, compact('data', 'langs', 'editor', 'codeEditor', 'productPlaceholderMore')));
-        } else {
-            return $this->view('templatesTab', $data);
-        }
+        return $this->moduleTabRedirect('templates');
     }
 
     /**
@@ -323,52 +238,7 @@ class sSeoController
      */
     public function robots()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="file-terminal" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.robots'),
-        ];
-
-        $sites = [];
-        $editor = [];
-        $robots = [];
-
-        if (evo()->getConfig('check_sMultisite', false)) {
-            $sMultisite = sMultisite::all();
-            if ($sMultisite->isEmpty()) {
-                if (file_exists(EVO_BASE_PATH . 'robots.txt')) {
-                    $file = EVO_BASE_PATH . 'robots.txt';
-                } else {
-                    $file = '';
-                }
-                $editor[] = 'robots';
-                $robots['robots'] = $file;
-            } else {
-                foreach ($sMultisite as $site) {
-                    if (file_exists(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt')) {
-                        $file = EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'robots.txt';
-                    } elseif (file_exists(EVO_BASE_PATH . 'robots.txt')) {
-                        $file = EVO_BASE_PATH . 'robots.txt';
-                    } else {
-                        $file = '';
-                    }
-                    $editor[] = $site->key . '_robots';
-                    $sites[$site->key . '_robots'] = $site->site_name;
-                    $robots[$site->key . '_robots'] = $file;
-                }
-            }
-        } else {
-            if (file_exists(EVO_BASE_PATH . 'robots.txt')) {
-                $file = EVO_BASE_PATH . 'robots.txt';
-            } else {
-                $file = '';
-            }
-            $editor[] = 'robots';
-            $sites['robots'] = evo()->getConfig('site_name', 'Current website');
-            $robots['robots'] = $file;
-        }
-
-        $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
-        return $this->view('robotsTab', array_merge($data, compact('robots', 'sites', 'editor', 'codeEditor')));
+        return $this->moduleTabRedirect('robots');
     }
 
     /**
@@ -425,11 +295,7 @@ class sSeoController
      */
     public function configure()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="settings" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.configure'),
-        ];
-        return $this->view('configureTab', $data);
+        return $this->moduleTabRedirect('configure');
     }
 
     /**
@@ -437,50 +303,18 @@ class sSeoController
      */
     public function analytics()
     {
-        $data = [
-            'tabIcon' => '<i data-lucide="bar-chart-3" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
-            'tabName' => __('sSeo::global.analytics'),
-        ];
+        return $this->moduleTabRedirect('configure');
+    }
 
-        $sites = [];
-        if (evo()->getConfig('check_sMultisite', false)) {
-            $sites = sMultisite::all();
-        }
-        $data['sites'] = $sites;
+    protected function moduleTabRedirect(string $tab)
+    {
+        $url = sSeo::route('sSeo.module');
 
-        $gtmBySite = [];
-        $ga4BySite = [];
-        $gtmActiveBySite = [];
-        $ga4ActiveBySite = [];
-
-        if (evo()->getConfig('check_sMultisite', false) && !$sites->isEmpty()) {
-            foreach ($sites as $site) {
-                $siteKey = (string)$site->key;
-                if ($siteKey === '') continue;
-
-                $gtmRaw = (string)config('seiger.settings.sSeo.' . $siteKey . '_gtm_container_id', '');
-                $ga4Raw = (string)config('seiger.settings.sSeo.' . $siteKey . '_ga4_measurement_id', '');
-
-                $gtmBySite[$siteKey] = $gtmRaw;
-                $ga4BySite[$siteKey] = $ga4Raw;
-                $gtmActiveBySite[$siteKey] = AnalyticsIdParser::parseGtmIds($gtmRaw);
-                $ga4ActiveBySite[$siteKey] = AnalyticsIdParser::parseGa4Ids($ga4Raw);
-            }
-        } else {
-            $gtmRaw = (string)config('seiger.settings.sSeo.gtm_container_id', '');
-            $ga4Raw = (string)config('seiger.settings.sSeo.ga4_measurement_id', '');
-            $gtmBySite['single'] = $gtmRaw;
-            $ga4BySite['single'] = $ga4Raw;
-            $gtmActiveBySite['single'] = AnalyticsIdParser::parseGtmIds($gtmRaw);
-            $ga4ActiveBySite['single'] = AnalyticsIdParser::parseGa4Ids($ga4Raw);
+        if ($tab !== 'dashboard') {
+            $url .= (str_contains($url, '?') ? '&' : '?') . 'tab=' . rawurlencode($tab);
         }
 
-        $data['gtmBySite'] = $gtmBySite;
-        $data['ga4BySite'] = $ga4BySite;
-        $data['gtmActiveBySite'] = $gtmActiveBySite;
-        $data['ga4ActiveBySite'] = $ga4ActiveBySite;
-
-        return $this->view('analyticsTab', $data);
+        return redirect()->to($url);
     }
 
     /**

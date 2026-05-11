@@ -1,0 +1,57 @@
+<?php
+
+return [
+    'key' => 'sseo.activity',
+    'title' => 'sSeo::global.recent_activity',
+    'title_icon' => 'activity',
+    'provider' => \Seiger\sSeo\Tables\ActivityTableData::class,
+    'wire_target' => 'search,perPage,setSort,switchView,goToPage,firstPage,previousPage,nextPage,goLastPage',
+    'per_page' => 10,
+    'per_page_options' => [10, 20, 50],
+    'views' => ['table', 'list'],
+    'default_view' => 'table',
+    'default_sort' => 'meta',
+    'default_direction' => 'desc',
+    'search' => [
+        'enabled' => true,
+        'state' => 'search',
+        'width' => '18rem',
+        'placeholder' => 'sSeo::global.activity_search_placeholder',
+    ],
+    'actions' => [],
+    'filters' => [],
+    'columns' => [
+        [
+            'key' => 'label',
+            'type' => 'text',
+            'label' => 'sSeo::global.activity_column_activity',
+            'class' => 'evo-ui-table__title-column',
+            'sortable' => true,
+            'sort_field' => 'label',
+        ],
+        [
+            'key' => 'summary',
+            'type' => 'text',
+            'label' => 'sSeo::global.activity_column_details',
+            'sortable' => true,
+            'sort_field' => 'summary',
+        ],
+        [
+            'key' => 'meta',
+            'type' => 'date',
+            'label' => 'sSeo::global.activity_column_time',
+            'class' => 'evo-ui-table__date-column',
+            'sortable' => true,
+            'sort_field' => 'timestamp',
+            'default_direction' => 'desc',
+        ],
+    ],
+    'list' => [
+        'media' => false,
+        'compact' => true,
+        'title' => 'label',
+        'subtitle' => 'summary',
+        'meta' => ['meta'],
+    ],
+    'row_actions' => [],
+];

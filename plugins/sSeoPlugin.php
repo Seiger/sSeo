@@ -282,12 +282,26 @@ Event::listen('evolution.sArticlesAfterContentSave', function($params) {
  * Add Menu item
  */
 Event::listen('evolution.OnManagerMenuPrerender', function($params) {
+    $title = __('sSeo::global.module_title') !== 'sSeo::global.module_title' ? __('sSeo::global.module_title') : __('sSeo::global.title');
+    $icon = __('sSeo::global.module_icon') !== 'sSeo::global.module_icon' ? __('sSeo::global.module_icon') : __('sSeo::global.icon');
+    $iconHtml = '<i class="'.$icon.'"></i>';
+
+    if (function_exists('svg') && str_starts_with($icon, 'tabler-')) {
+        try {
+            $renderedIcon = svg($icon);
+            $iconSvg = method_exists($renderedIcon, 'toHtml') ? $renderedIcon->toHtml() : (string) $renderedIcon;
+            $iconHtml = '<span class="menu-module-icon" aria-hidden="true">'.$iconSvg.'</span>';
+        } catch (\Throwable) {
+            $iconHtml = '<i class="'.$icon.'"></i>';
+        }
+    }
+
     $menu['sseo'] = [
         'sseo',
         'tools',
-        '<i class="'.__('sSeo::global.icon').'"></i>'.__('sSeo::global.title'),
-        sSeo::route('sSeo.dashboard'),
-        __('sSeo::global.title'),
+        $iconHtml . $title,
+        sSeo::route('sSeo.module'),
+        $title,
         "",
         "",
         "main",

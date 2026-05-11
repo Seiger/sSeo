@@ -1,6 +1,6 @@
 {
   "name": "seiger/sseo",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "type": "evolutioncms-tool",
   "description": "Evocms package for collection of SEO Tools for Evolution CMS.",
   "keywords": [
@@ -20,7 +20,8 @@
   ],
   "require": {
     "php": "^8.3",
-    "evolution-cms/evolution": "^3.5"
+    "evolution-cms/evolution": "^3.5",
+    "evolution-cms/evo-ui": "^1.0.1"
   },
   "autoload": {
     "psr-4": {
@@ -49,6 +50,7 @@
     ]
   },
   "scripts": {
+    "test": "../sArticles/demo/core/vendor/bin/phpunit --configuration ../sArticles/demo/core/phpunit.xml tests/Unit",
     "post-autoload-dump": [],
     "post-install-cmd": [
       "@php artisan sseo:publish"
