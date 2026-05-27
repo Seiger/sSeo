@@ -498,7 +498,6 @@ class sSeo
             $query = sSeoModel::query();
             $query->where('resource_id', (int)$data['resource_id']);
             $query->where('resource_type', ($data['resource_type'] ?? 'document'));
-            if (trim($data['domain_key'] ?? '')) $query->where('domain_key', $data['domain_key']);
             $items = $query->get();
 
             foreach ($langs as $lang) {
@@ -510,6 +509,9 @@ class sSeo
 
                     if (in_array($request['resource_type'], ['product'])) {
                         $request['domain_key'] = 'default';
+                    } elseif ($request['resource_type'] === 'document') {
+                        $inputDomainKey = (string)($request['domain_key'] ?? $data['domain_key'] ?? '');
+                        $request['domain_key'] = $this->resolveDocumentDomainKey((int)$request['resource_id'], $inputDomainKey);
                     }
 
                     if ($lang == $langDefault) {
@@ -572,6 +574,46 @@ class sSeo
                 }
             }
         }
+    }
+
+    protected function resolveDocumentDomainKey(int $resourceId, string $fallback = 'default'): string
+    {
+        if (!evo()->getConfig('check_sMultisite', false)) {
+            return $fallback !== '' ? $fallback : 'default';
+        }
+
+        $domains = sMultisite::whereActive(1)->get();
+        if ($domains->isEmpty()) {
+            return $fallback !== '' ? $fallback : 'default';
+        }
+
+        $resource = SiteContent::find($resourceId);
+        if (!$resource) {
+            return $fallback !== '' ? $fallback : 'default';
+        }
+
+        foreach ($domains as $domain) {
+            if ((int)$domain->resource === $resourceId || (int)$domain->site_start === $resourceId) {
+                return (string)$domain->key;
+            }
+        }
+
+        $parent = (int)$resource->parent;
+        while ($parent > 0) {
+            foreach ($domains as $domain) {
+                if ((int)$domain->resource === $parent) {
+                    return (string)$domain->key;
+                }
+            }
+
+            $parentResource = SiteContent::find($parent);
+            if (!$parentResource) {
+                break;
+            }
+            $parent = (int)$parentResource->parent;
+        }
+
+        return 'default';
     }
 
     /**
