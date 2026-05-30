@@ -754,7 +754,7 @@ class sSeoController
                     if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
                         $loc = $siteUrl . '/';
                     } else {
-                        $loc = $siteUrl;
+                        $loc = $siteUrl . '/';
                     }
                 } else {
                     $loc = $siteUrl . str_replace($baseUrl, '', url($resource->id));
@@ -902,7 +902,7 @@ class sSeoController
                     if ($isLang && $resource->lang != 'base' && ($resource->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
                         $loc = $siteUrl . '/';
                     } else {
-                        $loc = $siteUrl;
+                        $loc = $siteUrl . '/';
                     }
                 } else {
                     $loc = $siteUrl . str_replace($baseUrl, '', url($resource->id));

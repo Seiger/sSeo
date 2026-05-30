@@ -3,12 +3,158 @@
  * Plugin for Seiger SEO Tools to Evolution CMS.
  */
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
-use Seiger\sSeo\Models\sSeoModel;
+use Seiger\sSeo\Models\sSeoModel as SeoModel;
+
+$sseoResourceDefaults = static fn (): array => [
+    'robots' => '',
+    'meta_title' => '',
+    'meta_description' => '',
+    'meta_keywords' => '',
+    'canonical_url' => '',
+    'exclude_from_sitemap' => false,
+    'priority' => '0.5',
+    'changefreq' => 'weekly',
+];
+
+$sseoResourceDomainKey = static function (mixed $resource, ?string $modelClass = null): string {
+    if (!evo()->getConfig('check_sMultisite', false)) {
+        return 'default';
+    }
+
+    $parent = (int) (is_object($resource) ? ($resource->parent ?? 0) : 0);
+    if ($parent <= 0 && is_numeric($resource) && $modelClass && class_exists($modelClass)) {
+        $parent = (int) $modelClass::query()->whereKey((int) $resource)->value('parent');
+    }
+
+    if ($parent <= 0) {
+        return (string) evo()->getConfig('site_key', 'default');
+    }
+
+    $multisiteClass = '\Seiger\sMultisite\Models\sMultisite';
+    if (!class_exists($multisiteClass)) {
+        return (string) evo()->getConfig('site_key', 'default');
+    }
+
+    foreach ($multisiteClass::query()->where('active', 1)->get(['key', 'resource']) as $domain) {
+        $key = trim((string) ($domain->key ?? ''));
+        if ($key === '') {
+            continue;
+        }
+
+        $siteResources = Cache::get('sMultisite-' . $key . '-resources');
+        if (is_array($siteResources) && in_array($parent, array_map('intval', $siteResources), true)) {
+            return $key;
+        }
+
+        $root = (int) ($domain->resource ?? 0);
+        if ($root > 0) {
+            $parents = array_map('intval', array_values(evo()->getParentIds($parent, 20)));
+            if ($parent === $root || in_array($root, $parents, true)) {
+                return $key;
+            }
+        }
+    }
+
+    return 'default';
+};
+
+$sseoResourceData = static function (int $resourceId, string $resourceType, string $lang = 'base', ?string $domainKey = null) use ($sseoResourceDefaults): array {
+    if ($resourceId <= 0 || trim($resourceType) === '') {
+        return $sseoResourceDefaults();
+    }
+
+    $domainKey = trim((string) ($domainKey ?: evo()->getConfig('site_key', 'default'))) ?: 'default';
+    $rows = SeoModel::query()
+        ->where('resource_id', $resourceId)
+        ->where('resource_type', $resourceType)
+        ->whereIn('domain_key', array_values(array_unique([$domainKey, 'default'])))
+        ->where('lang', $lang)
+        ->get();
+
+    $row = $rows->firstWhere('domain_key', $domainKey) ?: $rows->firstWhere('domain_key', 'default');
+    if (!$row) {
+        return $sseoResourceDefaults();
+    }
+
+    return array_replace($sseoResourceDefaults(), [
+        'robots' => (string) ($row->robots ?? ''),
+        'meta_title' => (string) ($row->meta_title ?? ''),
+        'meta_description' => (string) ($row->meta_description ?? ''),
+        'meta_keywords' => (string) ($row->meta_keywords ?? ''),
+        'canonical_url' => (string) ($row->canonical_url ?? ''),
+        'exclude_from_sitemap' => (bool) ($row->exclude_from_sitemap ?? false),
+        'priority' => number_format((float) ($row->priority ?? 0.5), 1, '.', ''),
+        'changefreq' => (string) ($row->changefreq ?? 'weekly'),
+    ]);
+};
+
+$sseoResourceParseTemplate = static function (string $source, array $context): string {
+    $callback = static function (array $matches) use ($context): string {
+        $key = (string) collect([$matches[1] ?? '', $matches[2] ?? '', $matches[3] ?? ''])
+            ->first(static fn ($value) => (string) $value !== '', '');
+        $value = data_get($context, $key, evo()->getConfig($key, ''));
+
+        return is_scalar($value) ? (string) $value : '';
+    };
+
+    return trim((string) preg_replace_callback('/\[\*([^\]]+)\*\]|\[\(([^\]]+)\)\]|\[\+([^\]]+)\+\]/', $callback, $source));
+};
+
+$sseoResourcePlaceholders = static function (array $params, string $resourceType, string $lang = 'base', ?string $modelClass = null) use ($sseoResourceParseTemplate): array {
+    $data = (array) ($params['data'] ?? []);
+    $source = (array) data_get($data, 'translations.' . $lang, $data);
+    $resource = $params['resource'] ?? $params['article'] ?? null;
+    $resourceId = (int) ($params['resourceId'] ?? $params['articleId'] ?? (is_object($resource) ? ($resource->id ?? 0) : 0));
+
+    if ($resourceId > 0 && $modelClass && class_exists($modelClass)) {
+        $model = $modelClass::query()->whereKey($resourceId)->first();
+        if ($model) {
+            $source = array_replace($model->toArray(), $source);
+            $source['link'] = (string) ($model->link ?? '');
+        }
+    }
+
+    $context = array_merge(evo()->allConfig(), $source, [
+        'id' => $resourceId,
+        'resource_type' => $resourceType,
+        'lang' => $lang,
+    ]);
+
+    return [
+        'meta_title' => $sseoResourceParseTemplate(
+            evo()->getConfig("sseo_meta_title_{$resourceType}_{$lang}", '[*pagetitle*] - [(site_name)]'),
+            $context
+        ),
+        'meta_description' => $sseoResourceParseTemplate(
+            evo()->getConfig("sseo_meta_description_{$resourceType}_{$lang}", '[*pagetitle*] - [(site_name)]'),
+            $context
+        ),
+        'meta_keywords' => trim($sseoResourceParseTemplate(
+            evo()->getConfig("sseo_meta_keywords_{$resourceType}_{$lang}", '[*pagetitle*], [*longtitle*]'),
+            $context
+        ), ','),
+        'canonical_url' => (string) ($context['link'] ?? ''),
+    ];
+};
+
+$sseoResourceFields = static function (string $prefix = 'seo.', string $tab = 'seo', string $section = '', array $placeholders = []): array {
+    return [
+        ['name' => $prefix . 'robots', 'type' => 'select', 'label' => 'sSeo::global.robots', 'help' => 'sSeo::global.robots_help', 'tab' => $tab, 'section' => $section, 'span' => 'full', 'options_provider' => 'articleModalOptions', 'rules' => ['nullable', 'string']],
+        ['name' => $prefix . 'meta_title', 'type' => 'text', 'label' => 'sSeo::global.meta_title', 'help' => 'sSeo::global.meta_title_help', 'tab' => $tab, 'section' => $section, 'span' => 'full', 'placeholder' => (string) ($placeholders['meta_title'] ?? ''), 'rules' => ['nullable', 'string', 'max:255']],
+        ['name' => $prefix . 'meta_description', 'type' => 'textarea', 'label' => 'sSeo::global.meta_description', 'help' => 'sSeo::global.meta_description_help', 'tab' => $tab, 'section' => $section, 'span' => 'full', 'rows' => 3, 'placeholder' => (string) ($placeholders['meta_description'] ?? ''), 'rules' => ['nullable', 'string']],
+        ['name' => $prefix . 'meta_keywords', 'type' => 'text', 'label' => 'sSeo::global.meta_keywords', 'help' => 'sSeo::global.meta_keywords_help', 'tab' => $tab, 'section' => $section, 'span' => 'full', 'placeholder' => (string) ($placeholders['meta_keywords'] ?? ''), 'rules' => ['nullable', 'string']],
+        ['name' => $prefix . 'canonical_url', 'type' => 'text', 'label' => 'sSeo::global.canonical', 'help' => 'sSeo::global.canonical_help', 'tab' => $tab, 'section' => $section, 'span' => 'full', 'placeholder' => (string) ($placeholders['canonical_url'] ?? ''), 'rules' => ['nullable', 'string', 'max:255']],
+        ['name' => $prefix . 'exclude_from_sitemap', 'type' => 'checkbox', 'label' => 'sSeo::global.exclude_from_sitemap', 'help' => 'sSeo::global.exclude_from_sitemap_help', 'tab' => $tab, 'section' => $section, 'rules' => ['boolean']],
+        ['name' => $prefix . 'priority', 'type' => 'select', 'label' => 'sSeo::global.priority', 'help' => 'sSeo::global.priority_help', 'tab' => $tab, 'section' => $section, 'options_provider' => 'articleModalOptions', 'rules' => ['nullable', 'string']],
+        ['name' => $prefix . 'changefreq', 'type' => 'select', 'label' => 'sSeo::global.change_frequency', 'help' => 'sSeo::global.change_frequency_help', 'tab' => $tab, 'section' => $section, 'options_provider' => 'articleModalOptions', 'rules' => ['nullable', 'string']],
+    ];
+};
 
 /**
  * Correct url formatting
@@ -238,6 +384,92 @@ Event::listen('evolution.sCommerceManagerAddTabEvent', function($params) {
     }
 });
 
+Event::listen('evolution.sArticlesManagerModalTabsEvent', function($params) {
+    if (evo()->getConfig('check_sLang', false)) {
+        return;
+    }
+
+    return [
+        'name' => 'seo',
+        'label' => 'sSeo::global.title',
+        'icon' => 'chart-line',
+    ];
+});
+
+Event::listen('evolution.sArticlesManagerModalDefaultsEvent', function($params) use ($sseoResourceDefaults) {
+    $languages = array_values(array_filter((array) ($params['languages'] ?? [])));
+    if ($languages !== []) {
+        return [
+            'seo' => collect($languages)
+                ->mapWithKeys(fn (string $language) => [$language => $sseoResourceDefaults()])
+                ->all(),
+        ];
+    }
+
+    return ['seo' => $sseoResourceDefaults()];
+});
+
+Event::listen('evolution.sArticlesManagerModalDataEvent', function($params) use ($sseoResourceData, $sseoResourceDomainKey) {
+    $article = $params['article'] ?? null;
+    $articleId = (int) ($params['articleId'] ?? (is_object($article) ? ($article->id ?? 0) : 0));
+    $domainKey = $sseoResourceDomainKey($article ?: $articleId, '\Seiger\sArticles\Models\sArticle');
+    $languages = array_values(array_filter((array) ($params['languages'] ?? [])));
+
+    if ($languages !== []) {
+        return [
+            'seo' => collect($languages)
+                ->mapWithKeys(fn (string $language) => [$language => $sseoResourceData($articleId, 'article', $language, $domainKey)])
+                ->all(),
+        ];
+    }
+
+    return ['seo' => $sseoResourceData($articleId, 'article', 'base', $domainKey)];
+});
+
+Event::listen('evolution.sArticlesManagerModalFieldsEvent', function($params) use ($sseoResourceFields, $sseoResourcePlaceholders) {
+    if (($params['multilingual'] ?? false) === true) {
+        $language = (string) ($params['language'] ?? 'base');
+
+        return $sseoResourceFields(
+            (string) ($params['prefix'] ?? 'seo.' . $language . '.'),
+            (string) ($params['tab'] ?? ''),
+            (string) ($params['section'] ?? 'relations'),
+            $sseoResourcePlaceholders($params, 'article', $language, '\Seiger\sArticles\Models\sArticle')
+        );
+    }
+
+    if (evo()->getConfig('check_sLang', false)) {
+        return;
+    }
+
+    return $sseoResourceFields('seo.', 'seo', '', $sseoResourcePlaceholders($params, 'article', 'base', '\Seiger\sArticles\Models\sArticle'));
+});
+
+Event::listen('evolution.sArticlesManagerModalOptionsEvent', function($params) {
+    $name = (string) data_get($params, 'field.name', '');
+
+    if (Str::endsWith($name, '.robots') || $name === 'seo.robots') {
+        return [
+            ['value' => '', 'label' => '-'],
+            ['value' => 'index,follow', 'label' => 'index,follow'],
+            ['value' => 'index,nofollow', 'label' => 'index,nofollow'],
+            ['value' => 'noindex,nofollow', 'label' => 'noindex,nofollow'],
+        ];
+    }
+
+    if (Str::endsWith($name, '.priority') || $name === 'seo.priority') {
+        return collect(range(10, 1))
+            ->map(fn (int $value) => ['value' => number_format($value / 10, 1, '.', ''), 'label' => number_format($value / 10, 1, '.', '')])
+            ->all();
+    }
+
+    if (Str::endsWith($name, '.changefreq') || $name === 'seo.changefreq') {
+        return collect(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never'])
+            ->map(fn (string $value) => ['value' => $value, 'label' => $value])
+            ->all();
+    }
+});
+
 /**
  * Save SEO fields
  */
@@ -265,16 +497,31 @@ Event::listen('evolution.sCommerceAfterProductContentSave', function($params) {
         //}
     }
 });
-Event::listen('evolution.sArticlesAfterContentSave', function($params) {
+Event::listen('evolution.sArticlesAfterContentSave', function($params) use ($sseoResourceDomainKey, $sseoResourceDefaults) {
     $article = $params['article'] ?? null;
     $content = $params['content'] ?? null;
     $articleId = is_object($article) ? ($article->id ?? 0) : (int)$article;
 
     if ($articleId > 0) {
         $lang = $content?->lang ?? 'base';
-        $data = array_merge(['resource_id' => $articleId, 'resource_type' => 'article'], request()->input('sseo', []));
-        $data['domain_key'] = $data[$lang]['domain_key'] = 'default';
+        $seo = (array) data_get($params, 'data.seo', request()->input('sseo', []));
+        $seo = array_replace($sseoResourceDefaults(), (array) data_get($seo, $lang, $seo));
+        $domainKey = $sseoResourceDomainKey($article ?: $articleId, '\Seiger\sArticles\Models\sArticle');
+        $data = [
+            'resource_id' => $articleId,
+            'resource_type' => 'article',
+            'domain_key' => $domainKey,
+            $lang => array_merge($seo, ['domain_key' => $domainKey]),
+        ];
         sSeo::updateSeoFields($data);
+
+        if ($domainKey !== 'default') {
+            SeoModel::query()
+                ->where('resource_id', $articleId)
+                ->where('resource_type', 'article')
+                ->where('domain_key', 'default')
+                ->delete();
+        }
     }
 });
 
