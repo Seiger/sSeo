@@ -789,7 +789,7 @@ class sSeoController
                     }
 
                     $productLink = (string)($product->link ?? '');
-                    $loc = $siteUrl . trim($productLink, '.');
+                    $loc = $this->sitemapLoc($siteUrl, $productLink);
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
@@ -802,11 +802,12 @@ class sSeoController
         if (evo()->getConfig('check_sArticles', false)) {
             $publications = sArticle::leftJoin('s_seo', function($join) {
                 $join->on('s_articles.id', '=', 's_seo.resource_id');
-                $join->where('s_seo.resource_type', '=', 'publication');
+                $join->where('s_seo.resource_type', '=', 'article');
             })
                 ->where(function($q) {
                     $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })
+                ->active()
                 ->get();
 
             if (!empty($publications)) {
@@ -819,7 +820,7 @@ class sSeoController
                     }
 
                     $publicationLink = (string)($publication->link ?? '');
-                    $loc = $siteUrl . trim($publicationLink, '.');
+                    $loc = $this->sitemapLoc($siteUrl, $publicationLink);
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';
@@ -938,7 +939,7 @@ class sSeoController
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . str_replace($baseUrl, '', $product->link);
+                    $loc = $this->sitemapLoc($siteUrl, (string)$product->link);
                     $lastmod = $product->last_modified ? Carbon::parse($product->last_modified)->toAtomString() : Carbon::parse($product->updated_at)->toAtomString();
                     $changefreq = $product->changefreq ?? 'always';
                     $priority = $product->priority ?? '0.5';
@@ -952,21 +953,22 @@ class sSeoController
             $publications = sArticle::select('*', 's_seo.lang as lang')
                 ->leftJoin('s_seo', function($join) {
                     $join->on('s_articles.id', '=', 's_seo.resource_id');
-                    $join->where('s_seo.resource_type', '=', 'publication');
+                    $join->where('s_seo.resource_type', '=', 'article');
                 })->where(function($q) {
                     $q->whereNot('exclude_from_sitemap', true)->orWhereNull('exclude_from_sitemap');
                 })->whereIn('parent', $domainIds)
+                ->active()
                 ->get();
 
             if (!empty($publications)) {
                 foreach ($publications as $publication) {
                     if ($isLang && $publication->lang != 'base' && ($publication->lang != sLang::langDefault() || evo()->getConfig('s_lang_default_show', 0) == 1)) {
-                        $siteUrl = $baseUrl . '/' . trim($product->lang);
+                        $siteUrl = $baseUrl . '/' . trim($publication->lang);
                     } else {
                         $siteUrl = $baseUrl;
                     }
 
-                    $loc = $siteUrl . str_replace(EVO_SITE_URL, '/', $publication->link);
+                    $loc = $this->sitemapLoc($siteUrl, (string)$publication->link);
                     $lastmod = $publication->last_modified ? Carbon::parse($publication->last_modified)->toAtomString() : Carbon::parse($publication->updated_at)->toAtomString();
                     $changefreq = $publication->changefreq ?? 'always';
                     $priority = $publication->priority ?? '0.5';
@@ -1001,9 +1003,16 @@ class sSeoController
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . PHP_EOL;
 
         // Loop through each URL and add it to the sitemap
+        $seen = [];
         foreach ($urls as $url) {
+            $loc = $this->normalizeSitemapLoc((string)($url['loc'] ?? ''));
+            if ($loc === '' || isset($seen[$loc])) {
+                continue;
+            }
+            $seen[$loc] = true;
+
             $sitemap .= '    <url>' . PHP_EOL;
-            $sitemap .= '        <loc>' . htmlspecialchars($url['loc']) . '</loc>' . PHP_EOL;
+            $sitemap .= '        <loc>' . htmlspecialchars($loc) . '</loc>' . PHP_EOL;
             $sitemap .= '        <lastmod>' . $url['lastmod'] . '</lastmod>' . PHP_EOL;
             $sitemap .= '        <changefreq>' . $url['changefreq'] . '</changefreq>' . PHP_EOL;
             $sitemap .= '        <priority>' . $url['priority'] . '</priority>' . PHP_EOL;
@@ -1015,6 +1024,69 @@ class sSeoController
 
         // Write the XML file
         file_put_contents($file, $sitemap);
+    }
+
+    /**
+     * Normalize sitemap loc values before writing XML.
+     *
+     * The domain root is the only extensionless URL that must always keep a trailing slash.
+     */
+    protected function normalizeSitemapLoc(string $loc): string
+    {
+        $loc = trim($loc);
+        if ($loc === '') {
+            return '';
+        }
+
+        $path = parse_url($loc, PHP_URL_PATH);
+        $query = parse_url($loc, PHP_URL_QUERY);
+        $fragment = parse_url($loc, PHP_URL_FRAGMENT);
+
+        if (($path === null || $path === '') && $query === null && $fragment === null) {
+            return rtrim($loc, '/') . '/';
+        }
+
+        return $loc;
+    }
+
+    /**
+     * Build an absolute sitemap URL from the current site URL and a package link.
+     *
+     * Package models can expose either relative paths or absolute URLs. Sitemap generation normalizes
+     * absolute URLs to their path first, then prefixes the current domain once.
+     *
+     * @param string $siteUrl Absolute site URL, optionally including a language prefix.
+     * @param string $link Relative or absolute package link.
+     * @return string Absolute sitemap URL.
+     */
+    protected function sitemapLoc(string $siteUrl, string $link): string
+    {
+        $siteUrl = rtrim($siteUrl, '/');
+        $link = trim($link);
+
+        if ($link === '') {
+            return $siteUrl;
+        }
+
+        $path = parse_url($link, PHP_URL_PATH);
+        $query = parse_url($link, PHP_URL_QUERY);
+        $fragment = parse_url($link, PHP_URL_FRAGMENT);
+
+        if (is_string($path) && $path !== '') {
+            $link = $path;
+        }
+
+        $link = '/' . ltrim($link, '/.');
+
+        if (is_string($query) && $query !== '') {
+            $link .= '?' . $query;
+        }
+
+        if (is_string($fragment) && $fragment !== '') {
+            $link .= '#' . $fragment;
+        }
+
+        return $siteUrl . $link;
     }
 
     /**

@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
-use Seiger\sSeo\Models\sSeoModel as SeoModel;
+use Seiger\sSeo\Models\sSeoModel;
 
 $sseoResourceDefaults = static fn (): array => [
     'robots' => '',
@@ -70,7 +70,7 @@ $sseoResourceData = static function (int $resourceId, string $resourceType, stri
     }
 
     $domainKey = trim((string) ($domainKey ?: evo()->getConfig('site_key', 'default'))) ?: 'default';
-    $rows = SeoModel::query()
+    $rows = sSeoModel::query()
         ->where('resource_id', $resourceId)
         ->where('resource_type', $resourceType)
         ->whereIn('domain_key', array_values(array_unique([$domainKey, 'default'])))
@@ -516,12 +516,15 @@ Event::listen('evolution.sArticlesAfterContentSave', function($params) use ($sse
         sSeo::updateSeoFields($data);
 
         if ($domainKey !== 'default') {
-            SeoModel::query()
+            sSeoModel::query()
                 ->where('resource_id', $articleId)
                 ->where('resource_type', 'article')
                 ->where('domain_key', 'default')
                 ->delete();
         }
+
+        $sitemapResourceId = (int) ($article->parent ?? evo()->getConfig('site_start', 1));
+        sSeo::generateSitemap($sitemapResourceId > 0 ? $sitemapResourceId : (int) evo()->getConfig('site_start', 1));
     }
 });
 
