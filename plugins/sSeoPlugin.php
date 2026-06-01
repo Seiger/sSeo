@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
-use Seiger\sSeo\Models\sSeoModel;
+use Seiger\sSeo\Models\sSeoModel as sSeoModel;
 
 $sseoResourceDefaults = static fn (): array => [
     'robots' => '',
