@@ -453,6 +453,7 @@ Event::listen('evolution.sArticlesManagerModalOptionsEvent', function($params) {
             ['value' => '', 'label' => '-'],
             ['value' => 'index,follow', 'label' => 'index,follow'],
             ['value' => 'index,nofollow', 'label' => 'index,nofollow'],
+            ['value' => 'noindex,follow', 'label' => 'noindex,follow'],
             ['value' => 'noindex,nofollow', 'label' => 'noindex,nofollow'],
         ];
     }

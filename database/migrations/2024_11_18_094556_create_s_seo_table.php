@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('meta_title', 255)->default('')->comment('Page Meta title');
             $table->mediumText('meta_description')->default('')->comment('Page Meta description');
             $table->mediumText('meta_keywords')->default('')->comment('Page Meta keywords');
-            $table->enum('robots', ['', 'index,follow', 'index,nofollow', 'noindex,nofollow'])->default('')->comment('Robots Meta tag');
+            $table->enum('robots', ['', 'index,follow', 'index,nofollow', 'noindex,follow', 'noindex,nofollow'])->default('')->comment('Robots Meta tag');
             $table->string('canonical_url', 255)->default('')->comment('Canonical URL');
             $table->string('og_title', 255)->default('')->comment('Open Graph title');
             $table->mediumText('og_description')->default('')->comment('Open Graph description');
