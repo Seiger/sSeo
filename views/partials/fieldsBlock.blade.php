@@ -10,6 +10,7 @@
                 <option value="" @if(($robots ?? '') == '') selected @endif></option>
                 <option value="index,follow" @if(($robots ?? '') == 'index,follow') selected @endif>index,follow</option>
                 <option value="index,nofollow" @if(($robots ?? '') == 'index,nofollow') selected @endif>index,nofollow</option>
+                <option value="noindex,follow" @if(($robots ?? '') == 'noindex,follow') selected @endif>noindex,follow</option>
                 <option value="noindex,nofollow" @if(($robots ?? '') == 'noindex,nofollow') selected @endif>noindex,nofollow</option>
             </select>
         </div>
