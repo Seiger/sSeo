@@ -345,10 +345,16 @@ Event::listen('evolution.OnRenderSeoFields', function($params) {
     evo()->setConfig('lang', $lang);
 
     if ($id > 0) {
-        $fields = sSeoModel::where('resource_id', $id)
+        $domainKey = (string)($params['domain_key'] ?? evo()->getConfig('site_key', 'default'));
+        $domainKey = trim($domainKey) !== '' ? $domainKey : 'default';
+
+        $rows = sSeoModel::where('resource_id', $id)
             ->where('resource_type', $type)
             ->where('lang', $lang)
-            ->first()?->toArray() ?? [];
+            ->whereIn('domain_key', array_values(array_unique([$domainKey, 'default'])))
+            ->get();
+
+        $fields = ($rows->firstWhere('domain_key', $domainKey) ?: $rows->firstWhere('domain_key', 'default'))?->toArray() ?? [];
 
         $fields['lang'] = $lang;
         return view('sSeo::partials.fieldsBlock', $fields)->render();
