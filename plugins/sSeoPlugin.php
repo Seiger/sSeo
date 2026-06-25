@@ -224,8 +224,32 @@ Event::listen('evolution.OnLoadSettings', function($params) {
         // Check domen
         $url .= $domen;
 
-        // Check request slashes count
         $requestUri = $_SERVER['REQUEST_URI'];
+
+        // Remove external tracking params from canonical storefront URLs.
+        $requestUriParts = parse_url($requestUri);
+        if ($requestUriParts !== false && !empty($requestUriParts['query'])) {
+            parse_str($requestUriParts['query'], $queryParams);
+            $cleanQueryParams = $queryParams;
+            foreach (array_keys($cleanQueryParams) as $queryParam) {
+                if (in_array(Str::lower((string)$queryParam), ['srsltid', 'srsltiid'], true)) {
+                    unset($cleanQueryParams[$queryParam]);
+                }
+            }
+
+            if ($cleanQueryParams !== $queryParams) {
+                $requestUri = (string)($requestUriParts['path'] ?? '/');
+                if (!empty($cleanQueryParams)) {
+                    $requestUri .= '?' . http_build_query($cleanQueryParams);
+                }
+                if (isset($requestUriParts['fragment'])) {
+                    $requestUri .= '#' . $requestUriParts['fragment'];
+                }
+                $redirect = true;
+            }
+        }
+
+        // Check request slashes count
         if (preg_match("/(\/){2,}/", $requestUri)) {
             $requestUriArr = explode('/', $requestUri);
             $requestUriArr = array_diff($requestUriArr, ['']);
