@@ -274,12 +274,18 @@ Event::listen('evolution.OnLoadSettings', function($params) {
         if ($requestUri != '/' && evo()->getConfig('friendly_urls', false) && trim(evo()->getConfig('friendly_url_suffix', ''))) {
             $requestUriArr = explode('?', $requestUri);
             $langIndex = '';
+            $requestExtension = strtolower(pathinfo($requestUriArr[0] ?? '', PATHINFO_EXTENSION));
+            $skipSuffixExtensions = ['xml', 'txt', 'json', 'webmanifest'];
 
             if (evo()->getConfig('check_sLang', false)) {
                 $langIndex = '/' . evo()->getLocale() . '/';
             }
 
-            if ($requestUriArr[0] != $langIndex && !str_ends_with($requestUriArr[0], evo()->getConfig('friendly_url_suffix', ''))) {
+            if (
+                !in_array($requestExtension, $skipSuffixExtensions, true)
+                && $requestUriArr[0] != $langIndex
+                && !str_ends_with($requestUriArr[0], evo()->getConfig('friendly_url_suffix', ''))
+            ) {
                 $requestUriArr[0] = $requestUriArr[0] . evo()->getConfig('friendly_url_suffix', '');
                 $requestUri = implode('?', $requestUriArr);
                 $redirect = true;
