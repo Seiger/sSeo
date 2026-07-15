@@ -29,7 +29,11 @@ class sSeo
     /**
      * Check and generate the canonical URL for the current page.
      *
-     * @return array Returns an array with keys "show" (boolean) and "value" (string)
+     * Paginated pages receive a self-referencing canonical URL, while unrelated
+     * query parameters are excluded from the canonical URL.
+     *
+     * @since 1.3.1 Paginated pages use self-referencing canonical URLs without unrelated query parameters.
+     * @return string The canonical URL for the current page.
      */
     public function checkCanonical(): string
     {
@@ -59,14 +63,29 @@ class sSeo
             $canonical = evo()->documentObject['link'];
         }
 
-        // Paginate
-        $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
-        if (
-            empty($canonical) ||
-            in_array($paginates_get, request()->segments()) ||
-            in_array($paginates_get, array_keys(request()->except('q')))
-        ) {
+        // Pagination
+        $paginatesGet = config('seiger.settings.sSeo.paginates_get', 'page');
+        $requestGet = request()->except('q');
+        $hasQueryPagination = array_key_exists($paginatesGet, $requestGet);
+        $hasPathPagination = in_array($paginatesGet, request()->segments(), true);
+
+        if ($hasPathPagination) {
+            $canonical = request()->getPathInfo();
+        } elseif (empty($canonical) || $hasQueryPagination) {
             $canonical = UrlProcessor::makeUrl((int)$document['id']);
+
+            if ($hasQueryPagination) {
+                $page = filter_var(
+                    request()->query($paginatesGet),
+                    FILTER_VALIDATE_INT,
+                    ['options' => ['min_range' => 1]]
+                );
+
+                if ($page !== false && $page > 1) {
+                    $canonical .= (str_contains($canonical, '?') ? '&' : '?')
+                        . http_build_query([$paginatesGet => $page]);
+                }
+            }
         }
 
         if (evo()->isBackend() && str_starts_with($canonical, 'http')) {
@@ -159,7 +178,10 @@ class sSeo
     /**
      * Check and generate the Robots settings and return the value to be used
      *
-     * @return array Returns an array with keys "show" (boolean) and "value" (string)
+     * Pagination is indexable by default. Explicit document rules and configured
+     * noindex query parameters remain authoritative.
+     *
+     * @return string The robots directive, or an empty string when no directive is required.
      */
     public function checkRobots(): string
     {
@@ -169,15 +191,6 @@ class sSeo
         // robots
         if (isset($document['robots']) && !empty($document['robots'])) {
             $robots = ['show' => true, 'value' => strtolower($document['robots'])];
-        }
-
-        // Paginate
-        $paginates_get = config('seiger.settings.sSeo.paginates_get', 'page');
-        if (
-            in_array($paginates_get, request()->segments()) ||
-            in_array($paginates_get, array_keys(request()->except('q')))
-        ) {
-            $robots = ['show' => true, 'value' => 'noindex,follow'];
         }
 
         // seorobots
@@ -208,11 +221,11 @@ class sSeo
         }
 
         // $_GET
-        $request_get = request()->except('q');
-        if (count($request_get)) {
-            $noindex_get = config('seiger.settings.sSeo.noindex_get', []);
-            foreach ($request_get as $key => $item) {
-                if (in_array($key, $noindex_get) || (is_scalar($item) && strpos((string)$item, ',') !== false)) {
+        $requestGet = request()->except('q');
+        if (count($requestGet)) {
+            $noindexGet = config('seiger.settings.sSeo.noindex_get', []);
+            foreach ($requestGet as $key => $item) {
+                if (in_array($key, $noindexGet) || (is_scalar($item) && strpos((string)$item, ',') !== false)) {
                     $robots = ['show' => true, 'value' => 'noindex,nofollow'];
                 }
             }
