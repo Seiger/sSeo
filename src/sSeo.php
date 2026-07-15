@@ -70,14 +70,8 @@ class sSeo
             
             // ?page=2 gets canonicalized on itself
             $page = (int)request()->query($paginates_get, 1);
-            $query = request()->except('q');
-            if ($page <= 1) {
-                unset($query[$paginates_get]);
-            }
-
-            if (!empty($query)) {
-                ksort($query);
-                $canonical .= (str_contains($canonical, '?') ? '&' : '?') . http_build_query($query);
+            if ($page > 1) {
+                 $canonical .= (str_contains($canonical, '?') ? '&' : '?') . http_build_query([$paginates_get => $page]);
             }
         }
 
@@ -228,16 +222,6 @@ class sSeo
                     $robots = ['show' => true, 'value' => 'noindex,follow'];
                 }
             }
-        }
-
-        // robots will not contain noindex for pagination
-        if (
-            in_array($paginates_get, request()->segments()) ||
-            in_array($paginates_get, array_keys(request()->except('q')))
-        ) {
-            $robots = str_contains($robots['value'], 'noindex')
-                ? ['show' => true, 'value' => 'index,follow']
-                : $robots;
         }
 
         return $robots['show'] ? $robots['value'] : '';
