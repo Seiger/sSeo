@@ -67,6 +67,12 @@ class sSeo
             in_array($paginates_get, array_keys(request()->except('q')))
         ) {
             $canonical = UrlProcessor::makeUrl((int)$document['id']);
+            
+            // ?page=2 gets canonicalized on itself
+            $page = (int)request()->query($paginates_get, 1);
+            if ($page > 1) {
+                 $canonical .= (str_contains($canonical, '?') ? '&' : '?') . http_build_query([$paginates_get => $page]);
+            }
         }
 
         if (evo()->isBackend() && str_starts_with($canonical, 'http')) {
