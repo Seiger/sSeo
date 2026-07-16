@@ -419,6 +419,103 @@ class sSeoController
     }
 
     /**
+     * Prepare llms.txt files for editing in the manager.
+     *
+     * The method mirrors robots.txt handling: a single-site installation edits the project root file,
+     * while multisite installations prefer a site-specific storage file and fall back to the root file.
+     *
+     * @return \Illuminate\View\View The view with llms.txt file paths, site names, and code editor setup.
+     * @since 1.4.0
+     */
+    public function llms()
+    {
+        $data = [
+            'tabIcon' => '<i data-lucide="bot" class="w-6 h-6 text-blue-400 drop-shadow-[0_0_6px_#3b82f6]"></i>',
+            'tabName' => __('sSeo::global.llms'),
+        ];
+
+        $sites = [];
+        $editor = [];
+        $llms = [];
+
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sMultisite = sMultisite::all();
+            if ($sMultisite->isEmpty()) {
+                $file = file_exists(EVO_BASE_PATH . 'llms.txt') ? EVO_BASE_PATH . 'llms.txt' : '';
+                $editor[] = 'llms';
+                $sites['llms'] = evo()->getConfig('site_name', 'Current website');
+                $llms['llms'] = $file;
+            } else {
+                foreach ($sMultisite as $site) {
+                    if (file_exists(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'llms.txt')) {
+                        $file = EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'llms.txt';
+                    } elseif (file_exists(EVO_BASE_PATH . 'llms.txt')) {
+                        $file = EVO_BASE_PATH . 'llms.txt';
+                    } else {
+                        $file = '';
+                    }
+                    $editor[] = $site->key . '_llms';
+                    $sites[$site->key . '_llms'] = $site->site_name;
+                    $llms[$site->key . '_llms'] = $file;
+                }
+            }
+        } else {
+            $file = file_exists(EVO_BASE_PATH . 'llms.txt') ? EVO_BASE_PATH . 'llms.txt' : '';
+            $editor[] = 'llms';
+            $sites['llms'] = evo()->getConfig('site_name', 'Current website');
+            $llms['llms'] = $file;
+        }
+
+        $codeEditor = $this->textEditor(implode(',', $editor), '500px', 'Codemirror');
+        return $this->view('llmsTab', array_merge($data, compact('llms', 'sites', 'editor', 'codeEditor')));
+    }
+
+    /**
+     * Save submitted llms.txt content to the appropriate project or multisite file.
+     *
+     * Multisite installations create the site storage directory when needed and write each site's
+     * llms.txt independently. Single-site installations require a non-empty root llms.txt body.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @since 1.4.0
+     */
+    public function updateLlms()
+    {
+        if (evo()->getConfig('check_sMultisite', false)) {
+            $sites = sMultisite::all();
+            if ($sites->isEmpty()) {
+                $llms = request()->input('llms', '');
+
+                if (empty($llms)) {
+                    return redirect()->back()->with('error', trans('sSeo::global.llms_text_empty'));
+                }
+
+                file_put_contents(EVO_BASE_PATH . 'llms.txt', $llms);
+            } else {
+                foreach ($sites as $site) {
+                    if (!is_dir(EVO_STORAGE_PATH . $site->key)) {
+                        mkdir(EVO_STORAGE_PATH . $site->key, octdec(evo()->getConfig('new_folder_permissions', '0777')), true);
+                        chmod(EVO_STORAGE_PATH . $site->key, octdec(evo()->getConfig('new_folder_permissions', '0777')));
+                    }
+
+                    $llms = request()->input($site->key . '_llms', '');
+                    file_put_contents(EVO_STORAGE_PATH . $site->key . DIRECTORY_SEPARATOR . 'llms.txt', $llms);
+                }
+            }
+        } else {
+            $llms = request()->input('llms', '');
+
+            if (empty($llms)) {
+                return redirect()->back()->with('error', trans('sSeo::global.llms_text_empty'));
+            }
+
+            file_put_contents(EVO_BASE_PATH . 'llms.txt', $llms);
+        }
+
+        return redirect()->back()->with('success', trans('sSeo::global.success_updated'));
+    }
+
+    /**
      * Returns the view for the configure page.
      *
      * @return mixed The view for the configure page.

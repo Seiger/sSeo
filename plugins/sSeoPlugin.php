@@ -340,6 +340,21 @@ Event::listen('evolution.OnPageNotFound', function () {
             }
         }
 
+        if (request()->is('llms.txt')) {
+            $file = null;
+            if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'llms.txt')) {
+                $file = EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'llms.txt';
+            } elseif (file_exists(EVO_BASE_PATH . 'llms.txt')) {
+                $file = EVO_BASE_PATH . 'llms.txt';
+            }
+
+            if ($file) {
+                header('Content-Type: text/plain');
+                echo file_get_contents($file);
+                exit;
+            }
+        }
+
         if (request()->is('sitemap.xml')) {
             $file = null;
             if (file_exists(EVO_STORAGE_PATH . evo()->getConfig('site_key', 'default') . DIRECTORY_SEPARATOR . 'sitemap.xml')) {
