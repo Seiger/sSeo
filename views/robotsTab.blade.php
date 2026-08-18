@@ -6,6 +6,7 @@
 @endsection
 @section('content')
     <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.urobots')}}" onsubmit="documentDirty=false;">
+        @csrf
         @foreach ($robots as $key => $robot)
             @if(!is_writable(trim($robot ?? '') ?: EVO_BASE_PATH))
                 <div class="s-alert s-alert--danger">
