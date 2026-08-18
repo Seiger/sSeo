@@ -7,6 +7,7 @@
 @section('content')
     @if(evo()->getConfig('sseo_pro', false))
         <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.utemplates')}}" onsubmit="documentDirty=false;">
+            @csrf
             <div class="max-w-7xl mx-auto py-3 px-6" x-data="sSeo.sPinner('document_base')">
                 <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden darkness:bg-[#122739] darkness:border-slate-700">
                     <span @click="toggle()" class="s-meta-block-btn">

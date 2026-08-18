@@ -6,6 +6,7 @@
 @endsection
 @section('content')
     <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.ullms')}}" onsubmit="documentDirty=false;">
+        @csrf
         @foreach ($llms as $key => $llm)
             @php
                 $llmPath = trim($llm ?? '');
