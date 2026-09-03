@@ -88,13 +88,13 @@
         </label>
         <div class="col-12 col-md-3 col-lg-2 col-xl-1">
             <select name="sseo[{{$lang??'base'}}][changefreq]" id="changefreq" class="form-control" onchange="documentDirty=true;">
-                <option value="always" @if(($change_frequency ?? '') == 'always') selected @endif>always</option>
-                <option value="hourly" @if(($change_frequency ?? '') == 'hourly') selected @endif>hourly</option>
-                <option value="daily" @if(($change_frequency ?? '') == 'daily') selected @endif>daily</option>
-                <option value="weekly" @if(($change_frequency ?? '') == 'weekly') selected @endif>weekly</option>
-                <option value="monthly" @if(($change_frequency ?? '') == 'monthly') selected @endif>monthly</option>
-                <option value="yearly" @if(($change_frequency ?? '') == 'yearly') selected @endif>yearly</option>
-                <option value="never" @if(($change_frequency ?? '') == 'never') selected @endif>never</option>
+                <option value="always" @if(($changefreq ?? '') == 'always') selected @endif>always</option>
+                <option value="hourly" @if(($changefreq ?? '') == 'hourly') selected @endif>hourly</option>
+                <option value="daily" @if(($changefreq ?? '') == 'daily') selected @endif>daily</option>
+                <option value="weekly" @if(($changefreq ?? '') == 'weekly') selected @endif>weekly</option>
+                <option value="monthly" @if(($changefreq ?? '') == 'monthly') selected @endif>monthly</option>
+                <option value="yearly" @if(($changefreq ?? '') == 'yearly') selected @endif>yearly</option>
+                <option value="never" @if(($changefreq ?? '') == 'never') selected @endif>never</option>
             </select>
         </div>
     </div>

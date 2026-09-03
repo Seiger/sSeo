@@ -1,4 +1,5 @@
 <form id="form" name="form" method="post" enctype="multipart/form-data" action="{{sSeo::route('sSeo.modulesave')}}" onsubmit="documentDirty=false;">
+    @csrf
     <input type="hidden" name="sseo[resource_id]" value="{{(int)$id}}">
     <input type="hidden" name="sseo[resource_type]" value="{{$type}}">
     @include('sSeo::partials.fieldsBlock')

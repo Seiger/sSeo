@@ -12,6 +12,8 @@ Route::middleware('mgr')->prefix('sseo/')->name('sSeo.')->group(function () {
     Route::post('templates', [sSeoController::class, 'updateTemplates'])->name('utemplates');
     Route::get('robots', [sSeoController::class, 'robots'])->name('robots');
     Route::post('robots', [sSeoController::class, 'updateRobots'])->name('urobots');
+    Route::get('llms', [sSeoController::class, 'llms'])->name('llms');
+    Route::post('llms', [sSeoController::class, 'updateLlms'])->name('ullms');
     Route::get('analytics', [sSeoController::class, 'analytics'])->name('analytics');
     Route::post('analytics', [sSeoController::class, 'updateAnalytics'])->name('uanalytics');
     Route::get('configure', [sSeoController::class, 'configure'])->name('configure');
