@@ -412,9 +412,13 @@ Event::listen('evolution.OnRenderSeoFields', function($params) {
 Event::listen('evolution.OnDocFormRender', function($params) {
     if (isset($params['id']) && !empty($params['id']) && !evo()->getConfig('check_sLang', false)) {
         $lang = $params['lang'] ?? 'base';
+        $domainKey = sSeo::resolveDocumentDomainKey(
+            (int)$params['id'],
+            (string)evo()->getConfig('site_key', 'default')
+        );
         $fields = sSeoModel::where('resource_id', $params['id'])
             ->where('resource_type', 'document')
-            ->where('domain_key', evo()->getConfig('site_key', 'default'))
+            ->where('domain_key', $domainKey)
             ->where('lang', $lang)
             ->first()?->toArray() ?? [];
         $fields['lang'] = $lang;
