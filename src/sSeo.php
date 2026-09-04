@@ -589,7 +589,10 @@ class sSeo
         }
     }
 
-    protected function resolveDocumentDomainKey(int $resourceId, string $fallback = 'default'): string
+    /**
+     * Resolve the domain key from the document tree instead of the current request host.
+     */
+    public function resolveDocumentDomainKey(int $resourceId, string $fallback = 'default'): string
     {
         if (!evo()->getConfig('check_sMultisite', false)) {
             return $fallback !== '' ? $fallback : 'default';
