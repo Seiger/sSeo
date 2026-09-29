@@ -6,6 +6,7 @@
         "",
     ],
     "redirects_enabled" => 1,
+    "redirect_skip_prefixes" => [],
     "generate_sitemap" => 1,
     "product_attribute_aliases" => [],
     "gtm_container_id" => "",
