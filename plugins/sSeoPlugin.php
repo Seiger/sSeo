@@ -10,6 +10,7 @@ use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use Seiger\sSeo\Models\sSeoModel as sSeoModel;
+use Seiger\sSeo\Support\RedirectGuard;
 
 $sseoResourceDefaults = static fn (): array => [
     'robots' => '',
@@ -168,23 +169,22 @@ Event::listen('evolution.OnLoadSettings', function($params) {
             return;
         }
 
-        // Skip SEO redirects for API endpoints (we don't want 301/302 canonicalization for APIs).
+        // Skip SEO redirects for non-GET/HEAD requests (a 301 drops the request body)
+        // and for API endpoints (we don't want 301/302 canonicalization for APIs).
         // - `SAPI_BASE_PATH` controls sApi base prefix (e.g. "rest")
         // - also exclude the conventional "/api/*" prefix used by other integrations
-        $apiBasePath = trim((string)env('SAPI_BASE_PATH', 'api'), '/');
-        $skipPrefixes = array_values(array_unique(array_filter([$apiBasePath, 'api'])));
-        if ($skipPrefixes !== []) {
-            $requestPath = (string)parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-            if ($requestPath !== '' && EVO_BASE_URL !== '' && EVO_BASE_URL !== '/' && str_starts_with($requestPath, EVO_BASE_URL)) {
-                $requestPath = trim($requestPath, EVO_BASE_URL);
-            }
-            $requestPath = trim($requestPath, '/');
-
-            foreach ($skipPrefixes as $prefix) {
-                if ($requestPath === $prefix || str_starts_with($requestPath, $prefix . '/')) {
-                    return;
-                }
-            }
+        // - `redirect_skip_prefixes` setting adds more prefixes (e.g. "mcp" for eMCP)
+        $skipPrefixes = array_merge(
+            [(string)env('SAPI_BASE_PATH', 'api'), 'api'],
+            (array)config('seiger.settings.sSeo.redirect_skip_prefixes', [])
+        );
+        if (RedirectGuard::shouldSkip(
+            (string)($_SERVER['REQUEST_METHOD'] ?? 'GET'),
+            (string)($_SERVER['REQUEST_URI'] ?? ''),
+            (string)EVO_BASE_URL,
+            $skipPrefixes
+        )) {
+            return;
         }
 
         $redirect = false;

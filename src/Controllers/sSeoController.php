@@ -692,6 +692,7 @@ class sSeoController
             'paginates_get',
             'noindex_get',
             'redirects_enabled',
+            'redirect_skip_prefixes',
             'generate_sitemap',
             'product_attribute_aliases',
             'gtm_container_id',

@@ -35,3 +35,12 @@ Use placeholders like `[*pagetitle*]`, `[*longtitle*]`, `[(site_name)]`.
 ## Configure
 Toggle functions: WWW control, redirection, sitemap creation, GET name for pagination, list of $_GET parameters prohibited from indexing, elements on the page in the interface, etc.
 ![Configure](/img/admin/configure.jpg)
+
+### URL canonicalization
+sSeo sends a 301 to the canonical URL (protocol, WWW, lowercase path, single slashes, friendly URL suffix) only for `GET` and `HEAD` requests. `POST`, `PUT`, `PATCH`, `DELETE` and other methods are never redirected, because a 301 turns them into a `GET` without a body.
+
+Paths under `/api` and the sApi prefix (`SAPI_BASE_PATH`) are skipped. Add other endpoint prefixes with `redirect_skip_prefixes` in `core/custom/config/seiger/settings/sSeo.php`:
+
+```php
+"redirect_skip_prefixes" => ["mcp", "webhooks"],
+```

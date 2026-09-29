@@ -22,9 +22,17 @@
     "php": "^8.4",
     "evolution-cms/evolution": "^3.5"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  },
   "autoload": {
     "psr-4": {
       "Seiger\\sSeo\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Seiger\\sSeo\\Tests\\": "tests/"
     }
   },
   "extra": {
@@ -44,6 +52,9 @@
       "/.git/*",
       "/.github/*",
       "/.idea/*",
+      "/tests",
+      "/tests/**",
+      "phpunit.xml.dist",
       "README.md",
       "LICENSE"
     ]
