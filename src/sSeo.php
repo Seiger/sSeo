@@ -693,6 +693,9 @@ class sSeo
      * in the database, it falls back to `evo()->documentObject`.
      *
      * The result is cached in `$this->document` to avoid redundant database queries.
+     * Automatic created/updated timestamps are excluded before serialization:
+     * frontend metadata does not consume them, while JSON casts such as
+     * structured_data and extra_meta must still be applied by Eloquent.
      *
      * @return array The document data merged with `evo()->documentObject` if found in `sSeoModel`, otherwise returns `evo()->documentObject` as is.
      */
@@ -710,7 +713,7 @@ class sSeo
                 ->where('resource_type', evo()->documentObject['type'] ?? '')
                 ->where('domain_key', $domainKey)
                 ->where('lang', $lang)
-                ->first()?->toArray();
+                ->first()?->makeHidden(['created_at', 'updated_at'])->toArray();
 
             if (is_array($document) && count($document)) {
                 $this->document = array_merge($document, evo()->documentObject);
