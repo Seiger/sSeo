@@ -310,9 +310,16 @@ Event::listen('evolution.OnLoadSettings', function($params) {
 });
 
 /**
- * Page Not Found logics
+ * Handle frontend redirects and generated SEO files during a normal web request.
+ *
+ * Legacy manager entry points can raise this event before the HTTP request is
+ * bound. Leave their error response to the caller instead of resolving request.
  */
 Event::listen('evolution.OnPageNotFound', function () {
+    if (!app()->bound('request')) {
+        return;
+    }
+
     if (config('seiger.settings.sSeo.redirects_enabled', 0) == 1) {
         $requestUri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         $siteKey = evo()->getConfig('check_sMultisite', false) ? evo()->getConfig('site_key', 'default') : 'all';
