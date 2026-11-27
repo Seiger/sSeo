@@ -33,6 +33,10 @@
             <textarea id="meta_description" name="sseo[{{$lang??'base'}}][meta_description]" rows="2" class="form-control" placeholder="{{sSeo::checkMetaDescription()}}" onchange="documentDirty=true;">{{$meta_description ?? ''}}</textarea>
         </div>
     </div>
+    @php($sseoExtensions = \Seiger\sSeo\Support\FieldExtensions::render(get_defined_vars()))
+    @if($sseoExtensions !== '')
+        <div class="sseo-extensions" data-sseo-lang="{{$lang ?? 'base'}}">{!! $sseoExtensions !!}</div>
+    @endif
 </div>
 <div class="row form-row form-element-input d-flex flex-column flex-md-row">
     <label class="control-label col-12 col-md-2 col-xl-1">

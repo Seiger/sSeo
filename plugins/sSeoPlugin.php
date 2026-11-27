@@ -409,6 +409,8 @@ Event::listen('evolution.OnRenderSeoFields', function($params) {
         $fields = ($rows->firstWhere('domain_key', $domainKey) ?: $rows->firstWhere('domain_key', 'default'))?->toArray() ?? [];
 
         $fields['lang'] = $lang;
+        // A resource without a saved row still names itself to sSeoFieldsRender listeners.
+        $fields += ['resource_id' => $id, 'resource_type' => $type, 'domain_key' => $domainKey];
         return view('sSeo::partials.fieldsBlock', $fields)->render();
     }
 });
@@ -429,6 +431,7 @@ Event::listen('evolution.OnDocFormRender', function($params) {
             ->where('lang', $lang)
             ->first()?->toArray() ?? [];
         $fields['lang'] = $lang;
+        $fields += ['resource_id' => (int)$params['id'], 'resource_type' => 'document', 'domain_key' => $domainKey];
         return view('sSeo::resourceTab', $fields)->render();
     }
 });
