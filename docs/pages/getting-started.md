@@ -54,3 +54,27 @@ if (evo()->getConfig('check_sSeo', false)) {
 ```
 
 If the plugin is installed, the result of ```evo()->getConfig('check_sSeo', false)``` will always be ```true```. Otherwise, you will get an ```false```.
+
+### Adding your own block under the SEO fields
+
+The SEO fields of a document, a product or any other resource fire the `sSeoFieldsRender` event. Every listener may return an HTML string. It is shown under the meta description, in the same tab, for every language. Use it for keyword data, suggested titles, checks and the like, without changing sSeo's form.
+
+```php
+use Illuminate\Support\Facades\Event;
+
+Event::listen('evolution.sSeoFieldsRender', function (array $params) {
+    // $params = [
+    //     'resource_id' => 42,
+    //     'resource_type' => 'document',   // or 'product', ...
+    //     'lang' => 'base',                // or the sLang language of this tab
+    //     'domain_key' => 'default',       // the sMultisite domain
+    //     'fields' => ['meta_title' => '...', 'meta_description' => '...', 'meta_keywords' => '...', 'canonical_url' => '...', 'robots' => '...'],
+    // ];
+    return '<div class="my-seo-hint">' . e('Searched 880 times a month') . '</div>';
+});
+```
+
+- Escape what you output: the string is printed as HTML.
+- Return `null` or an empty string to show nothing. A listener that throws is skipped and logged, and the fields still render.
+- The fields of one language are named `sseo[<lang>][meta_title]`, `sseo[<lang>][meta_description]` and so on. The block sits inside a `div.sseo-extensions` with `data-sseo-lang="<lang>"`. A script can fill a field this way; set `documentDirty = true` so the manager is asked to save.
+- Values are saved by the form's own Save button, as if the manager had typed them.

@@ -2,7 +2,7 @@
     @csrf
     <input type="hidden" name="sseo[resource_id]" value="{{(int)$id}}">
     <input type="hidden" name="sseo[resource_type]" value="{{$type}}">
-    @include('sSeo::partials.fieldsBlock')
+    @include('sSeo::partials.fieldsBlock', ['resource_id' => (int)$id, 'resource_type' => $type])
 </form>
 @push('scripts.bot')
     <div id="actions">

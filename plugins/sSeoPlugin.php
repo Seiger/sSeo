@@ -10,6 +10,7 @@ use Seiger\sCommerce\Facades\sCommerce;
 use Seiger\sSeo\Facades\sSeo;
 use Seiger\sSeo\Models\sRedirect;
 use Seiger\sSeo\Models\sSeoModel as sSeoModel;
+use Seiger\sSeo\Support\FieldExtensions;
 use Seiger\sSeo\Support\RedirectGuard;
 
 $sseoResourceDefaults = static fn (): array => [
@@ -409,6 +410,8 @@ Event::listen('evolution.OnRenderSeoFields', function($params) {
         $fields = ($rows->firstWhere('domain_key', $domainKey) ?: $rows->firstWhere('domain_key', 'default'))?->toArray() ?? [];
 
         $fields['lang'] = $lang;
+        // sSeoFieldsRender gets the domain being edited, also when the values are the default domain's.
+        $fields = FieldExtensions::identify($fields, $id, $type, $domainKey);
         return view('sSeo::partials.fieldsBlock', $fields)->render();
     }
 });
@@ -429,6 +432,7 @@ Event::listen('evolution.OnDocFormRender', function($params) {
             ->where('lang', $lang)
             ->first()?->toArray() ?? [];
         $fields['lang'] = $lang;
+        $fields = FieldExtensions::identify($fields, (int)$params['id'], 'document', $domainKey);
         return view('sSeo::resourceTab', $fields)->render();
     }
 });
